@@ -1,0 +1,27 @@
+Title:Default Test Puzzle
+
+/* 
+ * Each square is separated by a semicolon. Each new line is separated by a backslash '\'.
+ * Each square contains a single identifier followed by 0 or more modifiers.
+ * The puzzle is terminated by a last backslash followed by a newline.
+ *
+ *     Element    |    Identifier    |    Modifiers    |    Description
+ * ---------------|------------------|-----------------|-------------------------------------------
+ * Exterior       | {empty}          | {empty}         | Used to put spaces before the first real
+ *                |                  |                 | elements, where the puzzle isn't left
+ *                |                  |                 | aligned.
+ * ---------------|------------------|-----------------|-------------------------------------------
+ * Interior       | I                | P: player start | Any internal space. Each box must have a
+ *                |                  | point           | matching target, and vice versa.
+ *                |                  | B#: box start   |
+ *                |                  | T#: target for  |
+ *                |                  |     box #       |
+ * ---------------|------------------|-----------------|-------------------------------------------
+ * Wall           | W                | {empty}         | Impassable element.
+ */
+
+Puzzle:;;;W;W;W;W;W;\;W;W;W;I;I;I;W;\;W;IP;IB1;I;W;I;W;\W;W;IB2;IB3;I;I;I;W;\W;I;I;W;W;I;W;W;\W;IT1;I;IT3;I;I;I;W;\W;W;I;I;I;IT2;I;W;\;W;W;W;W;W;W;W;\
+
+Title:Default Test Puzzle 2
+
+Puzzle:;;;;;W;W;W;W;\W;W;W;W;W;W;I;I;W;\W;I;IB3;I;I;IB4;I;I;W;\W;I;W;I;I;IT1;W;I;W;W;\W;I;I;IT4;I;W;IT2;IP;I;W;\W;W;IB1;W;I;IT3B2;I;I;I;W;\;W;I;I;I;W;W;W;W;W;\;W;W;W;W;W;\
