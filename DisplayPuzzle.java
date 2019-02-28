@@ -65,11 +65,9 @@ public class DisplayPuzzle extends JPanel{
       
       int width = puzzle.getWidth();
       int height = puzzle.getHeight();
-      System.out.println(width + "x" + height);
       byte square;
       int drawableX = (int) getSize().getWidth();
       int drawableY = (int) getSize().getHeight();
-      System.out.println(drawableX + "x" + drawableY);
       int offset = 10;
       int squareX;
       int squareY = offset;
