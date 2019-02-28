@@ -4,75 +4,219 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class SokobanInterpreter {
+   
    private File puzzle;
    
    public SokobanInterpreter(File p) {
+      
       puzzle = p;
+      
    }
    
-   public void outputDisplay() throws IOException {
+   public SokobanRuntimeStorage readPuzzleFile() throws IOException {
+      
       BufferedReader b = new BufferedReader(new FileReader(puzzle));
       String interp;
+      SokobanRuntimeStorage puzzle = null;
+      String title = "";
       boolean comment = false;
+      boolean foundPuzzle = false;
+      boolean foundTitle = false;
+      
       while ((interp = b.readLine()) != null) {
-         if (interp.startsWith("Title:") && comment == false) {
-            System.out.println(interp.substring(6) + "\n");
+         
+         if (interp.startsWith("Title:") && !comment && !foundTitle) {
+            
+            title = interp.substring(6);
+            foundTitle = true;
+            
          }
-         else if (interp.startsWith("Puzzle:") && comment == false) {
-            outputPuzzle(interp.substring(7));
-         }
-         else if (interp.contains("\\*")) {
-            comment = true;
-         }
-         else if (interp.contains("*\\") && comment == true) {
-            comment = false;
-         }
-      }
-      b.close();
-   }
-   public void outputPuzzle(String puzzle) {
-      String nextLine = puzzle.substring(0, puzzle.indexOf("\\"));
-      String remaining = puzzle.substring(puzzle.indexOf("\\") + 1);
-      String nextSquare;
-      char s;
-      boolean eol = false;
-      while (!eol) {
-         while (nextLine.indexOf(";") >= 0) {
-            nextSquare = nextLine.substring(0, nextLine.indexOf(";") + 1);
-            nextLine = nextLine.substring(nextLine.indexOf(";") + 1);
-            s = nextSquare.charAt(0);
-            switch (s) {
-            case 'W':
-               System.out.print("WW");
-               break;
-            case ';':
-               System.out.print("  ");
-               break;
-            case 'I':
-               if (nextSquare.length() <= 2) {
-                  System.out.print("  ");
-                  break;
-               }               
-               if (nextSquare.contains("P")) {
-                  System.out.print("PP");
+         
+         else if (interp.startsWith("Puzzle:") && !comment && !foundPuzzle && foundTitle) {
+            
+            String puzz = interp.substring(7).trim();
+            int height = 0;
+            int maxW = 0;
+            int countW = 0;
+            char input;
+            
+            for (int i = 0; i < puzz.length(); i++) {
+               
+               input = puzz.charAt(i);
+               
+               if (input == ':') {
+                  
+                  height++;
+                  
+                  if (countW > maxW) {
+                     
+                     maxW = countW;
+                     
+                  }
+                  
+                  countW = 0;
+                  
                }
-               if (nextSquare.contains("T")) {
-                  System.out.print("T" + nextSquare.charAt(nextSquare.indexOf("T") + 1));
+               
+               else if (input == ';') {
+                  
+                  countW++;
+                  
                }
-               if (nextSquare.contains("B")) {
-                  System.out.print("B" + nextSquare.charAt(nextSquare.indexOf("B") + 1));                  
-               }
+               
             }
+            
+            puzzle = new SokobanRuntimeStorage(title, maxW, height);
+            storePuzzle(puzz, puzzle);
+            foundPuzzle = true;
+            
          }
-         System.out.println();
-         if (remaining.indexOf("\\") >= 0) {
-            nextLine = remaining.substring(0, remaining.indexOf("\\"));
-            remaining = remaining.substring(remaining.indexOf("\\") + 1);
+         
+         else if (interp.startsWith("Puzzle:") && !comment) {
+            
+            System.err.println("Improper .spsf file structure. Please refer to the example puzzle file for proper structure.");
+            b.close();
+            return null;
+            
          }
+         else if (interp.contains("/*")) {
+            
+            comment = true;
+            
+         }
+         else if (interp.contains("*/") && comment) {
+            
+            comment = false;
+            
+         }
+         
+         else if (interp.isEmpty() || interp.equals("\n") || comment) {
+            
+            /* Disregard empty or commented lines */
+            
+         }
+         
          else {
-            eol = true;
+            
+            System.out.println(interp);
+            System.err.println("Improper .spsf file structure. Please check your file for errors.");
+            b.close();
+            return null;
+            
          }
+         
       }
-      System.out.println();
+      
+      b.close();
+      return puzzle;
+      
    }
+   
+   public void storePuzzle(String puzzle, SokobanRuntimeStorage puzz) {
+      
+      String nextLine = puzzle.substring(0, puzzle.indexOf(":"));
+      String remaining = puzzle.substring(puzzle.indexOf(":") + 1);
+      String nextSquare;
+      int w = 0;
+      int h = 0;
+      boolean eol = false;
+      
+      while (!eol) {
+         
+         while (nextLine.indexOf(";") >= 0) {
+            
+            nextSquare = nextLine.substring(0, nextLine.indexOf(";"));
+            nextLine = nextLine.substring(nextLine.indexOf(";") + 1);
+            switch (nextSquare) {
+            
+            case "":
+               
+               w++;
+               break;
+               
+            case "W":
+               
+               puzz.setSquare((byte) 1, w, h);
+               w++;
+               break;
+               
+            case "I":
+               
+               puzz.setSquare((byte) 2, w, h);
+               w++;
+               break;
+               
+            case "IP":
+               
+               puzz.setSquare((byte) 6, w, h);
+               w++;
+               break;
+               
+            case "IB":
+               
+               puzz.setSquare((byte) 10, w, h);
+               w++;
+               break;
+               
+            case "IT":
+               
+               puzz.setSquare((byte) 18, w, h);
+               w++;
+               break;
+               
+            case "IPT":
+               
+               puzz.setSquare((byte) 22, w, h);
+               w++;
+               break;
+               
+            case "ITP":
+               
+               puzz.setSquare((byte) 22, w, h);
+               w++;
+               break;
+               
+            case "IBT":
+               
+               puzz.setSquare((byte) 26, w, h);
+               w++;
+               break;
+               
+            case "ITB":
+               
+               puzz.setSquare((byte) 26, w, h);
+               w++;
+               break;
+               
+            default:
+               
+               System.err.println("Invalid square contents. Please refer to the example file for proper square contents.");
+               puzz.empty();
+               return;
+               
+            }
+                        
+         }
+         
+
+         w = 0;
+         h++;
+         
+         if (remaining.indexOf(":") >= 0) {
+            
+            nextLine = remaining.substring(0, remaining.indexOf(":"));
+            remaining = remaining.substring(remaining.indexOf(":") + 1);
+            
+         }
+         
+         else {
+            
+            eol = true;
+            
+         }
+         
+      }
+      
+   }
+   
 }
