@@ -8,6 +8,7 @@ public class InterpreterTester {
       File read = new File("DefaultTestPuzzle.spsf");
       SokobanInterpreter s = new SokobanInterpreter(read);
       SokobanRuntimeStorage puzzle = s.readPuzzleFile();
+      Validation.validate(puzzle);
       DisplayPuzzle.displayWindow(puzzle);
       
    }

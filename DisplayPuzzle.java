@@ -21,16 +21,17 @@ public class DisplayPuzzle extends JPanel{
    public static void displayWindow(SokobanRuntimeStorage p) {
       
       window = new JFrame(p.getName());
-      window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+      window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
       window.add(new DisplayPuzzle(p));
       window.pack();
       window.setVisible(true);
+      new Movement(window, p);
       
-      /*while(window.isVisible()) {
+      while(true) {
          
+         window.repaint();
          
-         
-      }*/
+      }
       
    }
    

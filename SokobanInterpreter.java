@@ -68,6 +68,15 @@ public class SokobanInterpreter {
             
             puzzle = new SokobanRuntimeStorage(title, maxW, height);
             storePuzzle(puzz, puzzle);
+            
+            if (!Validation.validate(puzzle)) {
+               
+               System.err.println("Invalid level design.");
+               b.close();
+               return null;
+               
+            }
+            
             foundPuzzle = true;
             
          }
@@ -117,8 +126,8 @@ public class SokobanInterpreter {
       String nextLine = puzzle.substring(0, puzzle.indexOf(":"));
       String remaining = puzzle.substring(puzzle.indexOf(":") + 1);
       String nextSquare;
-      int w = 0;
-      int h = 0;
+      int column = 0;
+      int row = 0;
       boolean eol = false;
       
       while (!eol) {
@@ -131,61 +140,67 @@ public class SokobanInterpreter {
             
             case "":
                
-               w++;
+               column++;
                break;
                
             case "W":
                
-               puzz.setSquare((byte) 1, w, h);
-               w++;
+               puzz.setSquare((byte) 1, column, row);
+               column++;
                break;
                
             case "I":
                
-               puzz.setSquare((byte) 2, w, h);
-               w++;
+               puzz.setSquare((byte) 2, column, row);
+               column++;
                break;
                
             case "IP":
                
-               puzz.setSquare((byte) 6, w, h);
-               w++;
+               puzz.setSquare((byte) 6, column, row);
+               puzz.setPlayerX(column);
+               puzz.setPlayerY(row);
+               column++;
                break;
                
             case "IB":
                
-               puzz.setSquare((byte) 10, w, h);
-               w++;
+               puzz.setSquare((byte) 10, column, row);
+               column++;
                break;
                
             case "IT":
                
-               puzz.setSquare((byte) 18, w, h);
-               w++;
+               puzz.setSquare((byte) 18, column, row);
+               column++;
                break;
                
             case "IPT":
                
-               puzz.setSquare((byte) 22, w, h);
-               w++;
+               puzz.setSquare((byte) 22, column, row);
+               puzz.setPlayerX(column);
+               puzz.setPlayerY(row);
+               column++;
                break;
                
             case "ITP":
                
-               puzz.setSquare((byte) 22, w, h);
-               w++;
+               puzz.setSquare((byte) 22, column, row);
+               puzz.setPlayerX(column);
+               puzz.setPlayerY(row);
+               column++;
                break;
                
             case "IBT":
                
-               puzz.setSquare((byte) 26, w, h);
-               w++;
+               puzz.setSquare((byte) 26, column, row);
+               column++;
                break;
                
             case "ITB":
                
-               puzz.setSquare((byte) 26, w, h);
-               w++;
+               puzz.setSquare((byte) 26, column, row);
+               column++;
                break;
                
             default:
@@ -199,8 +214,8 @@ public class SokobanInterpreter {
          }
          
 
-         w = 0;
-         h++;
+         column = 0;
+         row++;
          
          if (remaining.indexOf(":") >= 0) {
             
