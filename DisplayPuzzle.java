@@ -27,11 +27,11 @@ public class DisplayPuzzle extends JPanel{
       window.setVisible(true);
       new Movement(window, p);
       
-      while(true) {
+      /*while(true) {
          
          window.repaint();
          
-      }
+      }*/
       
    }
    
@@ -46,7 +46,7 @@ public class DisplayPuzzle extends JPanel{
    public void paintComponent(Graphics g) {
       
       super.paintComponent(g);
-      g.setColor(Color.black);
+      g.setColor(new Color(0, 0, 0));
       
       /*
        * The bytes stored are decimal conversions of binary numbers.
@@ -87,6 +87,7 @@ public class DisplayPuzzle extends JPanel{
             case 1:
                
                /* Wall */
+               g.setColor(new Color(0, 0, 0));
                g.drawRect(squareX, squareY, squareDim, squareDim);
                g.drawLine(squareX, squareY + squareDim / 2, squareX + squareDim, squareY + squareDim / 2);
                g.drawLine(squareX + squareDim / 2, squareY, squareX + squareDim / 2, squareY + squareDim);
@@ -95,27 +96,34 @@ public class DisplayPuzzle extends JPanel{
             case 2:
                
                /* Internal Space */
+               g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
                break;
                
             case 6:
                
                /* Internal Space and Player */
+               g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
+               g.setColor(new Color(0, 0, 200));
                g.drawOval(squareX, squareY, squareDim, squareDim);
                break;
                
             case 10:
                
                /* Internal Space and Box */
+               g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
-               g.drawRect(squareX + 1, squareY + 1, squareDim - 2, squareDim - 2);
+               g.setColor(new Color(200, 150, 0));
+               g.drawRect(squareX + 2, squareY + 2, squareDim - 4, squareDim - 4);
                break;
                
             case 18:
                
                /* Internal Space and Target */
+               g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
+               g.setColor(new Color(255, 0, 0));
                g.drawLine(squareX, squareY, squareX + squareDim, squareY + squareDim);
                g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
                break;
@@ -123,19 +131,25 @@ public class DisplayPuzzle extends JPanel{
             case 22:
                
                /* Internal Space and Player and Target */
+               g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
+               g.setColor(new Color(255, 0, 0));
                g.drawLine(squareX, squareY, squareX + squareDim, squareY + squareDim);
                g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
+               g.setColor(new Color(0, 0, 200));
                g.drawOval(squareX, squareY, squareDim, squareDim);
                break;
                
             case 26:
                
                /* Internal Space and Box and Target */
+               g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
+               g.setColor(new Color(255, 0, 0));
                g.drawLine(squareX, squareY, squareX + squareDim, squareY + squareDim);
                g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
-               g.drawRect(squareX + 1, squareY + 1, squareDim - 2, squareDim - 2);
+               g.setColor(new Color(200, 150, 0));
+               g.drawRect(squareX + 2, squareY + 2, squareDim - 4, squareDim - 4);
                break;
                
             default:

@@ -100,10 +100,25 @@ public class SokobanRuntimeStorage {
    
    public void moveLeft() {
       
-      if (playerX == 0) {
+      if (puzzle[playerX - 1][playerY] == 1) {
          
          Toolkit.getDefaultToolkit().beep();
          return;
+         
+      }
+      
+      else if (puzzle[playerX - 1][playerY] == 10 || puzzle[playerX - 1][playerY] == 26) {
+         
+         if (puzzle[playerX - 2][playerY] == 1 || puzzle[playerX - 2][playerY] == 10 || puzzle[playerX - 2][playerY] == 26) {
+            
+            Toolkit.getDefaultToolkit().beep();
+            return;   
+            
+         }
+         
+
+         puzzle[playerX - 1][playerY] -= 8;
+         puzzle[playerX - 2][playerY] += 8;
          
       }
       
@@ -115,10 +130,24 @@ public class SokobanRuntimeStorage {
 
    public void moveRight() {
 
-      if (playerX == puzzle.length - 1) {
+      if (puzzle[playerX + 1][playerY] == 1) {
 
          Toolkit.getDefaultToolkit().beep();
          return;
+
+      }
+
+      else if (puzzle[playerX + 1][playerY] == 10 || puzzle[playerX + 1][playerY] == 26) {
+
+         if (puzzle[playerX + 2][playerY] == 1 || puzzle[playerX + 2][playerY] == 10 || puzzle[playerX + 2][playerY] == 26) {
+
+            Toolkit.getDefaultToolkit().beep();
+            return;
+
+         }
+
+         puzzle[playerX + 1][playerY] -= 8;
+         puzzle[playerX + 2][playerY] += 8;
 
       }
 
@@ -130,10 +159,24 @@ public class SokobanRuntimeStorage {
 
    public void moveUp() {
 
-      if (playerY == 0) {
+      if (puzzle[playerX][playerY - 1] == 1) {
 
          Toolkit.getDefaultToolkit().beep();
          return;
+
+      }
+
+      else if (puzzle[playerX][playerY - 1] == 10 || puzzle[playerX][playerY - 1] == 26) {
+
+         if (puzzle[playerX][playerY - 2] == 1 || puzzle[playerX][playerY - 2] == 10 || puzzle[playerX][playerY - 2] == 26) {
+
+            Toolkit.getDefaultToolkit().beep();
+            return;
+
+         }
+
+         puzzle[playerX][playerY - 1] -= 8;
+         puzzle[playerX][playerY - 2] += 8;
 
       }
 
@@ -145,17 +188,31 @@ public class SokobanRuntimeStorage {
 
    public void moveDown() {
 
-      if (playerY == puzzle[0].length - 1) {
+      if (puzzle[playerX][playerY + 1] == 1) {
 
          Toolkit.getDefaultToolkit().beep();
          return;
 
       }
 
+      else if (puzzle[playerX][playerY + 1] == 10 || puzzle[playerX][playerY + 1] == 26) {
+
+         if (puzzle[playerX][playerY + 2] == 1 || puzzle[playerX][playerY + 2] == 10 || puzzle[playerX][playerY + 2] == 26) {
+
+            Toolkit.getDefaultToolkit().beep();
+            return;
+
+         }
+
+         puzzle[playerX][playerY + 1] -= 8;
+         puzzle[playerX][playerY + 2] += 8;
+
+      }
+
       puzzle[playerX][playerY] -= 4;
       puzzle[playerX][playerY + 1] += 4;
       playerY++;
-
+      
    }
    
 }
