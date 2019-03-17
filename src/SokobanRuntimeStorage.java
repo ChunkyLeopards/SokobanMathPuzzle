@@ -117,14 +117,14 @@ public class SokobanRuntimeStorage {
          }
          
 
-         puzzle[playerX - 1][playerY] -= 8;
-         puzzle[playerX - 2][playerY] += 8;
+         puzzle[playerX - 1][playerY] -= 8; // remove box from space to left
+         puzzle[playerX - 2][playerY] += 8; // move box onto next space
          
       }
       
-      puzzle[playerX][playerY] -= 4;
-      puzzle[playerX - 1][playerY] += 4;
-      playerX--;
+      puzzle[playerX][playerY] -= 4; // remove player from current location
+      puzzle[playerX - 1][playerY] += 4; // player location one to the left
+      playerX--; // update player x location
       
    }
 
