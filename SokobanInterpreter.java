@@ -3,15 +3,42 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Interprets and creates all necessary Sokoban objects from a file.
+ * @author Daniel Moore
+ */
+
 public class SokobanInterpreter {
    
+   public static final byte EXTERNAL = 0;
+   public static final byte WALL = 1;
+   public static final byte INTERNAL = 2;
+   public static final byte PLAYER = 4;
+   public static final byte INTERNAL_PLAYER = 6;
+   public static final byte BOX = 8;
+   public static final byte INTERNAL_BOX = 10;
+   public static final byte TARGET = 16;
+   public static final byte INTERNAL_TARGET = 18;
+   public static final byte INTERNAL_PLAYER_TARGET = 22;
+   public static final byte INTERNAL_BOX_TARGET = 26;
    private File puzzle;
+   
+   /**
+    * Constructor that uses an input file to create an interpreter.
+    * @param p The puzzle file. 
+    */
    
    public SokobanInterpreter(File p) {
       
       puzzle = p;
       
    }
+   
+   /**
+    * Reads a file with a stored Sokoban puzzle.
+    * @return SokobanRuntimeStorage object of the appropriate size to store the puzzle.
+    * @throws IOException
+    */
    
    public SokobanRuntimeStorage readPuzzleFile() throws IOException {
       
@@ -121,6 +148,13 @@ public class SokobanInterpreter {
       
    }
    
+   /**
+    * Method to interpret a string representing a Sokoban puzzle, and store
+    * it in a runtime storage object which will be manipulated to solve the puzzle. 
+    * @param puzzle string representation of a Sokoban puzzle.
+    * @param puzz The runtime storage object to store the puzzle in.
+    */
+   
    public void storePuzzle(String puzzle, SokobanRuntimeStorage puzz) {
       
       String nextLine = puzzle.substring(0, puzzle.indexOf(":"));
@@ -145,19 +179,19 @@ public class SokobanInterpreter {
                
             case "W":
                
-               puzz.setSquare((byte) 1, column, row);
+               puzz.setSquare(WALL, column, row);
                column++;
                break;
                
             case "I":
                
-               puzz.setSquare((byte) 2, column, row);
+               puzz.setSquare(INTERNAL, column, row);
                column++;
                break;
                
             case "IP":
                
-               puzz.setSquare((byte) 6, column, row);
+               puzz.setSquare(INTERNAL_PLAYER, column, row);
                puzz.setPlayerX(column);
                puzz.setPlayerY(row);
                column++;
@@ -165,41 +199,29 @@ public class SokobanInterpreter {
                
             case "IB":
                
-               puzz.setSquare((byte) 10, column, row);
+               puzz.setSquare(INTERNAL_BOX, column, row);
                column++;
                break;
                
             case "IT":
                
-               puzz.setSquare((byte) 18, column, row);
+               puzz.setSquare(INTERNAL_TARGET, column, row);
                column++;
                break;
                
             case "IPT":
-               
-               puzz.setSquare((byte) 22, column, row);
-               puzz.setPlayerX(column);
-               puzz.setPlayerY(row);
-               column++;
-               break;
-               
             case "ITP":
                
-               puzz.setSquare((byte) 22, column, row);
+               puzz.setSquare(INTERNAL_PLAYER_TARGET, column, row);
                puzz.setPlayerX(column);
                puzz.setPlayerY(row);
                column++;
                break;
                
             case "IBT":
-               
-               puzz.setSquare((byte) 26, column, row);
-               column++;
-               break;
-               
             case "ITB":
                
-               puzz.setSquare((byte) 26, column, row);
+               puzz.setSquare(INTERNAL_BOX_TARGET, column, row);
                column++;
                break;
                

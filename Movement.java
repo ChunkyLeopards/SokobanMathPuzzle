@@ -14,16 +14,16 @@ public class Movement {
             
             switch (key.getKeyCode()) {
             
-            case 37: p.moveLeft();
+            case 37: p.move(SokobanRuntimeStorage.LEFT);
                      break;
                      
-            case 38: p.moveUp();
+            case 38: p.move(SokobanRuntimeStorage.UP);
                      break;
                      
-            case 39: p.moveRight();
+            case 39: p.move(SokobanRuntimeStorage.RIGHT);
                      break;
             
-            case 40: p.moveDown();
+            case 40: p.move(SokobanRuntimeStorage.DOWN);
                      break;
                      
             default:

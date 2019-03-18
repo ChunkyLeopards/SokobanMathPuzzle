@@ -1,12 +1,30 @@
-import java.awt.Toolkit;
 import java.util.Arrays;
+
+/**
+ * This class serves as storage for a Sokoban puzzle. It also includes
+ * methods to move the player.
+ * @author Daniel Moore
+ */
 
 public class SokobanRuntimeStorage {
    
+   public static final int LEFT = 0;
+   public static final int UP = 1;
+   public static final int RIGHT = 2;
+   public static final int DOWN = 3;
    private String name;
    private byte puzzle[][];
    private int playerX;
    private int playerY;
+   
+   /**
+    * Constructs a 2D array of the appropriate width and height, and saves
+    * the name of the puzzle. The square value.
+    * @param w
+    * @param n The name of the puzzle.
+    * @param w Width of the puzzle.
+    * @param h Height of the puzzle.
+    */
    
    public SokobanRuntimeStorage(String n, int w, int h) {
       
@@ -21,7 +39,14 @@ public class SokobanRuntimeStorage {
       
    }
    
-   public void setSquare(byte s, int w, int h ) {
+   /**
+    * Sets a square in a Sokoban puzzle.
+    * @param s The square value.
+    * @param x The column to insert the value.
+    * @param y The row to insert the value. 
+    */
+   
+   public void setSquare(byte s, int x, int y) {
       
       /*
        * The bytes stored are decimal conversions of binary numbers.
@@ -39,9 +64,13 @@ public class SokobanRuntimeStorage {
        * A byte value of 0 represents external space.
        */
       
-      puzzle[w][h] = s;
+      puzzle[x][y] = s;
       
    }
+   
+   /**
+    * Removes a Sokoban puzzle storage object.
+    */
    
    public void empty() {
       
@@ -50,11 +79,21 @@ public class SokobanRuntimeStorage {
       
    }
    
+   /**
+    * Method to retrieve the name of a SokobanRuntimeStorage object.
+    * @return The name of a Sokoban puzzle.
+    */
+   
    public String getName() {
       
       return name;
       
    }
+   
+   /**
+    * Method to retrieve the height of a SokobanRuntimeStorage object.
+    * @return The height of a Sokoban puzzle.
+    */
    
    public int getHeight() {
       
@@ -62,47 +101,175 @@ public class SokobanRuntimeStorage {
       
    }
    
+   /**
+    * Method to retrieve the width of a SokobanRuntimeStorage object.
+    * @return The width of a Sokoban puzzle.}
+    */
+   
    public int getWidth() {
       
       return puzzle.length;
       
    }
    
-   public byte getValue(int w, int h) {
+   /**
+    * Method to retrieve the value of a square at a particular location
+    * in a SokobanRuntimeStorage object.
+    * @param x The column to retrieve from. 
+    * @param y The row to retrieve from.
+    * @return The value at location x, y of a Sokoban puzzle.
+    */
+   
+   public byte getValue(int x, int y) {
       
-      return puzzle[w][h];
+      return puzzle[x][y];
       
    }
-
+   
+   /**
+    * Method to retrieve the player's x location.
+    * @return The player's x location in a Sokoban puzzle.
+    */
+   
    public int getPlayerX() {
       
       return playerX;
       
    }
+   
+   /**
+    * Method to set the players's x location.
+    * @param x The player's x coordinate.
+    */
 
    public void setPlayerX(int x) {
       
       playerX = x;
       
    }
-
+   
+   /**
+    * Method to retrieve the player's y location.
+    * @return The player's y location in a Sokoban puzzle. 
+    */
+   
    public int getPlayerY() {
       
       return playerY;
       
    }
-
+   
+   /**
+    * Method to set the player's y location.
+    * @param y The player's y coordinate. 
+    */
+   
    public void setPlayerY(int y) {
       
       playerY = y;
       
    }
+
+   /**
+    * Method to move the player around the SokobanRuntimeStorage object.
+    * @param direction What direction to move in. Use the static
+    * LEFT, RIGHT, UP, DOWN variables.
+    */
    
-   public void moveLeft() {
+   public void move(int direction) {
+      
+      int playerXNew = playerX;
+      int playerYNew = playerY;
+      int boxX = playerX;
+      int boxY = playerY;
+      
+      switch (direction) {
+      
+      case LEFT:
+         
+         playerXNew = playerX - 1;
+         boxX = playerX - 2;
+         break;
+         
+      case UP:
+         
+         playerYNew = playerY - 1;
+         boxY = playerY - 2;
+         break;
+         
+      case RIGHT:
+         
+         playerXNew = playerX + 1;
+         boxX = playerX + 2;
+         break;
+         
+      case DOWN:
+         
+         playerYNew = playerY + 1;
+         boxY = playerY + 2;
+         break;
+         
+      default:
+            
+      }
+      
+      if (puzzle[playerXNew][playerYNew] == SokobanInterpreter.WALL) {
+         
+         // add bump sound effect
+         return;
+         
+      }
+      
+      else if (puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX || puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
+         
+         if (puzzle[boxX][boxY] == SokobanInterpreter.WALL || puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX || puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
+            
+            // add bump sound effect
+            return;   
+            
+         }
+
+         puzzle[playerXNew][playerYNew] -= SokobanInterpreter.BOX;
+         puzzle[boxX][boxY] += SokobanInterpreter.BOX;
+         
+      }
+      
+      puzzle[playerX][playerY] -= SokobanInterpreter.PLAYER;
+      puzzle[playerXNew][playerYNew] += SokobanInterpreter.PLAYER;
+      
+      switch (direction) {
+      
+      case LEFT:
+         
+         playerX--;
+         break;
+         
+      case UP:
+         
+         playerY--;
+         break;
+         
+      case RIGHT:
+         
+         playerX++;
+         break;
+         
+      case DOWN:
+         
+         playerY++;
+         break;
+         
+      default:
+      
+      }
+      
+   }
+   
+   /*public void moveLeft() {
       
       if (puzzle[playerX - 1][playerY] == 1) {
          
-         Toolkit.getDefaultToolkit().beep();
+         // add bump sound effect
          return;
          
       }
@@ -111,7 +278,7 @@ public class SokobanRuntimeStorage {
          
          if (puzzle[playerX - 2][playerY] == 1 || puzzle[playerX - 2][playerY] == 10 || puzzle[playerX - 2][playerY] == 26) {
             
-            Toolkit.getDefaultToolkit().beep();
+            // add bump sound effect
             return;   
             
          }
@@ -132,7 +299,7 @@ public class SokobanRuntimeStorage {
 
       if (puzzle[playerX + 1][playerY] == 1) {
 
-         Toolkit.getDefaultToolkit().beep();
+         // add bump sound effect
          return;
 
       }
@@ -141,9 +308,9 @@ public class SokobanRuntimeStorage {
 
          if (puzzle[playerX + 2][playerY] == 1 || puzzle[playerX + 2][playerY] == 10 || puzzle[playerX + 2][playerY] == 26) {
 
-            Toolkit.getDefaultToolkit().beep();
+            // add bump sound effect
             return;
-
+            
          }
 
          puzzle[playerX + 1][playerY] -= 8;
@@ -161,7 +328,7 @@ public class SokobanRuntimeStorage {
 
       if (puzzle[playerX][playerY - 1] == 1) {
 
-         Toolkit.getDefaultToolkit().beep();
+         // add bump sound effect
          return;
 
       }
@@ -170,7 +337,7 @@ public class SokobanRuntimeStorage {
 
          if (puzzle[playerX][playerY - 2] == 1 || puzzle[playerX][playerY - 2] == 10 || puzzle[playerX][playerY - 2] == 26) {
 
-            Toolkit.getDefaultToolkit().beep();
+            // add bump sound effect
             return;
 
          }
@@ -190,7 +357,7 @@ public class SokobanRuntimeStorage {
 
       if (puzzle[playerX][playerY + 1] == 1) {
 
-         Toolkit.getDefaultToolkit().beep();
+         // add bump sound effect
          return;
 
       }
@@ -199,7 +366,7 @@ public class SokobanRuntimeStorage {
 
          if (puzzle[playerX][playerY + 2] == 1 || puzzle[playerX][playerY + 2] == 10 || puzzle[playerX][playerY + 2] == 26) {
 
-            Toolkit.getDefaultToolkit().beep();
+            // add bump sound effect
             return;
 
          }
@@ -213,6 +380,6 @@ public class SokobanRuntimeStorage {
       puzzle[playerX][playerY + 1] += 4;
       playerY++;
       
-   }
+   }*/
    
 }
