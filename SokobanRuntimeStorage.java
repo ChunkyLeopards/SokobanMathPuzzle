@@ -230,7 +230,6 @@ public class SokobanRuntimeStorage {
          }
          
          short tempBoxValue = (short)(puzzle[playerXNew][playerYNew] / SokobanInterpreter.BOX_TRACK_OFFSET);
-         System.out.println(tempBoxValue);
          puzzle[playerXNew][playerYNew] -= (SokobanInterpreter.BOX + tempBoxValue * SokobanInterpreter.BOX_TRACK_OFFSET);
          puzzle[boxX][boxY] += (SokobanInterpreter.BOX + tempBoxValue * SokobanInterpreter.BOX_TRACK_OFFSET);
          
