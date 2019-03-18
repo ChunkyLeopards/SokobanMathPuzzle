@@ -21,6 +21,7 @@ public class SokobanInterpreter {
    public static final byte INTERNAL_TARGET = 18;
    public static final byte INTERNAL_PLAYER_TARGET = 22;
    public static final byte INTERNAL_BOX_TARGET = 26;
+   public static final short BOX_TRACK_OFFSET = 256;
    private File puzzle;
    
    /**
@@ -160,6 +161,7 @@ public class SokobanInterpreter {
       String nextLine = puzzle.substring(0, puzzle.indexOf(":"));
       String remaining = puzzle.substring(puzzle.indexOf(":") + 1);
       String nextSquare;
+      short boxTrack = 0;
       int column = 0;
       int row = 0;
       boolean eol = false;
@@ -199,7 +201,8 @@ public class SokobanInterpreter {
                
             case "IB":
                
-               puzz.setSquare(INTERNAL_BOX, column, row);
+               puzz.setSquare((short)(INTERNAL_BOX + boxTrack), column, row);
+               boxTrack = (short)(boxTrack + BOX_TRACK_OFFSET);
                column++;
                break;
                
@@ -221,7 +224,8 @@ public class SokobanInterpreter {
             case "IBT":
             case "ITB":
                
-               puzz.setSquare(INTERNAL_BOX_TARGET, column, row);
+               puzz.setSquare((short)(INTERNAL_BOX_TARGET + boxTrack), column, row);
+               boxTrack = (short)(boxTrack + BOX_TRACK_OFFSET);
                column++;
                break;
                

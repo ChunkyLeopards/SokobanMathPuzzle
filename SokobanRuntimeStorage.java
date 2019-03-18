@@ -13,7 +13,7 @@ public class SokobanRuntimeStorage {
    public static final int RIGHT = 2;
    public static final int DOWN = 3;
    private String name;
-   private byte puzzle[][];
+   private short puzzle[][];
    private int playerX;
    private int playerY;
    
@@ -29,11 +29,11 @@ public class SokobanRuntimeStorage {
    public SokobanRuntimeStorage(String n, int w, int h) {
       
       name = n;
-      puzzle = new byte[w][h];
+      puzzle = new short[w][h];
       
       for(int i = 0; i < w; i++) {
          
-         Arrays.fill(puzzle[i], (byte) 0);
+         Arrays.fill(puzzle[i], (short) 0);
          
       }
       
@@ -46,7 +46,7 @@ public class SokobanRuntimeStorage {
     * @param y The row to insert the value. 
     */
    
-   public void setSquare(byte s, int x, int y) {
+   public void setSquare(short s, int x, int y) {
       
       /*
        * The bytes stored are decimal conversions of binary numbers.
@@ -56,7 +56,7 @@ public class SokobanRuntimeStorage {
        * Internal space
        * Player
        * Box
-       * Target
+       * Targetpuzzle[playerXNew][playerYNew]
        * 
        * A 0 represents no element, while a 1 represents an element of the appropriate type.
        * Not all combinations are allowed. Input interpreter should catch invalid square contents.
@@ -120,7 +120,7 @@ public class SokobanRuntimeStorage {
     * @return The value at location x, y of a Sokoban puzzle.
     */
    
-   public byte getValue(int x, int y) {
+   public short getValue(int x, int y) {
       
       return puzzle[x][y];
       
@@ -220,17 +220,19 @@ public class SokobanRuntimeStorage {
          
       }
       
-      else if (puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX || puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
+      else if ((byte)puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX || (byte)puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
          
-         if (puzzle[boxX][boxY] == SokobanInterpreter.WALL || puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX || puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
+         if (puzzle[boxX][boxY] == SokobanInterpreter.WALL || (byte)puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX || (byte)puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
             
             // add bump sound effect
             return;   
             
          }
-
-         puzzle[playerXNew][playerYNew] -= SokobanInterpreter.BOX;
-         puzzle[boxX][boxY] += SokobanInterpreter.BOX;
+         
+         short tempBoxValue = (short)(puzzle[playerXNew][playerYNew] / SokobanInterpreter.BOX_TRACK_OFFSET);
+         System.out.println(tempBoxValue);
+         puzzle[playerXNew][playerYNew] -= (SokobanInterpreter.BOX + tempBoxValue * SokobanInterpreter.BOX_TRACK_OFFSET);
+         puzzle[boxX][boxY] += (SokobanInterpreter.BOX + tempBoxValue * SokobanInterpreter.BOX_TRACK_OFFSET);
          
       }
       
