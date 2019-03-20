@@ -8,8 +8,14 @@ public class UndoState {
    public UndoState next = null;
    
    public UndoState(short undo[][], int px, int py) {
+      state = new short[undo.length][undo[0].length];
       
-      state = Arrays.copyOf(undo, undo.length);
+      for (int i = 0; i < undo.length; i++) {
+         
+         state[i] = Arrays.copyOf(undo[i], undo[i].length); 
+         
+      }
+      
       x = px;
       y = py;
       
@@ -42,6 +48,12 @@ public class UndoState {
    public int getY() {
       
       return y;
+      
+   }
+   
+   public String toString() {
+      
+      return "The player was at " + x + ", " + y; 
       
    }
    

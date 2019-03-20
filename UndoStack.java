@@ -25,8 +25,24 @@ public class UndoStack {
    
    public void push(UndoState undo) {
       
-      undo.setNext(head.getNext());
-      head.setNext(undo);
+      undo.setNext(head);
+      head = undo;
+      
+   }
+   
+   public int size() {
+      
+      int count = 0;
+      UndoState temp = head;
+      
+      while (temp != null) {
+         
+         temp = temp.getNext();
+         count++;
+         
+      }
+      
+      return count;
       
    }
    
