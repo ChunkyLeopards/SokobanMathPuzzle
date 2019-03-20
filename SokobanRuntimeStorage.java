@@ -16,6 +16,7 @@ public class SokobanRuntimeStorage {
    private short puzzle[][];
    private int playerX;
    private int playerY;
+   private UndoStack undo = null;
    
    /**
     * Constructs a 2D array of the appropriate width and height, and saves
@@ -178,10 +179,17 @@ public class SokobanRuntimeStorage {
    
    public void move(int direction) {
       
+      if (undo == null) {
+
+         undo = new UndoStack(puzzle, playerX, playerY);
+         
+      }
+      
       int playerXNew = playerX;
       int playerYNew = playerY;
       int boxX = playerX;
       int boxY = playerY;
+      undo.push(new UndoState(puzzle, playerX, playerY));
       
       switch (direction) {
       
@@ -215,6 +223,7 @@ public class SokobanRuntimeStorage {
       
       if (puzzle[playerXNew][playerYNew] == SokobanInterpreter.WALL) {
          
+         undo.pop();
          // add bump sound effect
          return;
          
@@ -224,6 +233,7 @@ public class SokobanRuntimeStorage {
          
          if (puzzle[boxX][boxY] == SokobanInterpreter.WALL || (byte)puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX || (byte)puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
             
+            undo.pop();
             // add bump sound effect
             return;   
             
@@ -263,6 +273,15 @@ public class SokobanRuntimeStorage {
       default:
       
       }
+      
+   }
+   
+   public void undo() {
+      
+      UndoState last = undo.pop();
+      puzzle = last.getState();
+      playerX = last.getX();
+      playerY = last.getY();
       
    }
    

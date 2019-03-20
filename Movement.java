@@ -26,7 +26,10 @@ public class Movement {
             case 40: p.move(SokobanRuntimeStorage.DOWN);
                      break;
                      
-            default:
+            case 90: p.undo();
+                     break;
+                     
+            default: //System.out.println(key);
             
             }
             

@@ -47,13 +47,11 @@ public class MainMenu extends JPanel {
       panel.setBackground(Color.red);
       puzzles = new JLabel("Puzzles");
       puzzles.setAlignmentX(Component.CENTER_ALIGNMENT);
-      puzzles.setAlignmentY(Component.CENTER_ALIGNMENT);
       puzzles.setFont(new Font("TimesRoman", Font.BOLD + Font.ITALIC, 20));
       puzzles.setSize(puzzles.getMinimumSize());
       puzzles.setBorder(new EmptyBorder(5, 5, 5, 5));
       puzzleButton = new JPanel();
       puzzleButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-      puzzleButton.setAlignmentY(0.2f);
       puzzleButton.setMaximumSize(new Dimension(puzzles.getWidth()  + 30, puzzles.getHeight()));
       puzzleButton.setBackground(Color.gray);
       puzzleButton.add(puzzles);
@@ -159,7 +157,7 @@ public class MainMenu extends JPanel {
          @Override
          public void mouseReleased(MouseEvent arg0) {
 
-            puzzleButton.setBackground(Color.gray);
+            puzzleButton.setBackground(Color.lightGray);
 
          }
 
@@ -196,7 +194,7 @@ public class MainMenu extends JPanel {
          @Override
          public void mouseReleased(MouseEvent arg0) {
 
-            editorButton.setBackground(Color.gray);
+            editorButton.setBackground(Color.lightGray);
 
          }
 
@@ -233,7 +231,7 @@ public class MainMenu extends JPanel {
          @Override
          public void mouseReleased(MouseEvent arg0) {
 
-            optionButton.setBackground(Color.gray);
+            optionButton.setBackground(Color.lightGray);
 
          }
 
@@ -272,7 +270,7 @@ public class MainMenu extends JPanel {
          @Override
          public void mouseReleased(MouseEvent arg0) {
 
-            exitButton.setBackground(Color.gray);
+            exitButton.setBackground(Color.lightGray);
 
          }
 
