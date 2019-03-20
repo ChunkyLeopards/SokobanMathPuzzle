@@ -1,0 +1,27 @@
+/* 
+ * Each puzzle file must contain a "Title:" and a "Puzzle:" code. Optionally, it may include an "Equation:"
+ * and "Piece:" code.
+ *
+ * Puzzles are represented by a single line.
+ * Each square is separated by a semicolon ';'. Each new line is separated by a colon ':'.
+ * Each square contains a single identifier followed by 0 or more modifiers.
+ * The puzzle is terminated by a final colon.
+ *
+ *
+ *     Element    |    Identifier    |    Modifiers    |    Description
+ * ---------------|------------------|-----------------|-------------------------------------------
+ * Exterior       | {empty}          | {empty}         | Used to put spaces before the first real
+ *                |                  |                 | elements, where the puzzle isn't left
+ *                |                  |                 | aligned.
+ * ---------------|------------------|-----------------|-------------------------------------------
+ * Interior       | I                | P: player start | Any internal space. A box and a target or
+ *                |                  | point           | a player and a target can be on one space
+ *                |                  | B: box start    | at a time. A player and target cannot.
+ *                |                  | T: target start |
+ * ---------------|------------------|-----------------|-------------------------------------------
+ * Wall           | W                | {empty}         | Impassable element.
+ */
+
+Title:Error Case 2
+
+Puzzle:W;W;W;W;:W;IB;I;IT;:
