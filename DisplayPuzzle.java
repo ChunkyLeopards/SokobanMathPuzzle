@@ -75,7 +75,7 @@ public class DisplayPuzzle extends JPanel{
       
       int width = puzzle.getWidth();
       int height = puzzle.getHeight();
-      byte square;
+      short square;
       int drawableX = (int) getSize().getWidth();
       int drawableY = (int) getSize().getHeight();
       int offset = 10;
@@ -91,7 +91,7 @@ public class DisplayPuzzle extends JPanel{
             
             square = puzzle.getValue(j, i);
             
-            switch (square) {
+            switch ((byte)square) {
             
             case SokobanInterpreter.EXTERNAL:
                break;            
@@ -124,6 +124,8 @@ public class DisplayPuzzle extends JPanel{
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
                g.setColor(new Color(200, 150, 0));
                g.drawRect(squareX + 2, squareY + 2, squareDim - 4, squareDim - 4);
+               g.setColor(new Color(0, 0, 0));
+               g.drawString(((Integer)(square / SokobanInterpreter.BOX_TRACK_OFFSET)).toString(), squareX + 4, squareY + squareDim - 4);
                break;
                
             case SokobanInterpreter.INTERNAL_TARGET:
@@ -155,6 +157,8 @@ public class DisplayPuzzle extends JPanel{
                g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
                g.setColor(new Color(200, 150, 0));
                g.drawRect(squareX + 2, squareY + 2, squareDim - 4, squareDim - 4);
+               g.setColor(new Color(0, 0, 0));
+               g.drawString(((Integer)(square / SokobanInterpreter.BOX_TRACK_OFFSET)).toString(), squareX + 4, squareY + squareDim - 4);
                break;
                
             default:
