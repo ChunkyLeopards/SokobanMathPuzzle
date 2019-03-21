@@ -28,122 +28,11 @@ public class Validation {
 
       // check for invalid structure in 2x2, nested for
       // ex) square of boxes, all walls and boxes
-      for (int i = 0; i < p.getWidth() - 1; i++) {
-         for (int j = 0; j < p.getHeight() - 1; j++) {
-            int UL = p.getValue(i, j);
-            int UR = p.getValue(i + 1, j);
-            int LL = p.getValue(i, j + 1);
-            int LR = p.getValue(i + 1, j + 1);
-            // 2 boxes against a wall
-            // 2 boxes against wall one on target
-            // WW
-            // BB
-            if ((UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.INTERNAL_BOX)
-                  // WW
-                  // BS
-                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.INTERNAL_BOX_TARGET)
-                  // WW
-                  // SB
-                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX_TARGET && LR == SokobanInterpreter.INTERNAL_BOX)
-                  // WB
-                  // WB
-                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX)
-                  // WS
-                  // WB
-                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX_TARGET && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX)
-                  // WB
-                  // WS
-                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX_TARGET)
-                  // BW
-                  // BW
-                  || (UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.WALL)
-                  // SW
-                  // BW
-                  || (UL == SokobanInterpreter.INTERNAL_BOX_TARGET && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.WALL)
-                  // BW
-                  // SW
-                  || (UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX_TARGET && LR == SokobanInterpreter.WALL)
-                  // BB
-                  // WW
-                  || (UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.INTERNAL_BOX && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.WALL)
-                  // SB
-                  // WW
-                  || (UL == SokobanInterpreter.INTERNAL_BOX_TARGET && UR == SokobanInterpreter.INTERNAL_BOX && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.WALL)
-                  // BS
-                  // WW
-                  || (UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.INTERNAL_BOX_TARGET && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.WALL)) {
-               System.err.println("Failed Case 3a, invalid box structure, two connected boxes along a wall");
-               return false;
-            }
-
-            // 1 box in a corner
-            // BW
-            // W
-            if ((UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.WALL)
-                  // WB
-                  // W
-                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.WALL)
-                  // W
-                  // WB
-                  || (UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX)
-                  // W
-                  // BW
-                  || (UL == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.WALL)) {
-               System.err.println("Failed Case 3b, invalid box structure, box in a corner");
-               return false;
-            }
-
-            // 3 boxes around a wall
-            // WB
-            // __
-            if ((UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // W_
-                  // _B
-                  || (UL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // W_
-                  // B_
-                  || (UL == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // BW
-                  // __
-                  || (UR == SokobanInterpreter.WALL && UL == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // _W
-                  // B_
-                  || (UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // _W
-                  // _B
-                  || (UR == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // __
-                  // WB
-                  || (LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // B_
-                  // W_
-                  || (LL == SokobanInterpreter.WALL && UL == SokobanInterpreter.INTERNAL_BOX && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // _B
-                  // W_
-                  || (LL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // __
-                  // BW
-                  || (LR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // B_
-                  // _W
-                  || (LR == SokobanInterpreter.WALL && UL == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
-                  // _B
-                  // _W
-                  || (LR == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET))) {
-               System.err.println("Failed Case 3c, invalid box structure, 3 boxes around one wall");
-               return false;
-            }
-
-            // 4 boxes
-            if ((UL == 10 && (UR == 10 || UR == 26) && (LL == 10 || LL == 26) && (LR == 10 || LR == 26))
-                  || (UR == 10 && (UL == 10 || UL == 26) && (LL == 10 || LL == 26) && (LR == 10 || LR == 26))
-                  || (LL == 10 && (UL == 10 || UL == 26) && (UR == 10 || UR == 26) && (LR == 10 || LR == 26))
-                  || (LR == 10 && (UL == 10 || UL == 26) && (LL == 10 || LL == 26) && (UR == 10 || UR == 26))) {
-               System.err.println("Failed Case 3d, invalid box structure, 4 boxes in a 2 by 2 space");
-               return false;
-            }
-
-         }
+      if (!checkStructure(p)) {
+         
+         System.err.println("Failed case 3 - invalid element structure.");
+         return false;
+         
       }
 
       // Case 4 External wall closes, includes corners for aesthetics
@@ -152,11 +41,11 @@ public class Validation {
 
          }
       }
-      System.out.println("passed test 4");
+      //System.out.println("passed test 4");
 
       // Check all internal spaces connected, create list of internal spaces (x,y) and
       // a tree
-      System.out.println("passed test 5");
+      //System.out.println("passed test 5");
 
       // Boxes on wall with no target along wall requires indentation
       if (!checkIndentVert(p)) {
@@ -388,6 +277,128 @@ public class Validation {
       // boxes and targets 1 to 1
       return true;
 
+   }
+   
+   public static boolean checkStructure(SokobanRuntimeStorage p) {
+      
+      for (int i = 0; i < p.getWidth() - 1; i++) {
+         for (int j = 0; j < p.getHeight() - 1; j++) {
+            int UL = p.getValue(i, j) % SokobanInterpreter.BOX_TRACK_OFFSET;
+            int UR = p.getValue(i + 1, j) % SokobanInterpreter.BOX_TRACK_OFFSET;
+            int LL = p.getValue(i, j + 1) % SokobanInterpreter.BOX_TRACK_OFFSET;
+            int LR = p.getValue(i + 1, j + 1) % SokobanInterpreter.BOX_TRACK_OFFSET;
+            // 2 boxes against a wall
+            // 2 boxes against wall one on target
+            // WW
+            // BB
+            if ((UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.INTERNAL_BOX)
+                  // WW
+                  // BS
+                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.INTERNAL_BOX_TARGET)
+                  // WW
+                  // SB
+                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX_TARGET && LR == SokobanInterpreter.INTERNAL_BOX)
+                  // WB
+                  // WB
+                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX)
+                  // WS
+                  // WB
+                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX_TARGET && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX)
+                  // WB
+                  // WS
+                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX_TARGET)
+                  // BW
+                  // BW
+                  || (UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.WALL)
+                  // SW
+                  // BW
+                  || (UL == SokobanInterpreter.INTERNAL_BOX_TARGET && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.WALL)
+                  // BW
+                  // SW
+                  || (UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX_TARGET && LR == SokobanInterpreter.WALL)
+                  // BB
+                  // WW
+                  || (UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.INTERNAL_BOX && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.WALL)
+                  // SB
+                  // WW
+                  || (UL == SokobanInterpreter.INTERNAL_BOX_TARGET && UR == SokobanInterpreter.INTERNAL_BOX && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.WALL)
+                  // BS
+                  // WW
+                  || (UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.INTERNAL_BOX_TARGET && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.WALL)) {
+               System.err.println("Failed Case 3a, invalid box structure, two connected boxes along a wall");
+               return false;
+            }
+
+            // 1 box in a corner
+            // BW
+            // W
+            if ((UL == SokobanInterpreter.INTERNAL_BOX && UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.WALL)
+                  // WB
+                  // W
+                  || (UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.WALL)
+                  // W
+                  // WB
+                  || (UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX)
+                  // W
+                  // BW
+                  || (UL == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && LR == SokobanInterpreter.WALL)) {
+               System.err.println("Failed Case 3b, invalid box structure, box in a corner");
+               return false;
+            }
+
+            // 3 boxes around a wall
+            // WB
+            // __
+            if ((UL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // W_
+                  // _B
+                  || (UL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // W_
+                  // B_
+                  || (UL == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // BW
+                  // __
+                  || (UR == SokobanInterpreter.WALL && UL == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // _W
+                  // B_
+                  || (UR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // _W
+                  // _B
+                  || (UR == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // __
+                  // WB
+                  || (LL == SokobanInterpreter.WALL && LR == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // B_
+                  // W_
+                  || (LL == SokobanInterpreter.WALL && UL == SokobanInterpreter.INTERNAL_BOX && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // _B
+                  // W_
+                  || (LL == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (LR == SokobanInterpreter.INTERNAL_BOX || LR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // __
+                  // BW
+                  || (LR == SokobanInterpreter.WALL && LL == SokobanInterpreter.INTERNAL_BOX && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // B_
+                  // _W
+                  || (LR == SokobanInterpreter.WALL && UL == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UR == SokobanInterpreter.INTERNAL_BOX || UR == SokobanInterpreter.INTERNAL_BOX_TARGET))
+                  // _B
+                  // _W
+                  || (LR == SokobanInterpreter.WALL && UR == SokobanInterpreter.INTERNAL_BOX && (LL == SokobanInterpreter.INTERNAL_BOX || LL == SokobanInterpreter.INTERNAL_BOX_TARGET) && (UL == SokobanInterpreter.INTERNAL_BOX || UL == SokobanInterpreter.INTERNAL_BOX_TARGET))) {
+               System.err.println("Failed Case 3c, invalid box structure, 3 boxes around one wall");
+               return false;
+            }
+
+            // 4 boxes
+            if ((UL == 10 && (UR == 10 || UR == 26) && (LL == 10 || LL == 26) && (LR == 10 || LR == 26))
+                  || (UR == 10 && (UL == 10 || UL == 26) && (LL == 10 || LL == 26) && (LR == 10 || LR == 26))
+                  || (LL == 10 && (UL == 10 || UL == 26) && (UR == 10 || UR == 26) && (LR == 10 || LR == 26))
+                  || (LR == 10 && (UL == 10 || UL == 26) && (LL == 10 || LL == 26) && (UR == 10 || UR == 26))) {
+               System.err.println("Failed Case 3d, invalid box structure, 4 boxes in a 2 by 2 space");
+               return false;
+            }
+
+         }
+      }
+      return true;
    }
 
 }

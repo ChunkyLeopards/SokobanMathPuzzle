@@ -128,7 +128,6 @@ public class MainMenu extends JPanel {
 
             }
 
-            Validation.validate(puzzle);
             DisplayPuzzle.displayWindow(puzzle);
 
          }
