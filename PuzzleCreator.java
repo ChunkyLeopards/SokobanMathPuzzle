@@ -45,7 +45,7 @@ public class PuzzleCreator extends JFrame{
       
       JFrame frame = new JFrame("Puzzle Creator: Dimensions");    
     
-      JLabel prompt = new JLabel("Enter the dimensions of your puzzle:\n Must be at least a 3x5 or 5x3 ");
+      JLabel prompt = new JLabel("Enter the dimensions of your puzzle: ");
       JLabel prompt1 = new JLabel("Must be at least a 3x5 or 5x3 ");
       JLabel prompt2 = new JLabel("Click on \"Done\" to create your new puzzle");
       prompt.setBounds(20, 2, 400, 100);   
