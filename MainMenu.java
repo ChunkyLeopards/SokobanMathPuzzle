@@ -28,6 +28,8 @@ public class MainMenu extends JPanel {
    private static JLabel editor;
    private static JPanel optionButton;
    private static JLabel options;
+   private static JPanel creditButton;
+   private static JLabel credits;
    private static JPanel exitButton;
    private static JLabel exit;
    private static JLabel title;
@@ -77,6 +79,17 @@ public class MainMenu extends JPanel {
       optionButton.setMaximumSize(new Dimension(options.getWidth()  + 30, options.getHeight()));
       optionButton.setBackground(Color.gray);
       optionButton.add(options);
+      credits = new JLabel("Credits");
+      credits.setBackground(Color.gray);
+      credits.setAlignmentX(Component.CENTER_ALIGNMENT);
+      credits.setFont(new Font("TimesRoman", Font.BOLD + Font.ITALIC, 20));
+      credits.setSize(credits.getMinimumSize());
+      credits.setBorder(new EmptyBorder(5, 5, 5, 5));
+      creditButton = new JPanel();
+      creditButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+      creditButton.setMaximumSize(new Dimension(credits.getWidth()  + 30, credits.getHeight()));
+      creditButton.setBackground(Color.gray);
+      creditButton.add(credits);
       exit = new JLabel("Exit");
       exit.setBackground(Color.gray);
       exit.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -95,6 +108,8 @@ public class MainMenu extends JPanel {
       panel.add(editorButton);
       panel.add(Box.createRigidArea(new Dimension(0,20)));
       panel.add(optionButton);
+      panel.add(Box.createRigidArea(new Dimension(0,20)));
+      panel.add(creditButton);
       panel.add(Box.createRigidArea(new Dimension(0,20)));
       panel.add(exitButton);
       panel.add(Box.createVerticalGlue());
@@ -239,6 +254,43 @@ public class MainMenu extends JPanel {
 
       });
 
+      creditButton.addMouseListener(new MouseListener() {
+
+         @Override
+         public void mouseClicked(MouseEvent arg0) {
+
+         }
+
+         @Override
+         public void mouseEntered(MouseEvent arg0) {
+
+            creditButton.setBackground(Color.lightGray);
+
+         }
+
+         @Override
+         public void mouseExited(MouseEvent arg0) {
+
+            creditButton.setBackground(Color.gray);
+
+         }
+
+         @Override
+         public void mousePressed(MouseEvent arg0) {
+
+            creditButton.setBackground(Color.white);
+
+         }
+
+         @Override
+         public void mouseReleased(MouseEvent arg0) {
+
+            creditButton.setBackground(Color.lightGray);
+
+         }
+
+      });
+      
       exitButton.addMouseListener(new MouseListener() {
 
          @Override
