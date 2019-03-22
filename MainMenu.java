@@ -166,7 +166,10 @@ public class MainMenu extends JPanel {
 
          @Override
          public void mouseClicked(MouseEvent arg0) {
-
+            
+            window.setVisible(false);
+            PuzzleCreator.display();
+            
          }
 
          @Override
