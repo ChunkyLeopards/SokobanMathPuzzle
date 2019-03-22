@@ -46,7 +46,11 @@ public class PuzzleCreator extends JFrame{
       JFrame frame = new JFrame("Puzzle Creator: Dimensions");    
     
       JLabel prompt = new JLabel("Enter the dimensions of your puzzle:\n Must be at least a 3x5 or 5x3 ");
-      prompt.setBounds(20, 15, 400, 100);   
+      JLabel prompt1 = new JLabel("Must be at least a 3x5 or 5x3 ");
+      JLabel prompt2 = new JLabel("Click on \"Done\" to create your new puzzle");
+      prompt.setBounds(20, 2, 400, 100);   
+      prompt1.setBounds(20, 13, 400, 100);
+      prompt2.setBounds(20, 24, 400, 100);  
       
       JLabel widthPrompt = new JLabel("Width: ");
       widthPrompt.setBounds(20, 75, 200, 100);
@@ -61,10 +65,12 @@ public class PuzzleCreator extends JFrame{
       widthEntry.setBounds(90, 100, 100, 50);
       
       JTextField heightEntry = new JTextField();
-		heightEntry.setBounds(90, 175, 100, 50);
+      heightEntry.setBounds(90, 175, 100, 50);
       
       frame.setVisible(true);
       frame.add(prompt);
+      frame.add(prompt1);
+      frame.add(prompt2);
       frame.add(widthPrompt);
       frame.add(heightPrompt);
       frame.add(widthEntry);      
