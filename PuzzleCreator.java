@@ -6,6 +6,8 @@
 */
 
 import java.io.File;
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +19,7 @@ import java.awt.event.WindowStateListener;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
@@ -32,11 +35,10 @@ public class PuzzleCreator extends JFrame{
    private static File box;
    private static File boxTarget;
    private static File playerTarget;
-
-   private static EditorButtons b;
    
    public static void display()
    {
+      
       //Creates the outter window
       //Allows for the use to enter the height and width for the
       //puzzle they want to create
@@ -131,41 +133,34 @@ public class PuzzleCreator extends JFrame{
          //Creates the grid of buttons
          puzz.setLayout(new GridLayout(nh, nw));
          for (int i = 0; i < (nh*nw); i++) {
-            b = new EditorButtons(exterior, 0);
-            puzz.add(b);            
+            JPanel but = new JPanel();
+            CardLayout buttons = new CardLayout();
+            EditorButtons ext = new EditorButtons(exterior);
+            EditorButtons wal = new EditorButtons(wall);
+            EditorButtons inter = new EditorButtons(interior);
+            EditorButtons pl = new EditorButtons(player);
+            EditorButtons bo = new EditorButtons(box);
+            EditorButtons tar = new EditorButtons(target);
+            EditorButtons bt = new EditorButtons(boxTarget);
+            EditorButtons pt = new EditorButtons(playerTarget);
+            but.setLayout(buttons);
+            but.add(ext, "0");
+            but.add(wal, "1");
+            but.add(inter, "2");
+            but.add(pl, "3");
+            but.add(bo, "4");
+            but.add(tar, "5");
+            but.add(bt, "6");
+            but.add(pt, "7");
+            puzz.add(but);
+            buttons.first(but);
             
-            b.addMouseListener(new MouseListener() {
+            but.addMouseListener(new MouseListener() {
 
                @Override
                public void mouseClicked(MouseEvent arg0) {
-                  switch(b.getTrack()) {
-
-                  case 0:
-                     b = new EditorButtons(wall, 1);
-                     break;
-                  case 1:
-                     b = new EditorButtons(interior, 2);
-                     break;
-                  case 2:
-                     b = new EditorButtons(player, 3);
-                     break;
-                  case 3:
-                     b = new EditorButtons(box, 4);
-                     break;
-                  case 4:
-                     b = new EditorButtons(target, 5);
-                     break;
-                  case 5:
-                     b = new EditorButtons(playerTarget, 6);
-                     break;
-                  case 6:
-                     b = new EditorButtons(boxTarget, 7);
-                     break;
-                  case 7:
-                     b = new EditorButtons(exterior, 0);
-                     break;
-                  default:
-                  }
+                  
+                  buttons.next(but);
                   
                }
 
@@ -188,18 +183,17 @@ public class PuzzleCreator extends JFrame{
                }
 
                @Override
-               public void mouseReleased(MouseEvent arg0) {
-                  // TODO Auto-generated method stub
-                  
-               }
-               
-            });
+                  public void mouseReleased(MouseEvent arg0) {
+                     // TODO Auto-generated method stub
 
-         }//end for
-         
+                  }
+
+               });
+
+            } // end for
+
          }// ends ActionPreformed
-	    });//ends button.actionListener
-      }//end display
+      });// ends button.actionListener
+   }// end display
 
- 
 }

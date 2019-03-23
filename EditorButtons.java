@@ -11,17 +11,15 @@ import javax.swing.JPanel;
 public class EditorButtons extends JPanel {
 
    private BufferedImage image = null;
-   private int track;
    
-   public EditorButtons(File icon, int t) {
+   public EditorButtons(File icon) {
       
       try {
          image = ImageIO.read(icon);
       } catch (IOException e) {
          e.printStackTrace();
       }
-      
-      track = t;
+      this.setBackground(new Color((int)(Math.random() * 255), (int)(Math.random() * 255), (int)(Math.random() * 255)));
       
    }
    
@@ -30,10 +28,6 @@ public class EditorButtons extends JPanel {
       
       g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), Color.white, null);
       
-   }
-   
-   public int getTrack() {
-      return track;
    }
 
 }
