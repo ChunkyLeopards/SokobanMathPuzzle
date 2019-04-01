@@ -12,14 +12,9 @@ public class EditorButtons extends JPanel {
 
    private BufferedImage image = null;
    
-   public EditorButtons(File icon) {
+   public EditorButtons(BufferedImage icon) {
       
-      try {
-         image = ImageIO.read(icon);
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
-      this.setBackground(new Color((int)(Math.random() * 255), (int)(Math.random() * 255), (int)(Math.random() * 255)));
+      image = icon;
       
    }
    

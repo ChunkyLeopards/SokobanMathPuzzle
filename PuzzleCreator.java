@@ -6,8 +6,8 @@
 */
 
 import java.io.File;
+import java.io.IOException;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +15,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,6 +37,14 @@ public class PuzzleCreator extends JFrame{
    private static File box;
    private static File boxTarget;
    private static File playerTarget;
+   private static BufferedImage exteriorImage;
+   private static BufferedImage wallImage;
+   private static BufferedImage interiorImage;
+   private static BufferedImage playerImage;
+   private static BufferedImage targetImage;
+   private static BufferedImage boxImage;
+   private static BufferedImage boxTargetImage;
+   private static BufferedImage playerTargetImage;
    
    public static void display()
    {
@@ -100,6 +110,19 @@ public class PuzzleCreator extends JFrame{
             boxTarget = new File("data/boxTarget.png");
             playerTarget = new File("data/playerTarget.png");
   
+            try {
+               exteriorImage = ImageIO.read(exterior);
+               wallImage = ImageIO.read(wall);
+               interiorImage = ImageIO.read(interior);
+               playerImage = ImageIO.read(player);
+               targetImage = ImageIO.read(target);
+               boxImage = ImageIO.read(box);
+               boxTargetImage = ImageIO.read(boxTarget);
+               playerTargetImage = ImageIO.read(playerTarget);
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
+            
    	    prompt.setText("Creating your puzzle");
             frame.setVisible(false);	
 
@@ -135,14 +158,14 @@ public class PuzzleCreator extends JFrame{
          for (int i = 0; i < (nh*nw); i++) {
             JPanel but = new JPanel();
             CardLayout buttons = new CardLayout();
-            EditorButtons ext = new EditorButtons(exterior);
-            EditorButtons wal = new EditorButtons(wall);
-            EditorButtons inter = new EditorButtons(interior);
-            EditorButtons pl = new EditorButtons(player);
-            EditorButtons bo = new EditorButtons(box);
-            EditorButtons tar = new EditorButtons(target);
-            EditorButtons bt = new EditorButtons(boxTarget);
-            EditorButtons pt = new EditorButtons(playerTarget);
+            EditorButtons ext = new EditorButtons(exteriorImage);
+            EditorButtons wal = new EditorButtons(wallImage);
+            EditorButtons inter = new EditorButtons(interiorImage);
+            EditorButtons pl = new EditorButtons(playerImage);
+            EditorButtons bo = new EditorButtons(boxImage);
+            EditorButtons tar = new EditorButtons(targetImage);
+            EditorButtons bt = new EditorButtons(boxTargetImage);
+            EditorButtons pt = new EditorButtons(playerTargetImage);
             but.setLayout(buttons);
             but.add(ext, "0");
             but.add(wal, "1");
@@ -193,6 +216,7 @@ public class PuzzleCreator extends JFrame{
             } // end for
 
          }// ends ActionPreformed
+         
       });// ends button.actionListener
    }// end display
 
