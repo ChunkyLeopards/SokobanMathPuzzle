@@ -14,6 +14,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -33,6 +34,14 @@ public class MainMenu extends JPanel {
    private static JPanel exitButton;
    private static JLabel exit;
    private static JLabel title;
+   private static JFrame puzzleSelection;
+   private static JScrollPane puzzlePane;
+   private static JPanel puzzlePanel;
+   private static JPanel puzzleList[];
+   private static JLabel puzzleName[];
+   private static JLabel puzzleListBack;
+   private static JPanel puzzleListBackButton;
+   private static File puzzleFile;
 
    public static void main(String[] args) throws IOException {
       
@@ -129,7 +138,150 @@ public class MainMenu extends JPanel {
          public void mouseClicked(MouseEvent arg0) {
 
             window.setVisible(false);
-            File read = new File("TestPuzzle2.spsf");
+            puzzleSelection = new JFrame();
+            puzzleSelection.setUndecorated(true);
+            puzzleSelection.setSize(750,750);
+            puzzlePanel = new JPanel();
+            puzzlePanel.setLayout(new BoxLayout(puzzlePanel, BoxLayout.PAGE_AXIS));
+            File puzzleDirectory = new File("puzzles");
+            File allPuzzles[] =  puzzleDirectory.listFiles();
+            puzzleList = new JPanel[allPuzzles.length];
+            puzzleName = new JLabel[allPuzzles.length];
+            int maxWidth = 0;
+            int maxHeight = 0;
+            
+            for (int i = 0; i < puzzleList.length; i++) {
+               
+               puzzleName[i] = new JLabel();
+               puzzleName[i].setText(allPuzzles[i].getPath());
+               puzzleName[i].setFont(new Font("TimesRoman", Font.BOLD, 20));
+               puzzleFile = allPuzzles[i];
+               
+               if (puzzleName[i].getWidth() > maxWidth) {
+                  
+                  maxWidth = puzzleName[i].getWidth();
+                  
+               }
+               
+               if (puzzleName[i].getHeight() > maxHeight) {
+                  
+                  maxHeight = puzzleName[i].getHeight();
+                  
+               }
+               
+               puzzleList[i] = new JPanel();
+               puzzleList[i].setBackground(Color.gray);
+               puzzleList[i].addMouseListener(new MouseListener() {
+                  
+                  File puzzle = new File(puzzleFile.getPath());
+                  
+                  @Override
+                  public void mouseClicked(MouseEvent arg0) {
+                     
+                     puzzleSelection.setVisible(false);
+                     SokobanInterpreter s = new SokobanInterpreter(puzzle);
+                     SokobanRuntimeStorage puzzle = null;
+
+                     try {
+
+                        puzzle = s.readPuzzleFile();
+
+                     } catch (IOException e) {
+
+                        e.printStackTrace();
+
+                     }
+
+                     DisplayPuzzle.displayWindow(puzzle);
+                     
+                  }
+
+                  @Override
+                  public void mouseEntered(MouseEvent arg0) {
+                     
+                     arg0.getComponent().setBackground(Color.lightGray);
+                     
+                  }
+
+                  @Override
+                  public void mouseExited(MouseEvent arg0) {
+                     
+                     arg0.getComponent().setBackground(Color.gray);
+                     
+                  }
+
+                  @Override
+                  public void mousePressed(MouseEvent arg0) {
+                     
+                     arg0.getComponent().setBackground(Color.white);
+                     
+                  }
+
+                  @Override
+                  public void mouseReleased(MouseEvent arg0) {
+                     
+                     arg0.getComponent().setBackground(Color.lightGray);
+                     
+                  }
+                  
+               });
+               
+               puzzleList[i].add(puzzleName[i]);
+               puzzlePanel.add(puzzleList[i]);
+               
+            }
+            
+            puzzleListBack = new JLabel("Back");
+            puzzleListBack.setFont(new Font("TimesRoman", Font.BOLD, 20));
+            puzzleListBackButton = new JPanel();
+            puzzleListBackButton.add(puzzleListBack);
+            puzzleListBackButton.setBackground(Color.gray);
+            puzzleListBackButton.addMouseListener(new MouseListener() {
+
+               @Override
+               public void mouseClicked(MouseEvent arg0) {
+                  
+                  puzzleSelection.setVisible(false);
+                  window.setVisible(true);
+                  
+               }
+
+               @Override
+               public void mouseEntered(MouseEvent arg0) {
+                  
+                  puzzleListBackButton.setBackground(Color.lightGray);
+                  
+               }
+
+               @Override
+               public void mouseExited(MouseEvent arg0) {
+                  
+                  puzzleListBackButton.setBackground(Color.gray);
+                  
+               }
+
+               @Override
+               public void mousePressed(MouseEvent arg0) {
+                  
+                  puzzleListBackButton.setBackground(Color.white);
+                  
+               }
+
+               @Override
+               public void mouseReleased(MouseEvent arg0) {
+                  
+                  puzzleListBackButton.setBackground(Color.lightGray);
+                  
+               }
+               
+            });
+            
+            puzzlePanel.add(puzzleListBackButton);            
+            puzzlePane = new JScrollPane(puzzlePanel);
+            puzzleSelection.add(puzzlePane);
+            puzzleSelection.setVisible(true);
+            
+            /*File read = new File("puzzles/TestPuzzle2.spsf");
             SokobanInterpreter s = new SokobanInterpreter(read);
             SokobanRuntimeStorage puzzle = null;
 
@@ -143,7 +295,7 @@ public class MainMenu extends JPanel {
 
             }
 
-            DisplayPuzzle.displayWindow(puzzle);
+            DisplayPuzzle.displayWindow(puzzle);*/
 
          }
 
