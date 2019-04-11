@@ -278,6 +278,7 @@ public class MainMenu extends JPanel {
             
             puzzlePanel.add(puzzleListBackButton);            
             puzzlePane = new JScrollPane(puzzlePanel);
+            puzzlePane.getVerticalScrollBar().setUnitIncrement(16);
             puzzleSelection.add(puzzlePane);
             puzzleSelection.setVisible(true);
             
