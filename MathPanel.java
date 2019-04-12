@@ -62,7 +62,7 @@ public class MathPanel {
       formulaLaTeX[8] = "P\\land(Q\\lor R)\\equiv(P\\land Q)\\lor(P\\land R)";
       formulaLaTeX[9] = "f(x)\\geq g(x) - f(x)\\geq h(x) - g(x)";
       
-      formula = new TeXFormula(formulaLaTeX[6/*(int)(Math.random() * 10)*/]);
+      formula = new TeXFormula(formulaLaTeX[(int)(Math.random() * 10)]);
       functionImage = formula.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
                              .setSize(30)
                              .setFGColor(Color.white)

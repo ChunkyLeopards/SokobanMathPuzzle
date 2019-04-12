@@ -32,6 +32,7 @@ public class DisplayPuzzle extends JPanel{
    private static JMenuItem goMain;
    private static JMenuItem options;
    private static JMenuItem exit;
+   private static JMenuItem overview;
    private static MathPanel math;
    private static JPanel input;
    
@@ -76,6 +77,8 @@ public class DisplayPuzzle extends JPanel{
       
       options = new JMenuItem("Options");
       
+      overview = new JMenuItem("View Puzzle");
+      
       exit = new JMenuItem("Exit");
       
       exit.addActionListener(new ActionListener() {
@@ -95,6 +98,7 @@ public class DisplayPuzzle extends JPanel{
       menu.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
       menu.add(goMain);
       menu.add(options);
+      menu.add(overview);
       menu.add(exit);
       if(!test) {
          menuBar.add(moves);
