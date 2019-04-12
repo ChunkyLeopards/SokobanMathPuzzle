@@ -192,7 +192,7 @@ public class MainMenu extends JPanel {
 
                      }
 
-                     DisplayPuzzle.displayWindow(puzzle);
+                     DisplayPuzzle.displayWindow(puzzle, false);
                      
                   }
 
@@ -488,6 +488,12 @@ public class MainMenu extends JPanel {
    @Override
    public void paintComponent(Graphics g) {
 
+   }
+   
+   public static void reopenMainMenu() {
+      
+      window.setVisible(true);
+      
    }
 
 }

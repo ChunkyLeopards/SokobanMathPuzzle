@@ -1,8 +1,17 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -16,6 +25,13 @@ public class DisplayPuzzle extends JPanel{
    
    private SokobanRuntimeStorage puzzle;
    private static JFrame window;
+   private static JMenuBar menuBar;
+   private static JMenu menu;
+   private static JLabel moves;
+   private static JLabel time;
+   private static JMenuItem goMain;
+   private static JMenuItem options;
+   private static JMenuItem exit;
    
    /**
     * Creates a display object from a Sokoban puzzle.
@@ -33,10 +49,59 @@ public class DisplayPuzzle extends JPanel{
     * @param p The runtime storage of a puzzle.
     */
    
-   public static void displayWindow(SokobanRuntimeStorage p) {
+   public static void displayWindow(SokobanRuntimeStorage p, boolean test) {
       
       window = new JFrame(p.getName());
       window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+      window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.PAGE_AXIS));
+      menuBar = new JMenuBar();
+      menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.LINE_AXIS));
+      window.setUndecorated(true);
+      menu = new JMenu("Menu");
+      goMain = new JMenuItem("Return to Main Menu");
+      
+      goMain.addActionListener(new ActionListener() {
+
+         @Override
+         public void actionPerformed(ActionEvent arg0) {
+               
+            window.dispose();
+            MainMenu.reopenMainMenu();
+            
+         }
+         
+      });
+      
+      options = new JMenuItem("Options");
+      
+      exit = new JMenuItem("Exit");
+      
+      exit.addActionListener(new ActionListener() {
+
+         @Override
+         public void actionPerformed(ActionEvent arg0) {
+            
+            System.exit(0);
+            
+         }
+         
+      });
+      
+      moves = new JLabel("Moves: XX");
+      time = new JLabel("Time Elapsed: XX:XX");
+      window.add(menuBar);
+      menu.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
+      menu.add(goMain);
+      menu.add(options);
+      menu.add(exit);
+      if(!test) {
+         menuBar.add(moves);
+         menuBar.add(Box.createRigidArea(new Dimension(10, 0)));
+         menuBar.add(time);
+         window.add(MathPanel.createMathPanel());
+      }
+      menuBar.add(Box.createHorizontalGlue());
+      menuBar.add(menu);
       window.add(new DisplayPuzzle(p));
       window.pack();
       window.setVisible(true);
