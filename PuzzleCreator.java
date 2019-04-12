@@ -1,8 +1,14 @@
 /*
-   This 
-
-
-
+   This file allows the user to create their own puzzle.
+   Puzzles are validated and stored when user is complete
+   
+   To do:
+      -Actions to all buttons
+      -Fix Spacing
+      -Store finished puzzles
+      -Set Preview
+      -Validation
+      
 */
 
 import java.io.File;
@@ -16,9 +22,17 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
-
 import javax.swing.JFrame;
+import java.applet.Applet;
+import java.awt.Font;
+import java.awt.*;
+
+
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
 import javax.imageio.ImageIO;
+import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,8 +41,7 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 
 public class PuzzleCreator extends JFrame{
-
-   
+    
    private static File exterior;
    private static File wall;
    private static File interior;
@@ -46,61 +59,148 @@ public class PuzzleCreator extends JFrame{
    private static BufferedImage boxTargetImage;
    private static BufferedImage playerTargetImage;
    
-   public static void display()
-   {
-      
-      //Creates the outter window
-      //Allows for the use to enter the height and width for the
-      //puzzle they want to create
-      int height = 300;
-      int width = 350;
-      
-      JFrame frame = new JFrame("Puzzle Creator: Dimensions");    
-    
-      JLabel prompt = new JLabel("Enter the dimensions of your puzzle: ");
-      JLabel prompt1 = new JLabel("Must be at least a 3x5 or 5x3 ");
-      JLabel prompt2 = new JLabel("Click on \"Done\" to create your new puzzle");
-      prompt.setBounds(20, 2, 400, 100);   
-      prompt1.setBounds(20, 13, 400, 100);
-      prompt2.setBounds(20, 24, 400, 100);  
-      
-      JLabel widthPrompt = new JLabel("Width: ");
-      widthPrompt.setBounds(20, 75, 200, 100);
-      
-      JLabel heightPrompt = new JLabel("Height: ");
-      heightPrompt.setBounds(20, 150, 200, 100);
-      
-      JButton button =new JButton("Done");   
-      button.setBounds(30,250,140,40);
-      
-      JTextField widthEntry = new JTextField();
-      widthEntry.setBounds(90, 100, 100, 50);
-      
-      JTextField heightEntry = new JTextField();
-      heightEntry.setBounds(90, 175, 100, 50);
-      
-      frame.setVisible(true);
-      frame.add(prompt);
-      frame.add(prompt1);
-      frame.add(prompt2);
-      frame.add(widthPrompt);
-      frame.add(heightPrompt);
-      frame.add(widthEntry);      
-      frame.add(heightEntry);
-      frame.add(button);
-      frame.setLayout(null);    
-      frame.setSize(height,width);
-      frame.setVisible(true);
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      
-      button.addActionListener( new ActionListener(){
-          
-         //Once the button is clicked the next window is opened 
-         //the current one is closed
-         @Override
-	      public void actionPerformed(ActionEvent arg0)
-         {
+   public static void display(){
 
+      //Max and min allowed for puzzle creation
+      int max = 50;
+      int min = 5;
+   
+      //Size of the window
+      int width = 800;
+      int height = 800;
+      
+      //Frame setup
+      JFrame frame = new JFrame("Puzzle Creator: Dimensions");    
+      Font font1 = new Font("SandSerif",Font.PLAIN,16);
+      frame.setSize(width,height);
+      //frame.setBackground(Color.red);
+      
+      //Setting up the layout
+      frame.setLayout(new GridBagLayout());
+      GridBagConstraints c = new GridBagConstraints();
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+     
+      //Top buttons
+      //Submit
+      JButton bSubmit =new JButton("Submit"); 
+      bSubmit.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 0;
+      c.gridy = 0;
+      frame.add(bSubmit,c);
+      
+      //Test
+      JButton bTest =new JButton("Test");  
+      bTest.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 1;
+      c.gridy = 0;
+      frame.add(bTest,c);
+      
+      //Size
+      JButton bSize =new JButton("Size");  
+      bSize.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 2;
+      c.gridy = 0;
+      frame.add(bSize,c);
+      
+      //Validate
+      JButton bValidate =new JButton("Validate");  
+      bValidate.setFont(font1); 
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 3;
+      c.gridy = 0;
+      frame.add(bValidate,c);
+      
+      //Preview
+      JButton bPreview =new JButton("Preview");
+      bPreview.setFont(font1); 
+      c.fill = GridBagConstraints.HORIZONTAL;     
+      c.weightx = 0.5;
+      c.gridx = 4;
+      c.gridy = 0;
+      frame.add(bPreview,c);
+      
+      //Menu
+      JButton bMenu =new JButton("Menu");   
+      bMenu.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 5;
+      c.gridy = 0;
+      frame.add(bMenu,c);
+      
+      //Prompt and textbox for Rows
+      JLabel rowPrompt = new JLabel("Rows: ");
+      rowPrompt.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 0;
+      c.gridy = 1;
+      frame.add(rowPrompt,c);
+      
+      JTextField rowEntry = new JTextField();
+      rowEntry.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 1;
+      c.gridy = 1;
+      frame.add(rowEntry,c);
+      
+      //Prompt and textbox for Columns
+      JLabel columnPrompt = new JLabel("Columns: ");
+      columnPrompt.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 2;
+      c.gridy = 1;
+      frame.add(columnPrompt,c);
+      
+      JTextField columnEntry = new JTextField();
+      columnEntry.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridx = 3;
+      c.gridy = 1;
+      frame.add(columnEntry,c);
+     
+      //Echo messages
+      JLabel windowPrompt = new JLabel("Window: ");
+      windowPrompt.setFont(font1);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.anchor = GridBagConstraints.LAST_LINE_START;
+      c.weightx = 1.0;
+      c.gridx = 0;
+      c.gridy = 3;
+      frame.add(windowPrompt,c);
+      
+      //Place holder panel
+      JPanel holder = new JPanel();
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 0.5;
+      c.gridwidth = 6;
+      c.ipady = height - 150;
+      c.gridx = 0;
+      c.gridy = 2;
+      frame.add(holder,c);
+        
+      frame.setVisible(true);
+
+      //Setting button actions
+      //Submit
+      
+      //Size
+      bSize.addActionListener( new ActionListener(){
+          
+         @Override
+	      public void actionPerformed(ActionEvent arg0){
+         
             exterior = new File("data/emptyOS.png");
             wall = new File("data/wall.png");
             interior = new File("data/emptyIS.png");
@@ -121,103 +221,130 @@ public class PuzzleCreator extends JFrame{
                playerTargetImage = ImageIO.read(playerTarget);
             } catch (IOException e) {
                e.printStackTrace();
-            }
-            
-   	    prompt.setText("Creating your puzzle");
-            frame.setVisible(false);	
-
-         //Reading the values inputted from the user
-         String nHeight = heightEntry.getText();      
-         String nWidth = widthEntry.getText();
+            }  
          
          //Converts the input string into an integer
-         int nh = Integer.parseInt(nHeight);
-         int nw = Integer.parseInt(nWidth);
+         int nh = Integer.parseInt(columnEntry.getText());
+         int nw = Integer.parseInt(rowEntry.getText());
          
          //Based on the values, they are made bigger to create the next window to the fitted size
-         int newHeight = nh * 100;
-         int newWidth = nw * 100;
-             
-         JFrame puzz = new JFrame("Puzzle Creator: Choosing Blocks");  
-         puzz.addWindowStateListener(new WindowStateListener() {
-
-            @Override
-            public void windowStateChanged(WindowEvent arg0) {
-               System.out.println(arg0);
-               
-            }
-            
-         });  
-         puzz.setLayout(null);    
-         puzz.setSize(newWidth,newHeight);
-         puzz.setVisible(true);
-         puzz.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	         
-
-         //Creates the grid of buttons
-         puzz.setLayout(new GridLayout(nh, nw));
-         for (int i = 0; i < (nh*nw); i++) {
-            JPanel but = new JPanel();
-            CardLayout buttons = new CardLayout();
-            EditorButtons ext = new EditorButtons(exteriorImage);
-            EditorButtons wal = new EditorButtons(wallImage);
-            EditorButtons inter = new EditorButtons(interiorImage);
-            EditorButtons pl = new EditorButtons(playerImage);
-            EditorButtons bo = new EditorButtons(boxImage);
-            EditorButtons tar = new EditorButtons(targetImage);
-            EditorButtons bt = new EditorButtons(boxTargetImage);
-            EditorButtons pt = new EditorButtons(playerTargetImage);
-            but.setLayout(buttons);
-            but.add(ext, "0");
-            but.add(wal, "1");
-            but.add(inter, "2");
-            but.add(pl, "3");
-            but.add(bo, "4");
-            but.add(tar, "5");
-            but.add(bt, "6");
-            but.add(pt, "7");
-            puzz.add(but);
-            buttons.first(but);
-            
-            but.addMouseListener(new MouseListener() {
-
-               @Override
-               public void mouseClicked(MouseEvent arg0) {
-                  
-                  buttons.next(but);
-                  
-               }
-
-               @Override
-               public void mouseEntered(MouseEvent arg0) {
-                  // TODO Auto-generated method stub
-                  
-               }
-
-               @Override
-               public void mouseExited(MouseEvent arg0) {
-                  // TODO Auto-generated method stub
-                  
-               }
-
-               @Override
-               public void mousePressed(MouseEvent arg0) {
-                  // TODO Auto-generated method stub
-                  
-               }
-
-               @Override
-                  public void mouseReleased(MouseEvent arg0) {
-                     // TODO Auto-generated method stub
-
-                  }
-
-               });
-
-            } // end for
-
-         }// ends ActionPreformed
+         int newHeight = nh * 50;
+         int newWidth = nw * 50;
          
-      });// ends button.actionListener
-   }// end display
+         if( (nh <= min && nw < min) || (nh < min && nw <= min) || (nh > max) || ( nw > max) || (nh > max && nw < 3) || (nh < 3 && nw >50) ){
+            windowPrompt.setText("Opps! Values not valid");
+         }
+         
+         else{
+         
+            windowPrompt.setText("Creating your puzzle!");
+           
+            //Adding scrolling
+            JPanel newPanel = new JPanel();
+            JScrollPane newScroll = new JScrollPane(newPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+           
+            frame.add(newScroll,c);  
+            holder.setVisible(false);
+            
+            windowPrompt.setText("Click to cycle through");
+            
+            //array of puzzle
+            JPanel arrayPuzzle[][] = new JPanel[nh][nw]; 
 
-}
+            //Creates the grid of buttons
+            newPanel.setLayout(new GridLayout(nh,nw));
+            
+            
+            //This is for storing the information
+            for( int i = 0 ; i < max ; i++ ){
+               for( int j = 0 ; j < max ;j ++){
+                  
+               }
+               
+                
+           
+            }//end for i
+            
+            //Creating all the panels
+            for (int i = 0; i < (nh*nw); i++){
+            
+               JPanel but = new JPanel();
+               CardLayout buttons = new CardLayout();
+               
+               EditorButtons ext = new EditorButtons(exteriorImage);
+               EditorButtons wal = new EditorButtons(wallImage);
+               EditorButtons inter = new EditorButtons(interiorImage);
+               EditorButtons pl = new EditorButtons(playerImage);
+               EditorButtons bo = new EditorButtons(boxImage);
+               EditorButtons tar = new EditorButtons(targetImage);
+               EditorButtons bt = new EditorButtons(boxTargetImage);
+               EditorButtons pt = new EditorButtons(playerTargetImage);
+               
+               but.setLayout(buttons);
+               but.add(ext, "0");
+               but.add(wal, "1");
+               but.add(inter, "2");
+               but.add(pl, "3");
+               but.add(bo, "4");
+               but.add(tar, "5");
+               but.add(bt, "6");
+               but.add(pt, "7");
+               
+               newPanel.add(but);
+               buttons.first(but);
+
+               but.addMouseListener(new MouseListener() {
+                  @Override
+                  public void mouseClicked(MouseEvent arg0){
+                     buttons.next(but);
+                  }
+   
+                  @Override
+                  public void mouseEntered(MouseEvent arg0){
+                     // TODO Auto-generated method stub
+                  }
+   
+                  @Override
+                  public void mouseExited(MouseEvent arg0){
+                     // TODO Auto-generated method stub
+                  }
+   
+                  @Override
+                  public void mousePressed(MouseEvent arg0){
+                     // TODO Auto-generated method stub
+                  }
+   
+                  @Override
+                  public void mouseReleased(MouseEvent arg0){
+                        // TODO Auto-generated method stub
+                  }
+   
+              });//end MouseListener
+                 
+               }//end for i
+          }//end else
+          
+        }//end ActionPreformed
+      });//end bSize.actionListener
+      
+      //Validate
+      //Preview
+      //Menu
+      bMenu.addActionListener( new ActionListener(){
+          
+         @Override
+	      public void actionPerformed(ActionEvent arg1){
+         
+
+          return; 
+   
+            
+          
+        }//end ActionPreformed
+      });//end bMenu.actionListener
+
+      
+   }//end display
+     
+
+}//end clas
