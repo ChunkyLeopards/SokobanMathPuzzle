@@ -6,17 +6,32 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+/**
+ * Displays a Sokoban puzzle.
+ * @author Daniel Moore
+ */
+
 @SuppressWarnings("serial")
 public class DisplayPuzzle extends JPanel{
    
    private SokobanRuntimeStorage puzzle;
    private static JFrame window;
    
+   /**
+    * Creates a display object from a Sokoban puzzle.
+    * @param p The runtime storage of a puzzle.
+    */
+   
    public DisplayPuzzle(SokobanRuntimeStorage p) {
       
       puzzle = p;
       
    }
+   
+   /**
+    * Method to manage and display a window.
+    * @param p The runtime storage of a puzzle.
+    */
    
    public static void displayWindow(SokobanRuntimeStorage p) {
       
@@ -26,12 +41,6 @@ public class DisplayPuzzle extends JPanel{
       window.pack();
       window.setVisible(true);
       new Movement(window, p);
-      
-      /*while(true) {
-         
-         window.repaint();
-         
-      }*/
       
    }
    
@@ -66,7 +75,7 @@ public class DisplayPuzzle extends JPanel{
       
       int width = puzzle.getWidth();
       int height = puzzle.getHeight();
-      byte square;
+      short square;
       int drawableX = (int) getSize().getWidth();
       int drawableY = (int) getSize().getHeight();
       int offset = 10;
@@ -82,45 +91,45 @@ public class DisplayPuzzle extends JPanel{
             
             square = puzzle.getValue(j, i);
             
-            switch (square) {
+            switch ((byte)square) {
             
-            case 1:
+            case SokobanInterpreter.EXTERNAL:
+               break;            
+            
+            case SokobanInterpreter.WALL:
                
-               /* Wall */
                g.setColor(new Color(0, 0, 0));
                g.drawRect(squareX, squareY, squareDim, squareDim);
                g.drawLine(squareX, squareY + squareDim / 2, squareX + squareDim, squareY + squareDim / 2);
                g.drawLine(squareX + squareDim / 2, squareY, squareX + squareDim / 2, squareY + squareDim);
                break;
                
-            case 2:
+            case SokobanInterpreter.INTERNAL:
                
-               /* Internal Space */
                g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
                break;
                
-            case 6:
+            case SokobanInterpreter.INTERNAL_PLAYER:
                
-               /* Internal Space and Player */
                g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
                g.setColor(new Color(0, 0, 200));
                g.drawOval(squareX, squareY, squareDim, squareDim);
                break;
                
-            case 10:
+            case SokobanInterpreter.INTERNAL_BOX:
                
-               /* Internal Space and Box */
                g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
                g.setColor(new Color(200, 150, 0));
                g.drawRect(squareX + 2, squareY + 2, squareDim - 4, squareDim - 4);
+               g.setColor(new Color(0, 0, 0));
+               g.drawString(((Integer)(square / SokobanInterpreter.BOX_TRACK_OFFSET)).toString(), squareX + 4, squareY + squareDim - 4);
                break;
                
-            case 18:
+            case SokobanInterpreter.INTERNAL_TARGET:
                
-               /* Internal Space and Target */
                g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
                g.setColor(new Color(255, 0, 0));
@@ -128,9 +137,8 @@ public class DisplayPuzzle extends JPanel{
                g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
                break;
                
-            case 22:
+            case SokobanInterpreter.INTERNAL_PLAYER_TARGET:
                
-               /* Internal Space and Player and Target */
                g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
                g.setColor(new Color(255, 0, 0));
@@ -140,9 +148,8 @@ public class DisplayPuzzle extends JPanel{
                g.drawOval(squareX, squareY, squareDim, squareDim);
                break;
                
-            case 26:
+            case SokobanInterpreter.INTERNAL_BOX_TARGET:
                
-               /* Internal Space and Box and Target */
                g.setColor(new Color(0, 200, 0));
                g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
                g.setColor(new Color(255, 0, 0));
@@ -150,6 +157,8 @@ public class DisplayPuzzle extends JPanel{
                g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
                g.setColor(new Color(200, 150, 0));
                g.drawRect(squareX + 2, squareY + 2, squareDim - 4, squareDim - 4);
+               g.setColor(new Color(0, 0, 0));
+               g.drawString(((Integer)(square / SokobanInterpreter.BOX_TRACK_OFFSET)).toString(), squareX + 4, squareY + squareDim - 4);
                break;
                
             default:
