@@ -20,35 +20,71 @@ import org.scilab.forge.jlatexmath.TeXIcon;
 
 public class MathPanel {
    
-   private static JPanel mathPanel;
-   private static JPanel functionPanel;
-   private static JPanel buttonPanel;
-   private static JPanel groupButtonPanel;
-   private static JPanel symbolButtonPanel;
-   private static JPanel symbolButtonPanelOptions[];
-   private static String groupButtonNames[][];
-   private static String symbolButtonNames[][][];
-   private static JButton groupButtons[][];
-   private static JButton symbolButtons[][][];
-   private static String groupLaTeX[][];
-   private static String symbolLaTeX[][][];
-   private static TeXFormula groupForm[][];
-   private static TeXFormula symbolForm[][][];
-   private static TeXIcon groupImage[][];
-   private static TeXIcon symbolImage[][][];
-   private static JLabel function;
-   private static String formulaLaTeX[];
-   private static TeXFormula formula;
-   private static TeXIcon functionImage;
-   private static JTextField input;
-   private static CardLayout symbolOptions;
+   private JPanel problemPanel;
+   private JPanel inputPanel;
+   private JPanel functionPanel;
+   private JPanel buttonPanel;
+   private JPanel groupButtonPanel;
+   private JPanel symbolButtonPanel;
+   private JPanel symbolButtonPanelOptions[];
+   private String groupButtonNames[][];
+   private String symbolButtonNames[][][];
+   private JButton groupButtons[][];
+   private JButton symbolButtons[][][];
+   private String groupLaTeX[][];
+   private String symbolLaTeX[][][];
+   private TeXFormula groupForm[][];
+   private TeXFormula symbolForm[][][];
+   private TeXIcon groupImage[][];
+   private TeXIcon symbolImage[][][];
+   private JLabel function;
+   private String formulaLaTeX[];
+   private TeXFormula formula;
+   private TeXIcon functionImage;
+   private JTextField input;
+   private CardLayout symbolOptions;
    
-   public static JPanel createMathPanel() {
+   public JPanel createMath() {
       
-      input = new JTextField();
       symbolOptions = new CardLayout();
-      mathPanel = new JPanel();
-      mathPanel.setLayout(new BoxLayout(mathPanel, BoxLayout.PAGE_AXIS));
+      problemPanel = new JPanel();
+      problemPanel.setLayout(new BoxLayout(problemPanel, BoxLayout.PAGE_AXIS));
+      formulaLaTeX = new String[10];
+      
+      formulaLaTeX[0] = "x = \\frac{-b\\pm\\sqrt{b^2+4ac}}{2a}";
+      formulaLaTeX[1] = "\\sum^{50}_{i=0}i^2";
+      formulaLaTeX[2] = "\\int^5_0\\frac{x^2}{2}\\frac{dx}{dt}";
+      formulaLaTeX[3] = "\\begin{bmatrix}5&7&6&2\\\\9&-2&-6&3\\\\7&-1&2&1\\end{bmatrix}\\begin{bmatrix}2&4\\\\-5&7\\\\2&-8\\\\3&0\\end{bmatrix}";
+      formulaLaTeX[4] = "\\lim_{x\\to-0}\\tan\\left(\\frac{\\pi}{2}\\right)";
+      formulaLaTeX[5] = "\\log_6{18^x}";
+      formulaLaTeX[6] = "\\begin{array}{c|c|c|c}\\text{name}&\\text{lowercase}&\\text{uppercase}&\\text{variable}\\\\\\hline\\text{Alpha}&\\alpha&\\Alpha\\\\\\text{Beta}&\\beta&\\Beta\\\\\\text{Gamma}&\\gamma&\\Gamma\\\\\\text{Delta}&\\delta&\\Delta\\\\\\text{Epsilon}&\\epsilon&\\Epsilon&\\varepsilon\\\\\\text{Zeta}&\\zeta&\\Zeta\\\\\\text{Eta}&\\eta&\\Eta\\\\\\text{Theta}&\\theta&\\Theta&\\vartheta\\\\\\text{Iota}&\\iota&\\Iota\\\\\\text{Omicron}&\\omicron&\\Omicron\\\\\\text{Pi}&\\pi&\\Pi\\\\\\text{Rho}&\\rho&\\Rho&\\varrho\\\\\\text{Sigma}&\\sigma&\\Sigma\\\\\\text{Tau}&\\tau&\\Tau\\\\\\text{Upsilon}&\\upsilon&\\Upsilon\\\\\\text{Phi}&\\phi&\\Phi&\\varphi\\\\\\text{Chi}&\\chi&\\Chi\\\\\\text{Psi}&\\psi&\\Psi\\\\\\text{Omega}&\\omega&\\Omega\\end{array}";
+      formulaLaTeX[7] = "\\text{3 }\\text{random }\\text{numbers!}\\\\" + (int)(Math.random() * 100) + "\\\\" + (int)(Math.random() * 100) + "\\\\" + (int)(Math.random() * 100);
+      formulaLaTeX[8] = "P\\land(Q\\lor R)\\equiv(P\\land Q)\\lor(P\\land R)";
+      formulaLaTeX[9] = "f(x)\\geq g(x) - f(x)\\geq h(x) - g(x)";
+      
+      formula = new TeXFormula(formulaLaTeX[(int)(Math.random() * 10)]);
+      functionImage = formula.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
+                             .setSize(30)
+                             .setFGColor(Color.white)
+                             .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER)
+                             .setIsMaxWidth(true).setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f)
+                             .build();
+      functionPanel = new JPanel();
+      functionPanel.setBackground(Color.black);
+      function = new JLabel(functionImage);
+      function.setMaximumSize(new Dimension(100,300));
+      function.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+      functionPanel.add(function);
+      problemPanel.add(functionPanel);
+      return problemPanel;
+        
+   }
+   
+   public JPanel createInput() {
+      
+      inputPanel = new JPanel();
+      inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
+      input = new JTextField();
       buttonPanel = new JPanel();
       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
       buttonPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -195,38 +231,11 @@ public class MathPanel {
          symbolButtonPanel.add(symbolButtonPanelOptions[i], groupButtons[i / 4][i % 4].getToolTipText());
             
       }
+      inputPanel.add(input);
+      inputPanel.add(buttonPanel);
       
-      formulaLaTeX = new String[10];
+      return inputPanel;
       
-      formulaLaTeX[0] = "x = \\frac{-b\\pm\\sqrt{b^2+4ac}}{2a}";
-      formulaLaTeX[1] = "\\sum^{50}_{i=0}i^2";
-      formulaLaTeX[2] = "\\int^5_0\\frac{x^2}{2}\\frac{dx}{dt}";
-      formulaLaTeX[3] = "\\begin{bmatrix}5&7&6&2\\\\9&-2&-6&3\\\\7&-1&2&1\\end{bmatrix}\\begin{bmatrix}2&4\\\\-5&7\\\\2&-8\\\\3&0\\end{bmatrix}";
-      formulaLaTeX[4] = "\\lim_{x\\to-0}\\tan\\left(\\frac{\\pi}{2}\\right)";
-      formulaLaTeX[5] = "\\log_6{18^x}";
-      formulaLaTeX[6] = "\\begin{array}{c|c|c|c}\\text{name}&\\text{lowercase}&\\text{uppercase}&\\text{variable}\\\\\\hline\\text{Alpha}&\\alpha&\\Alpha\\\\\\text{Beta}&\\beta&\\Beta\\\\\\text{Gamma}&\\gamma&\\Gamma\\\\\\text{Delta}&\\delta&\\Delta\\\\\\text{Epsilon}&\\epsilon&\\Epsilon&\\varepsilon\\\\\\text{Zeta}&\\zeta&\\Zeta\\\\\\text{Eta}&\\eta&\\Eta\\\\\\text{Theta}&\\theta&\\Theta&\\vartheta\\\\\\text{Iota}&\\iota&\\Iota\\\\\\text{Omicron}&\\omicron&\\Omicron\\\\\\text{Pi}&\\pi&\\Pi\\\\\\text{Rho}&\\rho&\\Rho&\\varrho\\\\\\text{Sigma}&\\sigma&\\Sigma\\\\\\text{Tau}&\\tau&\\Tau\\\\\\text{Upsilon}&\\upsilon&\\Upsilon\\\\\\text{Phi}&\\phi&\\Phi&\\varphi\\\\\\text{Chi}&\\chi&\\Chi\\\\\\text{Psi}&\\psi&\\Psi\\\\\\text{Omega}&\\omega&\\Omega\\end{array}";
-      formulaLaTeX[7] = "\\text{3 }\\text{random }\\text{numbers!}\\\\" + (int)(Math.random() * 100) + "\\\\" + (int)(Math.random() * 100) + "\\\\" + (int)(Math.random() * 100);
-      formulaLaTeX[8] = "P\\land(Q\\lor R)\\equiv(P\\land Q)\\lor(P\\land R)";
-      formulaLaTeX[9] = "f(x)\\geq g(x) - f(x)\\geq h(x) - g(x)";
-      
-      formula = new TeXFormula(formulaLaTeX[(int)(Math.random() * 10)]);
-      functionImage = formula.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
-                             .setSize(30)
-                             .setFGColor(Color.white)
-                             .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER)
-                             .setIsMaxWidth(true).setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f)
-                             .build();
-      functionPanel = new JPanel();
-      functionPanel.setBackground(Color.black);
-      function = new JLabel(functionImage);
-      function.setMaximumSize(new Dimension(100,300));
-      function.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-      functionPanel.add(function);
-      mathPanel.add(functionPanel);
-      mathPanel.add(input);
-      mathPanel.add(buttonPanel);
-      return mathPanel;
-        
    }
 
 }

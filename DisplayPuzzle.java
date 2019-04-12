@@ -32,6 +32,8 @@ public class DisplayPuzzle extends JPanel{
    private static JMenuItem goMain;
    private static JMenuItem options;
    private static JMenuItem exit;
+   private static MathPanel math;
+   private static JPanel input;
    
    /**
     * Creates a display object from a Sokoban puzzle.
@@ -98,14 +100,18 @@ public class DisplayPuzzle extends JPanel{
          menuBar.add(moves);
          menuBar.add(Box.createRigidArea(new Dimension(10, 0)));
          menuBar.add(time);
-         window.add(MathPanel.createMathPanel());
+         math = new MathPanel();
+         window.add(math.createMath());
+         input = math.createInput();
+         input.setVisible(false);
+         window.add(input);
       }
       menuBar.add(Box.createHorizontalGlue());
       menuBar.add(menu);
       window.add(new DisplayPuzzle(p));
       window.pack();
       window.setVisible(true);
-      new Movement(window, p);
+      new Movement(window, p, input);
       
    }
    
