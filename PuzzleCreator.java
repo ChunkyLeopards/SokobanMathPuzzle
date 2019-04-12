@@ -333,8 +333,10 @@ public class PuzzleCreator extends JFrame{
       bMenu.addActionListener( new ActionListener(){
           
          @Override
-	      public void actionPerformed(ActionEvent arg1){
+	  public void actionPerformed(ActionEvent arg1){
          
+            frame.dispose();
+             MainMenu.reopenMainMenu();  
 
           return; 
    

@@ -32,6 +32,12 @@ public class SokobanInterpreter {
    public SokobanInterpreter(File p) {
       
       puzzle = p;
+      try {
+         System.out.println(HashPuzzle.genHash(p));
+      } catch (IOException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
       
    }
    

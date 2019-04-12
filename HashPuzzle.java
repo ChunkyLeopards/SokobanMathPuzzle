@@ -15,7 +15,7 @@ public class HashPuzzle {
 	 * @return
 	 * @throws IOException
 	 */
-	static String genString(File f) throws IOException {
+	public static String genString(File f) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader (f));
 		String line = null;
 		StringBuilder sb = new StringBuilder();
@@ -119,9 +119,9 @@ public class HashPuzzle {
 		
 	}*/
 	
-	public static void main(String args[]) throws IOException {
+	/*public static void main(String args[]) throws IOException {
 		File p = new File("puzzles/DefaultTestPuzzle.spsf");
 		genHash(p);
 		//System.out.println(getHashFromString(p));
-	}
+	}*/
 }
