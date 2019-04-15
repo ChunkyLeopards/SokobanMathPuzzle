@@ -1,0 +1,125 @@
+Problem:
+   \frac{"r0"}{"r1"}+\frac{"r2"}{"r3"}
+;
+RandomConstraints:
+   r0:
+      type:i;
+      range:
+         min:-100;
+         max:100;
+      ;
+      neq:;
+      relation:;
+   ;
+   r1:
+      type:i;
+      range:
+         min:-100;
+         max:100;
+      ;
+      neq:0,1;
+      relation:;
+   ;
+   r2:
+      type:i;
+      range:
+         min:-100;
+         max:100;
+      ;
+      neq:;
+      relation:;
+   ;
+   r3:
+      type:i;
+      range:
+         min:-100;
+         max:100;
+      ;
+      neq:0,1;
+      relation:;
+   ;
+;
+Evaluation:
+   result0:"c0"
+   result1:\frac{"c1"}{"c2"};
+   c0:Evaluate((("r0"*"r3")+("r1"*"r2"))/("r1"*"r3"));
+   c1:Evaluate(("r0"*"r3")+("r1"*"r2")/gcd("r1"*"r3",("r0"*"r3")+("r1"*"r2")));
+   c2:Evaluate(("r1"*"r3")/gcd("r1"*"r3",("r0"*"r3")+("r1"*"r2")));
+;
+EvaluationConstraints:
+   c0:
+      type:i;
+      accuracy:1;
+      sign:+,-;
+   ;
+   c1:
+      type:i;
+      accuracy:1;
+      sign:+,-;
+   ;
+   c2:
+      type:i;
+      accuracy:1;
+      sign:+;
+   ;
+;
+Description:Evaluate the following addition problem. Write the answer as a number or reduced fraction.;
+Steps:
+   1:
+      text:Determine the denominator.;
+      allresult:
+         lhs:"r1"*"r3";
+         rhs:Evaluate("r1"*"r3");
+      ;
+   ;
+   2:
+      text:Determine the numerators.;
+      text:First Numerator;
+      allresult:
+         lhs:"r0"*"r3";
+         rhs:Evaluate("r0"*"r3");
+      ;
+      text:Second Numerator;
+         lhs:"r1"*"r2";
+         rhs:Evaluate("r1"*"r2");
+      ;
+   ;
+   3:
+      text:Sum the numerators;
+      allresult:
+         lhs:Evaluate("r0"*"r3")+Evaluate("r1"*"r2");
+         rhs:Evaluate(("r0"*"r3")+("r1"*"r2"));
+      ;
+   ;
+   4:
+      text:Write the answer as a fraction;
+      allresult:
+         form:\frac{"c0"}{"c1"};
+         c0:Evaluate(("r0"*"r3")+("r1"*"r2"));
+         c1:Evaluate("r1"*"r3");
+      ;
+   ;
+   5:
+      text:Simplify if possible.;
+      result0:
+         lhs:
+            form:\frac{"c0"}{"c1"};
+            c0:Evaluate(("r0"*"r3")+("r1"*"r2"));
+            c1:Evaluate("r1"*"r3");
+         ;
+         rhs:
+            Evaluate((("r0"*"r3")+("r1"*"r2"))/("r1"*"r3"));
+         ;
+      result1:
+         lhs:
+            form:\frac{"c0"}{"c1"};
+            c0:Evaluate(("r0"*"r3")+("r1"*"r2"));
+            c1:Evaluate("r1"*"r3");
+         ;
+         rhs:
+            form:\frac{"c0"}{"c1"};
+            c0:Evaluate(("r0"*"r3")+("r1"*"r2")/gcd("r1"*"r3",("r0"*"r3")+("r1"*"r2")));
+            c1:Evaluate(("r1"*"r3")/gcd("r1"*"r3",("r0"*"r3")+("r1"*"r2")));
+      ;
+   ;
+;
