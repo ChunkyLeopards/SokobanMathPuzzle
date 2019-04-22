@@ -46,6 +46,7 @@ public class MathPanel {
    
    public JPanel createMath() {
       
+      MathTemplateInterpreter puzzle = new MathTemplateInterpreter();
       symbolOptions = new CardLayout();
       problemPanel = new JPanel();
       problemPanel.setLayout(new BoxLayout(problemPanel, BoxLayout.PAGE_AXIS));
