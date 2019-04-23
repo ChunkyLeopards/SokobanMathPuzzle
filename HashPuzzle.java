@@ -65,27 +65,39 @@ public class HashPuzzle {
 		return v;
 	}
 	
-	/*
+	/**
+	 * Reads the hash from a line in a puzzle file
+	 * 
+	 * @param f
+	 * @return
+	 * @throws IOException
+	 */
 	public static int getHashFromString(File f) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader (f));
 		String line = null;
 		StringBuilder sb = new StringBuilder();
-				
-		sb.append(f.getPath());
+		
+		
+		
+		
+		String v;
 		
 		try {
 			while ((line = reader.readLine()) != null) {
 				if (line.startsWith("Hash:")) {
-				    sb.append(line);				    
+				    sb.append(line);
+				   
 				}
 			}
-			return Integer.parseUnsignedInt(sb);
+			v = sb.toString().substring(5);
+			
+			return Integer.parseInt(v);
 		} finally {
 			reader.close();
 		}
 		
 	}
-	*/
+	
 	
 	/**
 	 * 
@@ -99,7 +111,8 @@ public class HashPuzzle {
 	}
 	
 	/*
-	public void writeHash(File f, int v) throws IOException {
+	 
+	public static void writeHash(File f, int v) throws IOException {
 		String vStr = Integer.toString(v);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(f, true));
 		BufferedReader reader = new BufferedReader(new FileReader (f));
@@ -108,7 +121,7 @@ public class HashPuzzle {
 		try {
 			while ((line = reader.readLine()) != null) {
 				if (line.startsWith("Hash:")) {
-				    
+				    writer.append(vStr);
 				}
 			}
 			return;
@@ -119,9 +132,12 @@ public class HashPuzzle {
 		
 	}*/
 	
-	/*public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws IOException {
 		File p = new File("puzzles/DefaultTestPuzzle.spsf");
-		genHash(p);
+		int v = genHash(p);
+		System.out.println(getHashFromString(p));
+		//writeHash(p, v);
 		//System.out.println(getHashFromString(p));
-	}*/
+		
+	}
 }
