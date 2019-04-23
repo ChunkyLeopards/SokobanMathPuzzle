@@ -11,6 +11,7 @@ public class MathTemplateInterpreter {
    int weight[];
    String sections[];
    String problem;
+   RandomConstraint rNum[];
    
    public MathTemplateInterpreter() {
       
@@ -18,6 +19,12 @@ public class MathTemplateInterpreter {
       File rTemplate = template[7/*(int)(Math.random() * template.length)*/];
       getSections(rTemplate);
       getProblem();
+      
+      for(int i = 0; i < rNum.length; i++) {
+         
+         System.out.println(rNum[i].toString());
+         
+      }
       
    }
    
@@ -107,6 +114,7 @@ public class MathTemplateInterpreter {
                         section.append(nextChar);
                      
                      }
+                     
                      break;
                   case " ":
                      break;
@@ -137,8 +145,10 @@ public class MathTemplateInterpreter {
       
       int pIndex = 0;
       int rIndex = 0;
-      String problem;
-      String constraints;
+      String preProblem;
+      StringBuilder randomProblem;
+      String constraints = "";
+      rNum = new RandomConstraint[0];
       
       for(int index = 0; index < sections.length; index += 2) {
          
@@ -162,8 +172,110 @@ public class MathTemplateInterpreter {
          
       }
       
-      problem = sections[pIndex];
-      constraints = sections[rIndex];
+      if(pIndex == 0) {
+         
+         System.err.println("Problem does not exist.");
+         
+      }
+      
+      else {
+         
+         preProblem = sections[pIndex];
+         
+      }
+      
+      if(rIndex != 0) {
+         
+         constraints = sections[rIndex];
+         
+      }
+      
+      while(!constraints.isEmpty()) {
+         
+         rNum = Arrays.copyOf(rNum, rNum.length + 1);
+         RandomConstraint r = new RandomConstraint();
+         r.setName(constraints.substring(0, constraints.indexOf(':')));
+         constraints = constraints.substring(constraints.indexOf("type:"));
+         String type = constraints.substring(constraints.indexOf(':') + 1, constraints.indexOf(';'));
+         constraints = constraints.substring(constraints.indexOf(';') + 1);
+         
+         if(type.equals("i")) {
+            
+            r.setType(RandomConstraint.INT);
+            
+         }
+         else {
+            
+            r.setType(RandomConstraint.FLOAT);
+            
+         }
+         
+         int indexEnd = findEnd(constraints);
+         String rel = constraints.substring(0, indexEnd - 1);
+         constraints = constraints.substring(indexEnd);
+         String range = rel.substring(rel.indexOf(':') + 1);
+         indexEnd = findEnd(range);
+         rel = range.substring(indexEnd);
+         range = range.substring(0, indexEnd - 1);
+         String rangeMin = range.substring(0, range.indexOf(';'));
+         String rangeMax = range.substring(range.indexOf("max:"), range.length() - 1);
+         rangeMin = rangeMin.substring(rangeMin.indexOf(':') + 1, rangeMin.length());
+         rangeMax = rangeMax.substring(rangeMax.indexOf(':') + 1, rangeMax.length());
+         r.setMinRange(Float.parseFloat(rangeMin));
+         r.setMaxRange(Float.parseFloat(rangeMax));
+         String neq = rel.substring(rel.indexOf(':') + 1);
+         indexEnd = findEnd(neq);
+         rel = neq.substring(indexEnd);
+         neq = neq.substring(0, indexEnd - 1);
+         while(!neq.isEmpty()) {
+            
+            String nextConstraint = "";
+            
+            if(neq.indexOf(',') < 0) {
+             
+               nextConstraint = neq.substring(0, neq.length());
+               neq = "";
+               
+            }
+            else {
+               
+               nextConstraint = neq.substring(0, neq.indexOf(','));
+               neq = neq.substring(neq.indexOf(',') + 1);
+               
+            }
+            
+            r.addExcludedValue(Float.parseFloat(nextConstraint));
+            
+         }
+         
+         rNum[rNum.length - 1] = r;
+         
+      }
+      
+   }
+   
+   public int findEnd(String s) {
+      
+      int index = 0;
+      int deLim = 1;
+      while(deLim > 0) {
+         
+         switch(s.charAt(index)) {
+         
+         case ':':
+            deLim++;
+            break;
+         case ';':
+            deLim--;
+            break;
+         
+         }
+         
+         index++;
+         
+      }
+      
+      return index;
       
    }
    
