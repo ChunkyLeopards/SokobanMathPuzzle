@@ -40,7 +40,7 @@ RandomConstraints:
    ;
 ;
 Evaluation:
-   result0:"c0"
+   result0:"c0";
    result1:\frac{"c1"}{"c2"};
    c0:Evaluate((("r0"*"r3")+("r1"*"r2"))/("r1"*"r3"));
    c1:Evaluate(("r0"*"r3")+("r1"*"r2")/gcd("r1"*"r3",("r0"*"r3")+("r1"*"r2")));
@@ -80,6 +80,7 @@ Steps:
          rhs:Evaluate("r0"*"r3");
       ;
       text:Second Numerator;
+      allresult:
          lhs:"r1"*"r2";
          rhs:Evaluate("r1"*"r2");
       ;
@@ -110,6 +111,7 @@ Steps:
          rhs:
             Evaluate((("r0"*"r3")+("r1"*"r2"))/("r1"*"r3"));
          ;
+      ;
       result1:
          lhs:
             form:\frac{"c0"}{"c1"};
