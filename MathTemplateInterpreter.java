@@ -112,6 +112,9 @@ public class MathTemplateInterpreter {
                      
                      break;
                   case " ":
+                     if(temp[temp.length - 1].equals("Description")) {
+                        section.append(" ");
+                     }
                      break;
                   default:
                      section.append(nextChar);
@@ -345,6 +348,24 @@ public class MathTemplateInterpreter {
    public String getProblem() {
       
       return problem;
+      
+   }
+   
+   public String getDescription() {
+      
+      String description = "";
+      
+      for(int index = 0; index < sections.length; index += 2) {
+         
+         if(sections[index].equals("Description")) {
+            
+            description = sections[index + 1];
+            
+         }
+         
+      }
+      
+      return description;
       
    }
    

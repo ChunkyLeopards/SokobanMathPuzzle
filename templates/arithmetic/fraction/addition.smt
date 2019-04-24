@@ -63,7 +63,7 @@ EvaluationConstraints:
       sign:+;
    ;
 ;
-Description:Evaluate the following addition problem. Write the answer as a number or reduced fraction.;
+Description:Evaluate the fraction addition problem. Write the answer as a number or reduced fraction.;
 Steps:
    1:
       text:Determine the denominator.;

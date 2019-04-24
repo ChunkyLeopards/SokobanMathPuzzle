@@ -25,7 +25,7 @@ public class Movement {
                   p.move(SokobanRuntimeStorage.LEFT);
 
                   if (Validation.checkSolved(p)) {
-
+                     
                      input.setVisible(true);
                      isMoveable = false;
 
@@ -44,7 +44,7 @@ public class Movement {
                   p.move(SokobanRuntimeStorage.UP);
 
                   if (Validation.checkSolved(p)) {
-
+                     
                      input.setVisible(true);
                      isMoveable = false;
 
@@ -63,7 +63,7 @@ public class Movement {
                   p.move(SokobanRuntimeStorage.RIGHT);
 
                   if (Validation.checkSolved(p)) {
-
+                     
                      input.setVisible(true);
                      isMoveable = false;
 
@@ -82,7 +82,7 @@ public class Movement {
                   p.move(SokobanRuntimeStorage.DOWN);
 
                   if (Validation.checkSolved(p)) {
-
+                     
                      input.setVisible(true);
                      isMoveable = false;
 

@@ -1,6 +1,7 @@
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +12,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
@@ -27,6 +30,7 @@ public class MathPanel {
    private JPanel groupButtonPanel;
    private JPanel symbolButtonPanel;
    private JPanel symbolButtonPanelOptions[];
+   private JTextArea description;
    private String groupButtonNames[][];
    private String symbolButtonNames[][][];
    private JButton groupButtons[][];
@@ -43,11 +47,11 @@ public class MathPanel {
    private TeXIcon functionImage;
    private JTextField input;
    private CardLayout symbolOptions;
+   private MathTemplateInterpreter puzzle;
    
    public JPanel createMath() {
       
-      MathTemplateInterpreter puzzle = new MathTemplateInterpreter();
-      symbolOptions = new CardLayout();
+      puzzle = new MathTemplateInterpreter();
       problemPanel = new JPanel();
       problemPanel.setLayout(new BoxLayout(problemPanel, BoxLayout.PAGE_AXIS));
       formulaLaTeX = puzzle.getProblem();
@@ -70,9 +74,17 @@ public class MathPanel {
    }
    
    public JPanel createInput() {
-      
+
+      symbolOptions = new CardLayout();
       inputPanel = new JPanel();
       inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
+      description = new JTextArea(puzzle.getDescription());
+      description.setBackground(Color.black);
+      description.setLineWrap(true);
+      description.setWrapStyleWord(true);
+      description.setFont(new Font("TimesRoman", Font.PLAIN, 14));
+      description.setForeground(Color.white);
+      description.setBorder(new EmptyBorder(5, 5, 5, 5));
       input = new JTextField();
       buttonPanel = new JPanel();
       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
@@ -155,26 +167,76 @@ public class MathPanel {
       }
       
       symbolButtonNames[0][0][0] = "Lowercase Alpha";
+      symbolButtonNames[0][0][1] = "Lowercase Beta";
+      symbolButtonNames[0][0][2] = "Lowercase Gamma";
+      symbolButtonNames[0][0][3] = "Lowercase Delta";
+      symbolButtonNames[0][0][4] = "Lowercase Epsilon";
+      symbolButtonNames[0][1][0] = "Lowercase Zeta";
+      symbolButtonNames[0][1][1] = "Lowercase Eta";
+      symbolButtonNames[0][1][2] = "Lowercase Theta";
+      symbolButtonNames[0][1][3] = "Lowercase Iota";
+      symbolButtonNames[0][1][4] = "Lowercase Kappa";
       symbolButtonNames[1][0][0] = "Summation";
-      symbolButtonNames[2][0][0] = "Subset";
+      symbolButtonNames[1][0][1] = "Integral";
+      symbolButtonNames[2][0][0] = "Empty Set";
+      symbolButtonNames[2][0][1] = "Union";
+      symbolButtonNames[2][0][2] = "Intersection";
+      symbolButtonNames[2][0][3] = "Difference";
+      symbolButtonNames[2][0][4] = "Cartesian Product";
+      symbolButtonNames[2][1][0] = "Complement";
+      symbolButtonNames[2][1][1] = "Subset";
+      symbolButtonNames[2][1][2] = "Not Subset";
+      symbolButtonNames[2][1][3] = "Element";
+      symbolButtonNames[2][1][4] = "Not Element";
       symbolButtonNames[3][0][0] = "Not Equals";
       symbolButtonNames[4][0][0] = "Negation";
-      symbolButtonNames[5][0][0] = "Sin";
+      symbolButtonNames[5][0][0] = "Sine";
       symbolButtonNames[6][0][0] = "Parallel";
       symbolButtonNames[7][0][0] = "Real Numbers";
+      symbolButtonNames[7][0][1] = "Natural Numbers";
+      symbolButtonNames[7][0][2] = "Integers";
+      symbolButtonNames[7][0][3] = "Prime Numbers";
+      symbolButtonNames[7][0][4] = "Rational Numbers";
+      symbolButtonNames[7][1][0] = "Complex Numbers";
+      symbolButtonNames[7][1][1] = "Quaternions";
       symbolButtonNames[8][0][0] = "Plus or Minus";
       symbolButtonNames[9][0][0] = "Pi";
       symbolButtonNames[10][0][0] = "Standard Deviation or Covariance";
       symbolButtonNames[11][0][0] = "Combination";
       
       symbolLaTeX[0][0][0] = "\\alpha";
+      symbolLaTeX[0][0][1] = "\\beta";
+      symbolLaTeX[0][0][2] = "\\gamma";
+      symbolLaTeX[0][0][3] = "\\delta";
+      symbolLaTeX[0][0][4] = "\\epsilon";
+      symbolLaTeX[0][1][0] = "\\zeta";
+      symbolLaTeX[0][1][1] = "\\eta";
+      symbolLaTeX[0][1][2] = "\\theta";
+      symbolLaTeX[0][1][3] = "\\iota";
+      symbolLaTeX[0][1][4] = "\\kappa";
       symbolLaTeX[1][0][0] = "\\Sigma";
-      symbolLaTeX[2][0][0] = "\\subset";
+      symbolLaTeX[1][0][1] = "\\int";
+      symbolLaTeX[2][0][0] = "\\varnothing";
+      symbolLaTeX[2][0][1] = "\\cup";
+      symbolLaTeX[2][0][2] = "\\cap";
+      symbolLaTeX[2][0][3] = "\\setminus";
+      symbolLaTeX[2][0][4] = "\\times";
+      symbolLaTeX[2][1][0] = "\\overline{\\phantom{5}}";
+      symbolLaTeX[2][1][1] = "\\subset";
+      symbolLaTeX[2][1][2] = "\\subseteq";
+      symbolLaTeX[2][1][3] = "\\in";
+      symbolLaTeX[2][1][4] = "\\notin";
       symbolLaTeX[3][0][0] = "\\neq";
       symbolLaTeX[4][0][0] = "\\neg";
       symbolLaTeX[5][0][0] = "\\sin";
       symbolLaTeX[6][0][0] = "\\parallel";
       symbolLaTeX[7][0][0] = "\\mathbb{R}";
+      symbolLaTeX[7][0][1] = "\\mathbb{N}";
+      symbolLaTeX[7][0][2] = "\\mathbb{Z}";
+      symbolLaTeX[7][0][3] = "\\mathbb{P}";
+      symbolLaTeX[7][0][4] = "\\mathbb{Q}";
+      symbolLaTeX[7][1][0] = "\\mathbb{C}";
+      symbolLaTeX[7][1][1] = "\\mathbb{H}";
       symbolLaTeX[8][0][0] = "\\pm";
       symbolLaTeX[9][0][0] = "\\pi";
       symbolLaTeX[10][0][0] = "\\sigma";
@@ -220,6 +282,8 @@ public class MathPanel {
          symbolButtonPanel.add(symbolButtonPanelOptions[i], groupButtons[i / 4][i % 4].getToolTipText());
             
       }
+      
+      inputPanel.add(description);
       inputPanel.add(input);
       inputPanel.add(buttonPanel);
       
