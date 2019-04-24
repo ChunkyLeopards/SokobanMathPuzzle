@@ -38,7 +38,7 @@ public class MathPanel {
    private TeXIcon groupImage[][];
    private TeXIcon symbolImage[][][];
    private JLabel function;
-   private String formulaLaTeX[];
+   private String formulaLaTeX;
    private TeXFormula formula;
    private TeXIcon functionImage;
    private JTextField input;
@@ -50,20 +50,8 @@ public class MathPanel {
       symbolOptions = new CardLayout();
       problemPanel = new JPanel();
       problemPanel.setLayout(new BoxLayout(problemPanel, BoxLayout.PAGE_AXIS));
-      formulaLaTeX = new String[10];
-      
-      formulaLaTeX[0] = "x = \\frac{-b\\pm\\sqrt{b^2+4ac}}{2a}";
-      formulaLaTeX[1] = "\\sum^{50}_{i=0}i^2";
-      formulaLaTeX[2] = "\\int^5_0\\frac{x^2}{2}\\frac{dx}{dt}";
-      formulaLaTeX[3] = "\\begin{bmatrix}5&7&6&2\\\\9&-2&-6&3\\\\7&-1&2&1\\end{bmatrix}\\begin{bmatrix}2&4\\\\-5&7\\\\2&-8\\\\3&0\\end{bmatrix}";
-      formulaLaTeX[4] = "\\lim_{x\\to-0}\\tan\\left(\\frac{\\pi}{2}\\right)";
-      formulaLaTeX[5] = "\\log_6{18^x}";
-      formulaLaTeX[6] = "\\begin{array}{c|c|c|c}\\text{name}&\\text{lowercase}&\\text{uppercase}&\\text{variable}\\\\\\hline\\text{Alpha}&\\alpha&\\Alpha\\\\\\text{Beta}&\\beta&\\Beta\\\\\\text{Gamma}&\\gamma&\\Gamma\\\\\\text{Delta}&\\delta&\\Delta"/*\\\\\\text{Epsilon}&\\epsilon&\\Epsilon&\\varepsilon\\\\\\text{Zeta}&\\zeta&\\Zeta\\\\\\text{Eta}&\\eta&\\Eta\\\\\\text{Theta}&\\theta&\\Theta&\\vartheta\\\\\\text{Iota}&\\iota&\\Iota\\\\\\text{Omicron}&\\omicron&\\Omicron\\\\\\text{Pi}&\\pi&\\Pi\\\\\\text{Rho}&\\rho&\\Rho&\\varrho*/ + "\\\\\\text{Sigma}&\\sigma&\\Sigma"/*\\\\\\text{Tau}&\\tau&\\Tau\\\\\\text{Upsilon}&\\upsilon&\\Upsilon\\\\\\text{Phi}&\\phi&\\Phi&\\varphi\\\\\\text{Chi}&\\chi&\\Chi\\\\\\text{Psi}&\\psi&\\Psi*/ + "\\\\\\text{Omega}&\\omega&\\Omega\\end{array}";
-      formulaLaTeX[7] = "\\text{3 }\\text{random }\\text{numbers!}\\\\" + (int)(Math.random() * 100) + "\\\\" + (int)(Math.random() * 100) + "\\\\" + (int)(Math.random() * 100);
-      formulaLaTeX[8] = "P\\land(Q\\lor R)\\equiv(P\\land Q)\\lor(P\\land R)";
-      formulaLaTeX[9] = "f(x)\\geq g(x) - f(x)\\geq h(x) - g(x)";
-      
-      formula = new TeXFormula(formulaLaTeX[(int)(Math.random() * 10)]);
+      formulaLaTeX = puzzle.getProblem();
+      formula = new TeXFormula(formulaLaTeX);
       functionImage = formula.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
                              .setSize(30)
                              .setFGColor(Color.white)

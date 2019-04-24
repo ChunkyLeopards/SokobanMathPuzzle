@@ -7,24 +7,19 @@ import java.util.Arrays;
 
 public class MathTemplateInterpreter {
    
-   File template[];
-   int weight[];
-   String sections[];
-   String problem;
-   RandomConstraint rNum[];
+   private File template[];
+   private String sections[];
+   private String problem;
+   private RandomConstraint rNum[];
+   private float randFloats[];
+   private int randInts[];
    
    public MathTemplateInterpreter() {
       
       template = listTemplates(new File("templates"));
       File rTemplate = template[7/*(int)(Math.random() * template.length)*/];
       getSections(rTemplate);
-      getProblem();
-      
-      for(int i = 0; i < rNum.length; i++) {
-         
-         System.out.println(rNum[i].toString());
-         
-      }
+      genProblem();
       
    }
    
@@ -141,12 +136,12 @@ public class MathTemplateInterpreter {
       
    }
    
-   public void getProblem() {
+   public void genProblem() {
       
       int pIndex = 0;
       int rIndex = 0;
-      String preProblem;
-      StringBuilder randomProblem;
+      String preProblem = "";
+      StringBuilder randomProblem = new StringBuilder();
       String constraints = "";
       rNum = new RandomConstraint[0];
       
@@ -227,6 +222,16 @@ public class MathTemplateInterpreter {
          indexEnd = findEnd(neq);
          rel = neq.substring(indexEnd);
          neq = neq.substring(0, indexEnd - 1);
+         
+         if(r.getType() == RandomConstraint.FLOAT) {
+            
+            String precision = "";
+            precision = rel.substring(rel.indexOf("precision"));
+            rel = rel.substring(0, rel.indexOf(";") + 1);
+            r.setPrecision(Float.parseFloat(precision.substring(precision.indexOf(':') + 1, precision.indexOf(';'))));
+            
+         }
+         
          while(!neq.isEmpty()) {
             
             String nextConstraint = "";
@@ -252,6 +257,64 @@ public class MathTemplateInterpreter {
          
       }
       
+      randFloats = new float[rNum.length];
+      randInts = new int[rNum.length];
+
+      for(int i = 0; i < rNum.length; i++) {
+         
+         if(rNum[i].getType() == RandomConstraint.INT) {
+            
+            randInts[i] = rNum[i].generateRandInt();
+            
+         }
+         else {
+            
+            randFloats[i] = rNum[i].generateRandFloat();
+            
+         }
+         
+      }
+      
+      while(!preProblem.isEmpty()) {
+         
+         if(preProblem.indexOf('\"') < 0) {
+            
+            randomProblem.append(preProblem);
+            preProblem = "";
+            
+         }
+         else {
+            
+            randomProblem.append(preProblem.substring(0, preProblem.indexOf('\"')));
+            preProblem = preProblem.substring(preProblem.indexOf('\"') + 1);
+            
+            for(int i = 0; i < rNum.length; i++) {
+               
+               if(rNum[i].getName().equals(preProblem.substring(0, preProblem.indexOf('\"')))) {
+                  
+                  if(rNum[i].getType() == RandomConstraint.INT) {
+
+                     randomProblem.append(randInts[i]);
+                     
+                  }
+                  else {
+                     
+                     randomProblem.append(randFloats[i]);
+                     
+                  }
+                  
+               }
+               
+            }
+
+            preProblem = preProblem.substring(preProblem.indexOf('\"') + 1);
+            
+         }
+         
+      }
+      
+      problem = randomProblem.toString();
+      
    }
    
    public int findEnd(String s) {
@@ -276,6 +339,12 @@ public class MathTemplateInterpreter {
       }
       
       return index;
+      
+   }
+   
+   public String getProblem() {
+      
+      return problem;
       
    }
    

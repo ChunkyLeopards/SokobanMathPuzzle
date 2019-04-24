@@ -1,18 +1,20 @@
 import java.util.Arrays;
+import java.util.Random;
 
 public class RandomConstraint {
    
    final static boolean INT = true;
    final static boolean FLOAT = false;
-   String name;
-   boolean intType;
-   int iMinRange;
-   float fMinRange;
-   int iMaxRange;
-   float fMaxRange;
-   int iExcludedValues[];
-   float fExcludedValues[];
-   Relation rel[];
+   private String name;
+   private boolean intType;
+   private int iMinRange;
+   private float fMinRange;
+   private int iMaxRange;
+   private float fMaxRange;
+   private int iExcludedValues[];
+   private float fExcludedValues[];
+   private float precision;
+   private Relation rel[];
    
    public RandomConstraint() {
       
@@ -24,6 +26,7 @@ public class RandomConstraint {
       fMaxRange = 100000000f;
       iExcludedValues = new int[0];
       fExcludedValues = new float[0];
+      precision = 0.01f;
       rel = new Relation[0];
       
    }
@@ -70,6 +73,12 @@ public class RandomConstraint {
       
    }
    
+   public void setPrecision(float p) {
+      
+      precision = p;
+      
+   }
+   
    public void addExcludedValue(float f) {
       
       if(intType == INT) {
@@ -94,7 +103,71 @@ public class RandomConstraint {
       
    }
    
-   public String toString() {
+   public int generateRandInt() {
+      
+      int rand = -1;
+      Random r = new Random();
+      int bound = iMaxRange - iMinRange;
+      
+      while(rand < 0 || rand > bound) {
+         
+         rand = r.nextInt(bound + 1);
+         
+         for(int i = 0; i < iExcludedValues.length; i++) {
+            
+            if((rand + iMinRange) == iExcludedValues[i]) {
+               
+               rand = -1;
+               
+            }
+            
+         }
+         
+      }
+      
+      return rand + iMinRange;
+      
+   }
+   
+   public float generateRandFloat() {
+      
+      float rand = -1f;
+      Random r = new Random();
+      float bound = fMaxRange - fMinRange;
+      
+      while(rand < 0f || rand > bound) {
+         
+         rand = r.nextFloat() * (bound + precision);
+         
+         for(int i = 0; i < fExcludedValues.length; i++) {
+            
+            if(((rand + fMinRange) % precision) == fExcludedValues[i]) {
+               
+               rand = -1f;
+               
+            }
+            
+         }
+         
+      }
+      
+      return (rand + fMinRange) % precision;
+      
+   }
+   
+   public String getName() {
+      
+      return name;
+      
+   }
+   
+   public boolean getType() {
+      
+      return intType;
+      
+   }
+   
+   /*public String toString() {
       
       StringBuilder randc = new StringBuilder();
       randc.append("The name of the random number is " + name + ".\n");
@@ -161,6 +234,6 @@ public class RandomConstraint {
       
       return randc.toString();
       
-   }
+   }*/
 
 }
