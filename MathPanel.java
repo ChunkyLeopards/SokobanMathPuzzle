@@ -251,29 +251,29 @@ public class MathPanel {
             
             for(int k = 0; k < symbolLaTeX[0][0].length; k++) {
                
-               symbolForm[i][j][k] = new TeXFormula(symbolLaTeX[i][j][k]);
-               symbolImage[i][j][k] = symbolForm[i][j][k].new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
-                                                                   .setSize(15)
-                                                                   .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER)
-                                                                   .setIsMaxWidth(true).setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f)
-                                                                   .build();
-               symbolButtons[i][j][k] = new JButton();
-               symbolButtons[i][j][k].setIcon(symbolImage[i][j][k]);
-               symbolButtons[i][j][k].setToolTipText(symbolButtonNames[i][j][k]);
-               symbolButtons[i][j][k].setActionCommand(symbolLaTeX[i][j][k]);
-               
-               symbolButtons[i][j][k].addActionListener(new ActionListener() {
+               if (symbolLaTeX[i][j][k] != null) {
+                  symbolForm[i][j][k] = new TeXFormula(symbolLaTeX[i][j][k]);
+                  symbolImage[i][j][k] = symbolForm[i][j][k].new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
+                        .setSize(15).setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER)
+                        .setIsMaxWidth(true).setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
+                  symbolButtons[i][j][k] = new JButton();
+                  symbolButtons[i][j][k].setIcon(symbolImage[i][j][k]);
+                  symbolButtons[i][j][k].setToolTipText(symbolButtonNames[i][j][k]);
+                  symbolButtons[i][j][k].setActionCommand(symbolLaTeX[i][j][k]);
 
-                  @Override
-                  public void actionPerformed(ActionEvent arg0) {
-                     
-                     input.setText(input.getText() + arg0.getActionCommand());
-                     
-                  }
-                  
-               });
-               
-               symbolButtonPanelOptions[i].add(symbolButtons[i][j][k]);
+                  symbolButtons[i][j][k].addActionListener(new ActionListener() {
+
+                     @Override
+                     public void actionPerformed(ActionEvent arg0) {
+
+                        input.setText(input.getText() + arg0.getActionCommand());
+
+                     }
+
+                  });
+
+                  symbolButtonPanelOptions[i].add(symbolButtons[i][j][k]);
+               }
             
             }
             
