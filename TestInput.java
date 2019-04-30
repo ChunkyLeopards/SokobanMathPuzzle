@@ -12,6 +12,8 @@ public class TestInput {
       in = new Input();
       window.add(in.getPanel());
       window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+      window.pack();
+      window.setSize(1000, 80);
       window.setVisible(true);
 
    }

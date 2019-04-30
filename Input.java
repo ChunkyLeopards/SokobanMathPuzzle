@@ -1,26 +1,25 @@
-import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
-import org.scilab.forge.jlatexmath.TeXFormula.TeXIconBuilder;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
 public class Input {
    
    private JPanel display;
    private JLabel displayLabel;
-   private JTextField input;
    private LaTeXInputRepresentation formula;
    private boolean shift;
+   private boolean capsLock;
    
    public Input() {
       
+      capsLock = Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
       formula = new LaTeXInputRepresentation();
       formula.setActive();
       display = new JPanel();
@@ -40,23 +39,57 @@ public class Input {
             int in = arg0.getKeyCode();
             switch(in) {
             case 8: //backspace
-               backspace();
+               formula.backspace();
+               break;
+            case 10: //return/enter
+               formula.addFormula("//", 0);
                break;
             case 16: //shift
                shift = true;
                break;
+            case 20: //capslock
+               capsLock = !capsLock;
+               break;
             case 37: //arrowLeft
-               moveCursorLeft();
+               formula.moveCursorLeft();
                break;
             case 38: //arrowUp
-               moveCursorUp();
+               formula.moveCursorUp();
                break;
             case 39: //arrowRight
-               moveCursorRight();
+               formula.moveCursorRight();
                break;
             case 40: //arrowDown
-               moveCursorDown();
+               formula.moveCursorDown();
                break;
+               //special cases
+            case 45: //-
+            case 91: //[
+            case 92: //\
+            case 93: //]
+            case 50: //numbers with special shift cases
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+               if(shift ^ capsLock) {
+                  formula.addFormula("\\" + Character.toUpperCase(c), 0);
+               }
+               else {
+                  formula.addChar(c);
+               }
+               break;
+            case 59: //; 
+            case 222: //'
+            case 44: //,
+            case 46: //.
+            case 47: ///
+            case 61: //=
+            case 48: //numbers handled same as letters
+            case 49:
+            case 51:
+            case 56:
+            case 57:
             case 65: //letters
             case 66:
             case 67:
@@ -83,17 +116,16 @@ public class Input {
             case 88:
             case 89:
             case 90:
-               if(!shift) {
-                  addChar(c);
+               if(shift ^ capsLock) {
+                  formula.addChar(Character.toUpperCase(c));
                }
                else {
-                  addChar(Character.toUpperCase(c));
+                  formula.addChar(c);
                }
                break;
             default:
                System.out.println(c);
                System.out.println(in);
-               //addChar(in);
             }
             
             TeXFormula form = new TeXFormula(formula.buildLaTeX());
@@ -104,7 +136,6 @@ public class Input {
             displayLabel.setIcon(icon);
             display.removeAll();
             display.add(displayLabel);
-            //display.update(display.getGraphics());
             display.validate();
             
          }
@@ -130,107 +161,9 @@ public class Input {
       
    }
    
-   public void addChar(char c) {
-      
-      LaTeXInputRepresentation current = findActive(formula);
-      if(current == null) {
-         System.err.println("There is a big error here somewhere.");
-      }
-      else {
-         current.addChar(c);
-      }
-      
-   }
-   
-   public void addFormula(String f) {
-      
-      System.out.println(f);
-      
-   }
-   
-   public void moveCursorLeft() {
-      
-      LaTeXInputRepresentation current = findActive(formula);
-      if(current == null) {
-         System.err.println("There is a big error here somewhere.");
-      }
-      else {
-         current.moveCursorLeft();
-      }
-      
-   }
-   
-   public void moveCursorRight() {
-      
-      LaTeXInputRepresentation current = findActive(formula);
-      if(current == null) {
-         System.err.println("There is a big error here somewhere.");
-      }
-      else {
-         current.moveCursorRight();
-      }
-      
-   }
-   
-   public void moveCursorDown() {
-      
-      LaTeXInputRepresentation current = findActive(formula);
-      if(current == null) {
-         System.err.println("There is a big error here somewhere.");
-      }
-      else {
-         current.moveCursorDown();
-      }
-      
-   }
-   
-   public void moveCursorUp() {
-      
-      LaTeXInputRepresentation current = findActive(formula);
-      if(current == null) {
-         System.err.println("There is a big error here somewhere.");
-      }
-      else {
-         current.moveCursorUp();
-      }
-      
-   }
-   
-   public void backspace() {
-      
-      /*if(!activeSelection) {
-         
-         LaTeX = LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex - 1]).concat(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
-         for(int i = cursorLocationIndex - 1; i < possibleCursorLocations.length - 1; i++) {
-            possibleCursorLocations[i] = possibleCursorLocations[i + 1];
-         }
-         cursorLocationIndex--;
-         
-      }*/
-      
-   }
-   
    public JPanel getPanel() {
       
       return display;
-      
-   }
-   
-   public LaTeXInputRepresentation findActive(LaTeXInputRepresentation head) {
-      
-      if(head.getActive()) {
-         return head;
-      }
-      else {
-         LaTeXInputRepresentation children[] = head.getChildren();
-         for(int i = 0; i < children.length; i++) {
-            LaTeXInputRepresentation active = findActive(children[i]);
-            if(active != null) {
-               return active;
-            }
-         }
-      }
-      return null;
       
    }
    

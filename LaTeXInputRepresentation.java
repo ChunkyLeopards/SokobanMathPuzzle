@@ -5,9 +5,6 @@ public class LaTeXInputRepresentation {
    private String highlightColor = "\\definecolor{lblue}{rgb}{0.55, 0.78, 1}";
    private String setHighlightStart = "\\bgcolor{lblue}{";
    private boolean active;
-   private LaTeXInputRepresentation parent;
-   private LaTeXInputRepresentation children[];
-   private int childLocations[];
    private boolean activeSelection;
    private int selectionStartIndex;
    private int selectionEndIndex;
@@ -17,9 +14,6 @@ public class LaTeXInputRepresentation {
    
    public LaTeXInputRepresentation() {
       
-      parent = null;
-      children = new LaTeXInputRepresentation[0];
-      childLocations = new int[0];
       active = false;
       activeSelection = false;
       selectionStartIndex = 0;
@@ -33,9 +27,6 @@ public class LaTeXInputRepresentation {
 
    public LaTeXInputRepresentation(LaTeXInputRepresentation p) {
       
-      parent = p;
-      children = new LaTeXInputRepresentation[0];
-      childLocations = new int[0];
       active = false;
       activeSelection = false;
       selectionStartIndex = 0;
@@ -47,6 +38,12 @@ public class LaTeXInputRepresentation {
       
    }
    
+   public void addFormula(String f, int argumentCount) {
+      
+      System.out.println(f);
+      
+   }
+   
    public void addChar(char c) {
       
       String tempLaTeX = LaTeX;
@@ -54,8 +51,28 @@ public class LaTeXInputRepresentation {
       LaTeX = LaTeX.concat(String.valueOf(c));
       LaTeX = LaTeX.concat(tempLaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
       possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1);
+      for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
+         possibleCursorLocations[i] = possibleCursorLocations[i - 1];
+         possibleCursorLocations[i]++;
+      }
       cursorLocationIndex++;
       possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + 1;
+      
+   }
+   
+   public void backspace() {
+      
+      if(!activeSelection) {
+         
+         LaTeX = LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex - 1]).concat(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+         for(int i = cursorLocationIndex - 1; i < possibleCursorLocations.length - 1; i++) {
+            possibleCursorLocations[i] = possibleCursorLocations[i + 1];
+         }
+         cursorLocationIndex--;
+         
+      }
+      else {
+      }
       
    }
    
@@ -100,32 +117,15 @@ public class LaTeXInputRepresentation {
       String returnable = "";
       if(active) {
          if(activeSelection) {
-            if(children.length == 0) {
-               
-            }
-            else {
-               
-            }
          }
          else {
-            if(children.length == 0) {
-               returnable = LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]);
-               returnable = returnable.concat("\\vert ");
-               returnable = returnable.concat(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
-               System.out.println(returnable);
-            }
-            else {
-               
-            }
+            returnable = LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]);
+            returnable = returnable.concat("\\vert ");
+            returnable = returnable.concat(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
          }
       }
       else {
-         if(children.length == 0) {
-            returnable = LaTeX;
-         }
-         else {
-            
-         }
+         returnable = LaTeX;
       }
       return returnable;
       
@@ -134,12 +134,6 @@ public class LaTeXInputRepresentation {
    public boolean getActive() {
       
       return active;
-      
-   }
-   
-   public LaTeXInputRepresentation[] getChildren() {
-      
-      return children;
       
    }
    
