@@ -2,8 +2,8 @@ import java.util.Arrays;
 
 public class LaTeXInputRepresentation {
    
-   private String highlightColor = "\\definecolor{lblue}{rgb}{0.55, 0.78, 1}";
-   private String setHighlightStart = "\\bgcolor{lblue}{";
+   private String highlightColor = "\\definecolor{lblue}{rgb}{0, 0.15, 1}";
+   private String setHighlightStart = "\\fgcolor{white}{\\bgcolor{lblue}{";
    private boolean activeSelection;
    private int selectionIndex;
    private int cursorLocationIndex;
@@ -37,7 +37,42 @@ public class LaTeXInputRepresentation {
       StringBuilder newLaTeX = new StringBuilder();
       newLaTeX.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
       switch(f) {
-      case "\\\\":
+      case "Lowercase Eta":
+         newLaTeX.append("\\eta ");
+         newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+         possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1);
+         for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
+            possibleCursorLocations[i] = possibleCursorLocations[i - 1];
+            possibleCursorLocations[i] += 5;
+         }
+         cursorLocationIndex++;
+         possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + 5;
+         break;
+      case "^{}":
+         System.out.println(LaTeX);
+         newLaTeX.append(f);
+         newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+         possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 2);
+         if(cursorLocationIndex != 0) {
+            for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
+               possibleCursorLocations[i] = possibleCursorLocations[i - 2];
+               possibleCursorLocations[i] += f.length();
+            }
+         }
+         cursorLocationIndex++;
+         possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + f.length() - 1;
+         possibleCursorLocations[cursorLocationIndex + 1] = possibleCursorLocations[cursorLocationIndex] + 1;
+         System.out.println(LaTeX);
+         break;
+      case "\\~{}":
+      case "\\@ ":
+      case "\\$ ":
+      case "\\% ":
+      case "\\& ":
+      case "\\_ ":
+      case "\\{ ":
+      case "\\} ":
+      case "\\| ":
          newLaTeX.append(f);
          newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
          possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1);
@@ -68,7 +103,7 @@ public class LaTeXInputRepresentation {
          possibleCursorLocations[i]++;
       }
       cursorLocationIndex++;
-      possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + 1;
+      //possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + 1;
       
    }
    
@@ -173,7 +208,7 @@ public class LaTeXInputRepresentation {
             returnable.append(LaTeX.substring(0, possibleCursorLocations[selectionIndex]));
             returnable.append(setHighlightStart);
             returnable.append(LaTeX.substring(possibleCursorLocations[selectionIndex], possibleCursorLocations[cursorLocationIndex]));
-            returnable.append("}\\vert ");
+            returnable.append("\\hspace{-2}\\vert\\hspace{-2}}}");
             returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
             
          }
@@ -181,17 +216,17 @@ public class LaTeXInputRepresentation {
             
             returnable.append(highlightColor);
             returnable.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
-            returnable.append("\\vert");
             returnable.append(setHighlightStart);
+            returnable.append("\\hspace{-2}\\vert\\hspace{-2}");
             returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex], possibleCursorLocations[selectionIndex]));
-            returnable.append("}");
+            returnable.append("}}");
             returnable = returnable.append(LaTeX.substring(possibleCursorLocations[selectionIndex]));
             
          }
          else {
             
             returnable = returnable.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
-            returnable = returnable.append("\\vert ");
+            returnable = returnable.append("\\hspace{-2}\\vert\\hspace{-2}");
             returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
             
          }
@@ -199,7 +234,7 @@ public class LaTeXInputRepresentation {
       else {
          
          returnable = returnable.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
-         returnable = returnable.append("\\vert ");
+         returnable = returnable.append("\\hspace{-2}\\vert\\hspace{-2}");
          returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
          
       }

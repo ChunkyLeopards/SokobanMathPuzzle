@@ -13,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.scilab.forge.jlatexmath.TeXConstants;
@@ -45,7 +44,7 @@ public class MathPanel {
    private String formulaLaTeX;
    private TeXFormula formula;
    private TeXIcon functionImage;
-   private JTextField input;
+   private Input input;
    private CardLayout symbolOptions;
    private MathTemplateInterpreter puzzle;
    
@@ -87,7 +86,7 @@ public class MathPanel {
       description.setBorder(new EmptyBorder(5, 5, 5, 5));
       description.setEditable(false);
       description.setHighlighter(null);
-      input = new JTextField();
+      input = new Input();
       buttonPanel = new JPanel();
       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
       buttonPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -530,7 +529,8 @@ public class MathPanel {
                      @Override
                      public void actionPerformed(ActionEvent arg0) {
                         
-                        input.setText(input.getText() + arg0.getActionCommand());
+                        input.addButtonFormula(arg0.getActionCommand().toString());
+                        input.getPanel().requestFocus();
 
                      }
 
@@ -548,11 +548,17 @@ public class MathPanel {
       }
       
       inputPanel.add(description);
-      inputPanel.add(input);
+      inputPanel.add(input.getPanel());
       inputPanel.add(buttonPanel);
       
       return inputPanel;
       
    }
+   
+   public void getTextFocus() {
 
+      input.getPanel().requestFocus();
+      
+   }
+   
 }

@@ -9,7 +9,7 @@ public class Movement {
    
    private boolean isMoveable;
    
-   public Movement(JFrame area, SokobanRuntimeStorage p, JPanel input) {
+   public Movement(JFrame area, SokobanRuntimeStorage p, JPanel input, MathPanel math) {
       
       isMoveable = true;
 
@@ -27,6 +27,7 @@ public class Movement {
                   if (Validation.checkSolved(p)) {
                      
                      input.setVisible(true);
+                     math.getTextFocus();
                      isMoveable = false;
 
                   }
@@ -46,6 +47,7 @@ public class Movement {
                   if (Validation.checkSolved(p)) {
                      
                      input.setVisible(true);
+                     math.getTextFocus();
                      isMoveable = false;
 
                   }
@@ -65,6 +67,7 @@ public class Movement {
                   if (Validation.checkSolved(p)) {
                      
                      input.setVisible(true);
+                     math.getTextFocus();
                      isMoveable = false;
 
                   }
@@ -84,6 +87,7 @@ public class Movement {
                   if (Validation.checkSolved(p)) {
                      
                      input.setVisible(true);
+                     math.getTextFocus();
                      isMoveable = false;
 
                   }

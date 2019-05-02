@@ -1,6 +1,8 @@
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,12 +26,47 @@ public class Input {
       display = new JPanel();
       display.setFocusable(true);
       TeXFormula form = new TeXFormula(formula.buildLaTeX());
-      TeXIcon icon = form.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(15)
+      TeXIcon icon = form.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(20)
             .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER).setIsMaxWidth(true)
             .setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
       displayLabel = new JLabel();
       displayLabel.setIcon(icon);
       display.add(displayLabel);
+      display.addMouseListener(new MouseListener() {
+
+         @Override
+         public void mouseClicked(MouseEvent arg0) {
+
+            display.requestFocus();
+            System.out.println("in focus");
+            
+         }
+
+         @Override
+         public void mouseEntered(MouseEvent arg0) {
+            // TODO Auto-generated method stub
+            
+         }
+
+         @Override
+         public void mouseExited(MouseEvent arg0) {
+            // TODO Auto-generated method stub
+            
+         }
+
+         @Override
+         public void mousePressed(MouseEvent arg0) {
+            // TODO Auto-generated method stub
+            
+         }
+
+         @Override
+         public void mouseReleased(MouseEvent arg0) {
+            // TODO Auto-generated method stub
+            
+         }
+         
+      });
       display.addKeyListener(new KeyListener() {
 
          @Override
@@ -44,13 +81,14 @@ public class Input {
                formula.remove(true);
                break;
             case 10: //return/enter
-               formula.addFormula("\\\\");
                break;
             case 16: //shift
                shift = true;
                break;
             case 20: //capslock
                capsLock = !capsLock;
+               break;
+            case 32: //space
                break;
             case 35: //end
                formula.moveEnd(shift);
@@ -69,17 +107,32 @@ public class Input {
             case 40: //arrowDown
                break;
                //special cases
-            case 45: //-
-            case 91: //[
-            case 92: //\
-            case 93: //]
-            case 50: //numbers with special shift cases
-            case 52:
-            case 53:
-            case 54:
-            case 55:
+            case 54: //^
                if(shift ^ capsLock) {
-                  formula.addFormula(String.valueOf(Character.toUpperCase(c)));
+                  formula.addFormula(Character.toUpperCase(c) + "{}");
+               }
+               else {
+                  formula.addChar(c);
+               }
+               break;
+            case 192: //`
+               if(shift ^ capsLock) {
+                  formula.addFormula("\\" + Character.toUpperCase(c) + "{}");
+               }
+               else {
+                  formula.addChar(c);
+               }
+               break;
+            case 45: //_
+            case 91: //{
+            case 92: //|
+            case 93: //}
+            case 50: //@ //numbers with special shift cases
+            case 52: //$
+            case 53: //%
+            case 55: //&
+               if(shift ^ capsLock) {
+                  formula.addFormula("\\" + Character.toUpperCase(c) + " ");
                }
                else {
                   formula.addChar(c);
@@ -135,7 +188,7 @@ public class Input {
             }
             
             TeXFormula form = new TeXFormula(formula.buildLaTeX());
-            TeXIcon icon = form.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(15)
+            TeXIcon icon = form.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(20)
                   .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER).setIsMaxWidth(true)
                   .setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
             displayLabel = new JLabel();
@@ -171,6 +224,23 @@ public class Input {
    public JPanel getPanel() {
       
       return display;
+      
+   }
+   
+   public void addButtonFormula(String s) {
+      
+      formula.addFormula(s);
+      
+      TeXFormula form = new TeXFormula(formula.buildLaTeX());
+      TeXIcon icon = form.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(20)
+            .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER).setIsMaxWidth(true)
+            .setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
+      displayLabel = new JLabel();
+      displayLabel.setIcon(icon);
+      display.removeAll();
+      display.add(displayLabel);
+      display.validate();
+      display.update(display.getGraphics());
       
    }
    

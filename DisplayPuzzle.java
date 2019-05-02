@@ -115,7 +115,7 @@ public class DisplayPuzzle extends JPanel{
       window.add(new DisplayPuzzle(p));
       window.pack();
       window.setVisible(true);
-      new Movement(window, p, input);
+      new Movement(window, p, input, math);
       
    }
    
