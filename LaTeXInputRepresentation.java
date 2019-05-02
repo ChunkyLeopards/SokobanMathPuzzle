@@ -4,20 +4,16 @@ public class LaTeXInputRepresentation {
    
    private String highlightColor = "\\definecolor{lblue}{rgb}{0.55, 0.78, 1}";
    private String setHighlightStart = "\\bgcolor{lblue}{";
-   private boolean active;
    private boolean activeSelection;
-   private int selectionStartIndex;
-   private int selectionEndIndex;
+   private int selectionIndex;
    private int cursorLocationIndex;
    private int possibleCursorLocations[];
    private String LaTeX;
    
    public LaTeXInputRepresentation() {
       
-      active = false;
       activeSelection = false;
-      selectionStartIndex = 0;
-      selectionEndIndex = 0;
+      selectionIndex = 0;
       cursorLocationIndex = 0;
       possibleCursorLocations = new int[1];
       possibleCursorLocations[0] = 0;
@@ -27,10 +23,8 @@ public class LaTeXInputRepresentation {
 
    public LaTeXInputRepresentation(LaTeXInputRepresentation p) {
       
-      active = false;
       activeSelection = false;
-      selectionStartIndex = 0;
-      selectionEndIndex = 0;
+      selectionIndex = 0;
       cursorLocationIndex = 0;
       possibleCursorLocations = new int[1];
       possibleCursorLocations[0] = 0;
@@ -38,18 +32,36 @@ public class LaTeXInputRepresentation {
       
    }
    
-   public void addFormula(String f, int argumentCount) {
+   public void addFormula(String f) {
       
-      System.out.println(f);
+      StringBuilder newLaTeX = new StringBuilder();
+      newLaTeX.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
+      switch(f) {
+      case "\\\\":
+         newLaTeX.append(f);
+         newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+         possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1);
+         for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
+            possibleCursorLocations[i] = possibleCursorLocations[i - 1];
+            possibleCursorLocations[i] += f.length();
+         }
+         cursorLocationIndex++;
+         possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + f.length();
+         break;
+      default:
+         System.out.println(f);
+      }
+      LaTeX = newLaTeX.toString();
       
    }
    
    public void addChar(char c) {
       
-      String tempLaTeX = LaTeX;
-      LaTeX = tempLaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]);
-      LaTeX = LaTeX.concat(String.valueOf(c));
-      LaTeX = LaTeX.concat(tempLaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+      StringBuilder newLaTeX = new StringBuilder();
+      newLaTeX.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
+      newLaTeX.append(String.valueOf(c));
+      newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+      LaTeX = newLaTeX.toString();
       possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1);
       for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
          possibleCursorLocations[i] = possibleCursorLocations[i - 1];
@@ -60,114 +72,194 @@ public class LaTeXInputRepresentation {
       
    }
    
-   public void backspace() {
+   public void remove(boolean forward) {
+      
+      StringBuilder deletedString = new StringBuilder();
+      
+      System.out.println(Arrays.toString(possibleCursorLocations));
+      System.out.println(LaTeX);
+      System.out.println(cursorLocationIndex);
       
       if(!activeSelection) {
          
-         LaTeX = LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex - 1]).concat(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
-         for(int i = cursorLocationIndex - 1; i < possibleCursorLocations.length - 1; i++) {
-            possibleCursorLocations[i] = possibleCursorLocations[i + 1];
+         if(forward) {
+            
+            if(cursorLocationIndex < possibleCursorLocations.length - 1) {
+               
+               System.out.println("in delete");
+               
+               int diffLength = possibleCursorLocations[cursorLocationIndex] - possibleCursorLocations[cursorLocationIndex - 1];               
+               deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
+               deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex + 1]));
+               LaTeX = deletedString.toString();
+               for(int i = cursorLocationIndex; i < possibleCursorLocations.length - 1; i++) {
+                  possibleCursorLocations[i] = possibleCursorLocations[i + 1] - diffLength;
+               }
+               possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - 1);
+               
+            }
+            
          }
-         cursorLocationIndex--;
+         else {
+            
+            if(cursorLocationIndex > 0) {
+               
+               System.out.println("in backspace");
+               
+               int diffLength = possibleCursorLocations[cursorLocationIndex] - possibleCursorLocations[cursorLocationIndex - 1];
+               deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex - 1]));
+               deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+               LaTeX = deletedString.toString();
+               for(int i = cursorLocationIndex - 1; i < possibleCursorLocations.length - 1; i++) {
+                  possibleCursorLocations[i] = possibleCursorLocations[i + 1] - diffLength;
+               }
+               cursorLocationIndex--;
+               possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - 1);
+               
+            }
+            
+         }
          
       }
       else {
+         
+         if(cursorLocationIndex > selectionIndex) {
+            
+            int indexDiff = cursorLocationIndex - selectionIndex - 1;
+            int diffLength = possibleCursorLocations[cursorLocationIndex] - possibleCursorLocations[selectionIndex + 1];
+            System.out.println(diffLength);
+            deletedString.append(LaTeX.substring(0, possibleCursorLocations[selectionIndex]));
+            deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex], possibleCursorLocations.length - 1));
+            LaTeX = deletedString.toString();
+            for(int i = selectionIndex; i < possibleCursorLocations.length - indexDiff; i++) {
+               possibleCursorLocations[i] = possibleCursorLocations[i + indexDiff] - diffLength;
+            }
+            possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - indexDiff - 1);
+            cursorLocationIndex = selectionIndex;
+            activeSelection = false;
+            
+         }
+         else {
+            
+            int indexDiff = selectionIndex - cursorLocationIndex - 1;
+            int diffLength = possibleCursorLocations[selectionIndex] - possibleCursorLocations[cursorLocationIndex + 1];
+            System.out.println(diffLength);
+            deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
+            deletedString.append(LaTeX.substring(possibleCursorLocations[selectionIndex], possibleCursorLocations.length - 1));
+            LaTeX = deletedString.toString();
+            for(int i = cursorLocationIndex; i < possibleCursorLocations.length - indexDiff; i++) {
+               possibleCursorLocations[i] = possibleCursorLocations[i + indexDiff] - diffLength;
+            }
+            possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - indexDiff - 1);
+            activeSelection = false;
+            
+         }
+         
       }
       
-   }
-   
-   public void removeChar() {
-      
-      
-      
-   }
-   
-   public void setActive() {
-      
-      active = true;
-      
-   }
-   
-   public void setInactive() {
-      
-      active = false;
-      
-   }
-   
-   public void setSelection() {
-      
-      selectionStartIndex = cursorLocationIndex;
-      selectionEndIndex = cursorLocationIndex;
-      
-   }
-   
-   public void addToSelection() {
-      
-      
-      
-   }
-   
-   public void clearSelection() {
-      
-      
+      System.out.println(Arrays.toString(possibleCursorLocations));
+      System.out.println(LaTeX);
+      System.out.println(cursorLocationIndex);
       
    }
    
    public String buildLaTeX() {
-      String returnable = "";
-      if(active) {
-         if(activeSelection) {
+      
+      StringBuilder returnable = new StringBuilder();
+      if(activeSelection) {
+         if(cursorLocationIndex > selectionIndex) {
+            
+            returnable.append(highlightColor);
+            returnable.append(LaTeX.substring(0, possibleCursorLocations[selectionIndex]));
+            returnable.append(setHighlightStart);
+            returnable.append(LaTeX.substring(possibleCursorLocations[selectionIndex], possibleCursorLocations[cursorLocationIndex]));
+            returnable.append("}\\vert ");
+            returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+            
+         }
+         else if(cursorLocationIndex < selectionIndex) {
+            
+            returnable.append(highlightColor);
+            returnable.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
+            returnable.append("\\vert");
+            returnable.append(setHighlightStart);
+            returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex], possibleCursorLocations[selectionIndex]));
+            returnable.append("}");
+            returnable = returnable.append(LaTeX.substring(possibleCursorLocations[selectionIndex]));
+            
          }
          else {
-            returnable = LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]);
-            returnable = returnable.concat("\\vert ");
-            returnable = returnable.concat(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+            
+            returnable = returnable.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
+            returnable = returnable.append("\\vert ");
+            returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+            
          }
       }
       else {
-         returnable = LaTeX;
+         
+         returnable = returnable.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
+         returnable = returnable.append("\\vert ");
+         returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+         
       }
-      return returnable;
+      return returnable.toString();
       
    }
    
-   public boolean getActive() {
-      
-      return active;
-      
-   }
-   
-   public void moveCursorRight() {
-      
-      if(cursorLocationIndex == possibleCursorLocations.length - 1) {
-         //do stuff
+   public void moveCursorRight(boolean shift) {
+
+      if(shift && !activeSelection) {
+         selectionIndex = cursorLocationIndex;
+         activeSelection = true;
       }
-      else {
+      if(!shift) {
+         activeSelection = false;
+      }
+      if(cursorLocationIndex != possibleCursorLocations.length - 1) {
          cursorLocationIndex++;
       }
       
    }
    
-   public void moveCursorLeft() {
+   public void moveCursorLeft(boolean shift) {
       
-      if(cursorLocationIndex == 0) {
-         //do stuff
+      if(shift && !activeSelection) {
+         selectionIndex = cursorLocationIndex;
+         activeSelection = true;
       }
-      else {
+      if(!shift) {
+         activeSelection = false;
+      }
+      if(cursorLocationIndex != 0) {
          cursorLocationIndex--;
       }
       
    }
    
-   public void moveCursorDown() {
+   public void moveHome(boolean shift) {
       
-      
+      if(shift && !activeSelection) {
+         selectionIndex = cursorLocationIndex;
+         activeSelection = true;
+      }
+      if(!shift) {
+         activeSelection = false;
+      }
+      cursorLocationIndex = 0;
       
    }
    
-   public void moveCursorUp() {
+   public void moveEnd(boolean shift) {
       
-      
+      if(shift && !activeSelection) {
+         selectionIndex = cursorLocationIndex;
+         activeSelection = true;
+      }
+      if(!shift) {
+         activeSelection = false;
+      }
+      cursorLocationIndex = possibleCursorLocations.length - 1;
       
    }
 }

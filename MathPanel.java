@@ -228,18 +228,19 @@ public class MathPanel {
       symbolButtonNames[2][0][2] = "Absolute Value";
       symbolButtonNames[2][0][3] = "Floor";
       symbolButtonNames[2][0][4] = "Ceiling";
-      symbolButtonNames[2][1][0] = "Square Root";
-      symbolButtonNames[2][1][1] = "Nth Root";
-      symbolButtonNames[2][1][2] = "Product";
-      symbolButtonNames[2][1][3] = "Coproduct";
-      symbolButtonNames[2][1][4] = "Limit";
-      symbolButtonNames[2][2][0] = "Infinity";
-      symbolButtonNames[2][2][1] = "First Derivative";
-      symbolButtonNames[2][2][2] = "Second Derivative";
-      symbolButtonNames[2][2][3] = "Derivative";
-      symbolButtonNames[2][2][4] = "Partial Derivative";
-      symbolButtonNames[2][3][0] = "Logarithm";
-      symbolButtonNames[2][3][1] = "Natural Logarithm";
+      symbolButtonNames[2][1][0] = "Exponent";
+      symbolButtonNames[2][1][1] = "Square Root";
+      symbolButtonNames[2][1][2] = "Nth Root";
+      symbolButtonNames[2][1][3] = "Product";
+      symbolButtonNames[2][1][4] = "Coproduct";
+      symbolButtonNames[2][2][0] = "Limit";
+      symbolButtonNames[2][2][1] = "Infinity";
+      symbolButtonNames[2][2][2] = "First Derivative";
+      symbolButtonNames[2][2][3] = "Second Derivative";
+      symbolButtonNames[2][2][4] = "Derivative";
+      symbolButtonNames[2][3][0] = "Partial Derivative";
+      symbolButtonNames[2][3][1] = "Logarithm";
+      symbolButtonNames[2][3][2] = "Natural Logarithm";
       symbolButtonNames[3][0][0] = "Empty Set"; //sets
       symbolButtonNames[3][0][1] = "Union";
       symbolButtonNames[3][0][2] = "Intersection";
@@ -392,18 +393,19 @@ public class MathPanel {
       symbolLaTeX[2][0][2] = "\\vert\\phantom{5}\\vert";
       symbolLaTeX[2][0][3] = "\\lfloor\\phantom{5}\\rfloor";
       symbolLaTeX[2][0][4] = "\\lceil\\phantom{5}\\rceil";
-      symbolLaTeX[2][1][0] = "\\sqrt{\\phantom{5}}";
-      symbolLaTeX[2][1][1] = "\\sqrt[n]{\\phantom{5}}";
-      symbolLaTeX[2][1][2] = "\\prod";
-      symbolLaTeX[2][1][3] = "\\coprod";
-      symbolLaTeX[2][1][4] = "\\lim";
-      symbolLaTeX[2][2][0] = "\\infty";
-      symbolLaTeX[2][2][1] = "\\prime";
-      symbolLaTeX[2][2][2] = "\\prime\\prime";
-      symbolLaTeX[2][2][3] = "d";
-      symbolLaTeX[2][2][4] = "\\partial";
-      symbolLaTeX[2][3][0] = "\\log";
-      symbolLaTeX[2][3][1] = "\\ln";
+      symbolLaTeX[2][1][0] = "a^n";
+      symbolLaTeX[2][1][1] = "\\sqrt{\\phantom{5}}";
+      symbolLaTeX[2][1][2] = "\\sqrt[n]{\\phantom{5}}";
+      symbolLaTeX[2][1][3] = "\\prod";
+      symbolLaTeX[2][1][4] = "\\coprod";
+      symbolLaTeX[2][2][0] = "\\lim";
+      symbolLaTeX[2][2][1] = "\\infty";
+      symbolLaTeX[2][2][2] = "\\prime";
+      symbolLaTeX[2][2][3] = "\\prime\\prime";
+      symbolLaTeX[2][2][4] = "d";
+      symbolLaTeX[2][3][0] = "\\partial";
+      symbolLaTeX[2][3][1] = "\\log";
+      symbolLaTeX[2][3][2] = "\\ln";
       symbolLaTeX[3][0][0] = "\\varnothing"; //sets
       symbolLaTeX[3][0][1] = "\\cup";
       symbolLaTeX[3][0][2] = "\\cap";
@@ -527,7 +529,7 @@ public class MathPanel {
 
                      @Override
                      public void actionPerformed(ActionEvent arg0) {
-
+                        
                         input.setText(input.getText() + arg0.getActionCommand());
 
                      }

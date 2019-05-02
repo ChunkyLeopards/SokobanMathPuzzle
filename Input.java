@@ -21,7 +21,6 @@ public class Input {
       
       capsLock = Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
       formula = new LaTeXInputRepresentation();
-      formula.setActive();
       display = new JPanel();
       display.setFocusable(true);
       TeXFormula form = new TeXFormula(formula.buildLaTeX());
@@ -39,10 +38,13 @@ public class Input {
             int in = arg0.getKeyCode();
             switch(in) {
             case 8: //backspace
-               formula.backspace();
+               formula.remove(false);
+               break;
+            case 127: //delete
+               formula.remove(true);
                break;
             case 10: //return/enter
-               formula.addFormula("//", 0);
+               formula.addFormula("\\\\");
                break;
             case 16: //shift
                shift = true;
@@ -50,17 +52,21 @@ public class Input {
             case 20: //capslock
                capsLock = !capsLock;
                break;
+            case 35: //end
+               formula.moveEnd(shift);
+               break;
+            case 36: //home
+               formula.moveHome(shift);
+               break;
             case 37: //arrowLeft
-               formula.moveCursorLeft();
+               formula.moveCursorLeft(shift);
                break;
             case 38: //arrowUp
-               formula.moveCursorUp();
                break;
             case 39: //arrowRight
-               formula.moveCursorRight();
+               formula.moveCursorRight(shift);
                break;
             case 40: //arrowDown
-               formula.moveCursorDown();
                break;
                //special cases
             case 45: //-
@@ -73,7 +79,7 @@ public class Input {
             case 54:
             case 55:
                if(shift ^ capsLock) {
-                  formula.addFormula("\\" + Character.toUpperCase(c), 0);
+                  formula.addFormula(String.valueOf(Character.toUpperCase(c)));
                }
                else {
                   formula.addChar(c);
@@ -137,6 +143,7 @@ public class Input {
             display.removeAll();
             display.add(displayLabel);
             display.validate();
+            display.update(display.getGraphics());
             
          }
 
