@@ -103,7 +103,7 @@ public class LaTeXInputRepresentation {
          possibleCursorLocations[i]++;
       }
       cursorLocationIndex++;
-      //possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + 1;
+      possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + 1;
       
    }
    
@@ -123,7 +123,7 @@ public class LaTeXInputRepresentation {
                
                System.out.println("in delete");
                
-               int diffLength = possibleCursorLocations[cursorLocationIndex] - possibleCursorLocations[cursorLocationIndex - 1];               
+               int diffLength = possibleCursorLocations[cursorLocationIndex + 1] - possibleCursorLocations[cursorLocationIndex];               
                deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
                deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex + 1]));
                LaTeX = deletedString.toString();
@@ -238,6 +238,7 @@ public class LaTeXInputRepresentation {
          returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
          
       }
+      System.out.println(returnable);
       return returnable.toString();
       
    }
@@ -267,7 +268,7 @@ public class LaTeXInputRepresentation {
          activeSelection = false;
       }
       if(cursorLocationIndex != 0) {
-         cursorLocationIndex--;
+            cursorLocationIndex--;
       }
       
    }
