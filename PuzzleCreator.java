@@ -31,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.MatteBorder;
 
 @SuppressWarnings("serial")
 
@@ -261,6 +262,7 @@ public class PuzzleCreator extends JFrame {
                for (int i = 0; i < max; i++) {
                   for (int j = 0; j < max; j++) {
                      arrayPuzzle[i][j] = new JPanel();
+                     arrayPuzzle[i][j].setBorder(new MatteBorder(1, 1, 1, 1, Color.lightGray));
                      CardLayout buttons = new CardLayout();
 
                      EditorButtons ext = new EditorButtons(exteriorImage);
@@ -374,7 +376,7 @@ public class PuzzleCreator extends JFrame {
             testPuzzle = new SokobanRuntimeStorage("Test Puzzle", nw, nh);
             for(int i = 0; i < nw; i++) {
                for(int j = 0; j < nh; j++) {
-                  switch(arrayPuzzle[i][j].getName()) {
+                  switch(arrayPuzzle[j][i].getName()) {
                   case "0":
                      testPuzzle.setSquare(SokobanInterpreter.EXTERNAL, i, j);
                      break;
@@ -386,6 +388,8 @@ public class PuzzleCreator extends JFrame {
                      break;
                   case "3":
                      testPuzzle.setSquare(SokobanInterpreter.INTERNAL_PLAYER, i, j);
+                     testPuzzle.setPlayerX(j);
+                     testPuzzle.setPlayerY(i);
                      break;
                   case "4":
                      testPuzzle.setSquare(SokobanInterpreter.INTERNAL_BOX, i, j);
@@ -398,6 +402,8 @@ public class PuzzleCreator extends JFrame {
                      break;
                   case "7":
                      testPuzzle.setSquare(SokobanInterpreter.INTERNAL_PLAYER_TARGET, i, j);
+                     testPuzzle.setPlayerX(j);
+                     testPuzzle.setPlayerY(i);
                      break;
                   }
                }
@@ -412,6 +418,18 @@ public class PuzzleCreator extends JFrame {
          }
          
       });
+      
+      bTest.addActionListener(new ActionListener() {
+
+         @Override
+         public void actionPerformed(ActionEvent arg0) {
+            
+            DisplayPuzzle.displayWindow(testPuzzle, true);
+            
+         }
+         
+      });
+      
    }// end display
 
 }// end clas

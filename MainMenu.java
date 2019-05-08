@@ -281,22 +281,6 @@ public class MainMenu extends JPanel {
             puzzlePane.getVerticalScrollBar().setUnitIncrement(16);
             puzzleSelection.add(puzzlePane);
             puzzleSelection.setVisible(true);
-            
-            /*File read = new File("puzzles/TestPuzzle2.spsf");
-            SokobanInterpreter s = new SokobanInterpreter(read);
-            SokobanRuntimeStorage puzzle = null;
-
-            try {
-
-               puzzle = s.readPuzzleFile();
-
-            } catch (IOException e) {
-
-               e.printStackTrace();
-
-            }
-
-            DisplayPuzzle.displayWindow(puzzle);*/
 
          }
 
