@@ -44,6 +44,9 @@ public class LaTeXInputRepresentation {
    
    public void addFormula(String f) {
       
+      if(activeSelection) {
+         remove(true);
+      }
       StringBuilder newLaTeX = new StringBuilder();
       newLaTeX.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
       switch(f) {
@@ -93,7 +96,10 @@ public class LaTeXInputRepresentation {
    }
    
    public void addChar(char c) {
-      
+
+      if(activeSelection) {
+         remove(true);
+      }
       StringBuilder newLaTeX = new StringBuilder();
       newLaTeX.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
       newLaTeX.append(String.valueOf(c));
@@ -106,10 +112,6 @@ public class LaTeXInputRepresentation {
    public void remove(boolean forward) {
       
       StringBuilder deletedString = new StringBuilder();
-      
-      /*System.out.println(Arrays.toString(selectionSkipForward));
-      System.out.println(Arrays.toString(selectionSkipBackward));
-      System.out.println(cursorLocationIndex);*/
       
       if(!activeSelection) {
          
@@ -124,6 +126,16 @@ public class LaTeXInputRepresentation {
                   LaTeX = deletedString.toString();
                   for(int i = cursorLocationIndex; i < possibleCursorLocations.length - 1; i++) {
                      possibleCursorLocations[i] = possibleCursorLocations[i + 1] - diffLength;
+                     selectionSkipForward[i] = selectionSkipForward[i + 1];
+                     selectionSkipBackward[i] = selectionSkipBackward[i + 1];
+                  }
+                  for(int i = 0; i < possibleCursorLocations.length; i++) {
+                     if(selectionSkipForward[i] > cursorLocationIndex) {
+                        selectionSkipForward[i]--;
+                     }
+                     if(selectionSkipBackward[i] > cursorLocationIndex && selectionSkipBackward[i] != Integer.MAX_VALUE) {
+                        selectionSkipBackward[i]--;
+                     }
                   }
                   possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - 1);
                   selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - 1);
@@ -148,6 +160,16 @@ public class LaTeXInputRepresentation {
                   LaTeX = deletedString.toString();
                   for(int i = cursorLocationIndex - 1; i < possibleCursorLocations.length - 1; i++) {
                      possibleCursorLocations[i] = possibleCursorLocations[i + 1] - diffLength;
+                     selectionSkipForward[i] = selectionSkipForward[i + 1];
+                     selectionSkipBackward[i] = selectionSkipBackward[i + 1];
+                  }
+                  for(int i = 0; i < possibleCursorLocations.length; i++) {
+                     if(selectionSkipForward[i] > cursorLocationIndex - 1) {
+                        selectionSkipForward[i]--;
+                     }
+                     if(selectionSkipBackward[i] > cursorLocationIndex - 1 && selectionSkipBackward[i] != Integer.MAX_VALUE) {
+                        selectionSkipBackward[i]--;
+                     }
                   }
                   cursorLocationIndex--;
                   possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - 1);
@@ -166,47 +188,65 @@ public class LaTeXInputRepresentation {
       }
       else {
          
+         System.out.println(LaTeX);
+         
          if(cursorLocationIndex > selectionIndex) {
             
-            int indexDiff = cursorLocationIndex - selectionIndex - 1;
+            int indexDiff = cursorLocationIndex - selectionIndex;
             int diffLength = possibleCursorLocations[cursorLocationIndex] - possibleCursorLocations[selectionIndex + 1];
-            System.out.println(diffLength);
             deletedString.append(LaTeX.substring(0, possibleCursorLocations[selectionIndex]));
-            deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex], possibleCursorLocations.length - 1));
+            deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
             LaTeX = deletedString.toString();
             for(int i = selectionIndex; i < possibleCursorLocations.length - indexDiff; i++) {
-               possibleCursorLocations[i] = possibleCursorLocations[i + indexDiff] - diffLength;
+               possibleCursorLocations[i] = possibleCursorLocations[i + indexDiff] - diffLength - 1;
+               selectionSkipForward[i] = selectionSkipForward[i + indexDiff];
+               selectionSkipBackward[i] = selectionSkipBackward[i + indexDiff];
             }
-            possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - indexDiff - 1);
-            selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - indexDiff - 1);
-            selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length - indexDiff - 1);
+            for(int i = 0; i < possibleCursorLocations.length; i++) {
+               if(selectionSkipForward[i] > cursorLocationIndex) {
+                  selectionSkipForward[i] -= indexDiff;
+               }
+               if(selectionSkipBackward[i] > cursorLocationIndex && selectionSkipBackward[i] != Integer.MAX_VALUE) {
+                  selectionSkipBackward[i] -= indexDiff;
+               }
+            }
+            possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - indexDiff);
+            selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - indexDiff);
+            selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length - indexDiff);
             cursorLocationIndex = selectionIndex;
             activeSelection = false;
             
          }
          else {
             
-            int indexDiff = selectionIndex - cursorLocationIndex - 1;
+            int indexDiff = selectionIndex - cursorLocationIndex;
             int diffLength = possibleCursorLocations[selectionIndex] - possibleCursorLocations[cursorLocationIndex + 1];
-            System.out.println(diffLength);
             deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
-            deletedString.append(LaTeX.substring(possibleCursorLocations[selectionIndex], possibleCursorLocations.length - 1));
+            deletedString.append(LaTeX.substring(possibleCursorLocations[selectionIndex]));
             LaTeX = deletedString.toString();
             for(int i = cursorLocationIndex; i < possibleCursorLocations.length - indexDiff; i++) {
-               possibleCursorLocations[i] = possibleCursorLocations[i + indexDiff] - diffLength;
+               possibleCursorLocations[i] = possibleCursorLocations[i + indexDiff] - diffLength - 1;
+               selectionSkipForward[i] = selectionSkipForward[i + indexDiff];
+               selectionSkipBackward[i] = selectionSkipBackward[i + indexDiff];
             }
-            possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - indexDiff - 1);
-            selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - indexDiff - 1);
-            selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length - indexDiff - 1);
+            for(int i = 0; i < possibleCursorLocations.length; i++) {
+               if(selectionSkipForward[i] > cursorLocationIndex) {
+                  selectionSkipForward[i] -= indexDiff;
+               }
+               if(selectionSkipBackward[i] > cursorLocationIndex && selectionSkipBackward[i] != Integer.MAX_VALUE) {
+                  selectionSkipBackward[i] -= indexDiff;
+               }
+            }
+            possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - indexDiff);
+            selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - indexDiff);
+            selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length - indexDiff);
             activeSelection = false;
             
          }
+
+         System.out.println(LaTeX);
          
       }
-      
-      /*System.out.println(Arrays.toString(selectionSkipForward));
-      System.out.println(Arrays.toString(selectionSkipBackward));
-      System.out.println(cursorLocationIndex);*/
       
    }
    
@@ -289,6 +329,8 @@ public class LaTeXInputRepresentation {
          returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
          
       }
+      
+      System.out.println(returnable);
       return returnable.toString();
       
    }
