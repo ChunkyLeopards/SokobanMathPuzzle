@@ -188,8 +188,6 @@ public class LaTeXInputRepresentation {
       }
       else {
          
-         System.out.println(LaTeX);
-         
          if(cursorLocationIndex > selectionIndex) {
             
             int indexDiff = cursorLocationIndex - selectionIndex;
@@ -243,8 +241,6 @@ public class LaTeXInputRepresentation {
             activeSelection = false;
             
          }
-
-         System.out.println(LaTeX);
          
       }
       
@@ -330,7 +326,6 @@ public class LaTeXInputRepresentation {
          
       }
       
-      System.out.println(returnable);
       return returnable.toString();
       
    }

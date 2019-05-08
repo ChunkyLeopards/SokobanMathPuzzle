@@ -44,6 +44,12 @@ public class PuzzleCreator extends JFrame {
    private static File box;
    private static File boxTarget;
    private static File playerTarget;
+   private static JButton bSubmit;
+   private static JButton bTest;
+   private static JButton bSize;
+   private static JButton bValidate;
+   private static JButton bPreview;
+   private static JButton bMenu;
    private static BufferedImage exteriorImage;
    private static BufferedImage wallImage;
    private static BufferedImage interiorImage;
@@ -53,6 +59,9 @@ public class PuzzleCreator extends JFrame {
    private static BufferedImage boxTargetImage;
    private static BufferedImage playerTargetImage;
    private static JPanel arrayPuzzle[][];
+   private static SokobanRuntimeStorage testPuzzle;
+   private static int nh;
+   private static int nw;
 
    public static void display() {
 
@@ -77,8 +86,9 @@ public class PuzzleCreator extends JFrame {
 
       // Top buttons
       // Submit
-      JButton bSubmit = new JButton("Submit");
+      bSubmit = new JButton("Submit");
       bSubmit.setFont(font1);
+      bSubmit.setEnabled(false);
       c.fill = GridBagConstraints.HORIZONTAL;
       c.weightx = 0.5;
       c.gridx = 0;
@@ -86,34 +96,35 @@ public class PuzzleCreator extends JFrame {
       frame.add(bSubmit, c);
 
       // Test
-      JButton bTest = new JButton("Test");
+      bTest = new JButton("Test");
       bTest.setFont(font1);
+      bTest.setEnabled(false);
       c.fill = GridBagConstraints.HORIZONTAL;
       c.weightx = 0.5;
       c.gridx = 1;
       c.gridy = 0;
       frame.add(bTest, c);
 
-      // Size
-      JButton bSize = new JButton("Size");
-      bSize.setFont(font1);
+      // Validate
+      bValidate = new JButton("Validate");
+      bValidate.setFont(font1);
       c.fill = GridBagConstraints.HORIZONTAL;
       c.weightx = 0.5;
       c.gridx = 2;
       c.gridy = 0;
-      frame.add(bSize, c);
+      frame.add(bValidate, c);
 
-      // Validate
-      JButton bValidate = new JButton("Validate");
-      bValidate.setFont(font1);
+      // Size
+      bSize = new JButton("Size");
+      bSize.setFont(font1);
       c.fill = GridBagConstraints.HORIZONTAL;
       c.weightx = 0.5;
       c.gridx = 3;
       c.gridy = 0;
-      frame.add(bValidate, c);
+      frame.add(bSize, c);
 
       // Preview
-      JButton bPreview = new JButton("Preview");
+      bPreview = new JButton("Preview");
       bPreview.setFont(font1);
       c.fill = GridBagConstraints.HORIZONTAL;
       c.weightx = 0.5;
@@ -122,7 +133,7 @@ public class PuzzleCreator extends JFrame {
       frame.add(bPreview, c);
 
       // Menu
-      JButton bMenu = new JButton("Menu");
+      bMenu = new JButton("Menu");
       bMenu.setFont(font1);
       c.fill = GridBagConstraints.HORIZONTAL;
       c.weightx = 0.5;
@@ -218,13 +229,8 @@ public class PuzzleCreator extends JFrame {
             }
 
             // Converts the input string into an integer
-            int nh = Integer.parseInt(columnEntry.getText());
-            int nw = Integer.parseInt(rowEntry.getText());
-
-            // Based on the values, they are made bigger to create the next window to the
-            // fitted size
-            int newHeight = nh * 50;
-            int newWidth = nw * 50;
+            nh = Integer.parseInt(columnEntry.getText());
+            nw = Integer.parseInt(rowEntry.getText());
 
             if ((nh <= min && nw < min) || (nh < min && nw <= min) || (nh > max) || (nw > max) || (nh > max && nw < 3)
                   || (nh < 3 && nw > 50)) {
@@ -267,14 +273,15 @@ public class PuzzleCreator extends JFrame {
                      EditorButtons pt = new EditorButtons(playerTargetImage);
 
                      arrayPuzzle[i][j].setLayout(buttons);
-                     arrayPuzzle[i][j].add(ext, "0");
-                     arrayPuzzle[i][j].add(wal, "1");
-                     arrayPuzzle[i][j].add(inter, "2");
-                     arrayPuzzle[i][j].add(pl, "3");
-                     arrayPuzzle[i][j].add(bo, "4");
-                     arrayPuzzle[i][j].add(tar, "5");
-                     arrayPuzzle[i][j].add(bt, "6");
-                     arrayPuzzle[i][j].add(pt, "7");
+                     arrayPuzzle[i][j].add(ext);
+                     arrayPuzzle[i][j].add(wal);
+                     arrayPuzzle[i][j].add(inter);
+                     arrayPuzzle[i][j].add(pl);
+                     arrayPuzzle[i][j].add(bo);
+                     arrayPuzzle[i][j].add(tar);
+                     arrayPuzzle[i][j].add(bt);
+                     arrayPuzzle[i][j].add(pt);
+                     arrayPuzzle[i][j].setName("0");
 
                      if (i < nw && j < nh) {
                         newPanel.add(arrayPuzzle[i][j]);
@@ -286,6 +293,34 @@ public class PuzzleCreator extends JFrame {
                         @Override
                         public void mouseClicked(MouseEvent arg0) {
                            buttons.next((Container) arg0.getComponent());
+                           bTest.setEnabled(false);
+                           bSubmit.setEnabled(false);
+                           switch(((Container)arg0.getComponent()).getName()) {
+                           case "0":
+                              ((Container)arg0.getComponent()).setName("1");
+                              break;
+                           case "1":
+                              ((Container)arg0.getComponent()).setName("2");
+                              break;
+                           case "2":
+                              ((Container)arg0.getComponent()).setName("3");
+                              break;
+                           case "3":
+                              ((Container)arg0.getComponent()).setName("4");
+                              break;
+                           case "4":
+                              ((Container)arg0.getComponent()).setName("5");
+                              break;
+                           case "5":
+                              ((Container)arg0.getComponent()).setName("6");
+                              break;
+                           case "6":
+                              ((Container)arg0.getComponent()).setName("7");
+                              break;
+                           case "7":
+                              ((Container)arg0.getComponent()).setName("0");
+                              break;
+                           }
                         }
 
                         @Override
@@ -331,7 +366,52 @@ public class PuzzleCreator extends JFrame {
 
          }// end ActionPreformed
       });// end bMenu.actionListener
+      
+      bValidate.addActionListener(new ActionListener() {
 
+         @Override
+         public void actionPerformed(ActionEvent arg0) {
+            testPuzzle = new SokobanRuntimeStorage("Test Puzzle", nw, nh);
+            for(int i = 0; i < nw; i++) {
+               for(int j = 0; j < nh; j++) {
+                  switch(arrayPuzzle[i][j].getName()) {
+                  case "0":
+                     testPuzzle.setSquare(SokobanInterpreter.EXTERNAL, i, j);
+                     break;
+                  case "1":
+                     testPuzzle.setSquare(SokobanInterpreter.WALL, i, j);
+                     break;
+                  case "2":
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL, i, j);
+                     break;
+                  case "3":
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_PLAYER, i, j);
+                     break;
+                  case "4":
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_BOX, i, j);
+                     break;
+                  case "5":
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_TARGET, i, j);
+                     break;
+                  case "6":
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_BOX_TARGET, i, j);
+                     break;
+                  case "7":
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_PLAYER_TARGET, i, j);
+                     break;
+                  }
+               }
+            }
+            if(Validation.validate(testPuzzle)) {
+               System.out.println("Valid puzzle");
+               bTest.setEnabled(true);
+            }
+            else {
+               System.out.println("Invalid Puzzle");
+            }
+         }
+         
+      });
    }// end display
 
 }// end clas
