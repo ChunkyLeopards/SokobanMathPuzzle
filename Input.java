@@ -38,7 +38,6 @@ public class Input {
          public void mouseClicked(MouseEvent arg0) {
 
             display.requestFocus();
-            System.out.println("in focus");
             
          }
 
@@ -123,6 +122,14 @@ public class Input {
                   formula.addChar(c);
                }
                break;
+            case 47: /// //fraction
+               if(shift ^ capsLock) {
+                  formula.addChar(Character.toUpperCase(c));
+               }
+               else {
+                  formula.addFormula("\\frac{}{}");
+               }
+               break;
             case 45: //_
             case 91: //{
             case 92: //|
@@ -142,7 +149,6 @@ public class Input {
             case 222: //'
             case 44: //,
             case 46: //.
-            case 47: ///
             case 61: //=
             case 48: //numbers handled same as letters
             case 49:
@@ -195,7 +201,11 @@ public class Input {
             displayLabel.setIcon(icon);
             display.removeAll();
             display.add(displayLabel);
+            display.setMinimumSize(displayLabel.getMinimumSize());
             display.validate();
+            display.getParent().validate();
+            display.getParent().getParent().validate();
+            display.getParent().getParent().getParent().validate();
             display.update(display.getGraphics());
             
          }

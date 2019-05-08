@@ -29,6 +29,7 @@ public class MathPanel {
    private JPanel groupButtonPanel;
    private JPanel symbolButtonPanel;
    private JPanel symbolButtonPanelOptions[];
+   private JPanel inputLayer;
    private JTextArea description;
    private String groupButtonNames[][];
    private String symbolButtonNames[][][];
@@ -47,6 +48,8 @@ public class MathPanel {
    private Input input;
    private CardLayout symbolOptions;
    private MathTemplateInterpreter puzzle;
+   private JButton submit;
+   private JButton giveUp;
    
    public JPanel createMath() {
       
@@ -87,6 +90,10 @@ public class MathPanel {
       description.setEditable(false);
       description.setHighlighter(null);
       input = new Input();
+      submit = new JButton("Submit");
+      giveUp = new JButton("Give Up?");
+      inputLayer = new JPanel();
+      inputLayer.setLayout(new BoxLayout(inputLayer, BoxLayout.LINE_AXIS));
       buttonPanel = new JPanel();
       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
       buttonPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -311,10 +318,10 @@ public class MathPanel {
       symbolButtonNames[8][1][1] = "Quaternions";
       symbolButtonNames[8][1][2] = "Infinite Cardinals";
       symbolButtonNames[9][0][0] = "Plus or Minus"; //operators
-      symbolButtonNames[9][0][0] = "Multiplication";
-      symbolButtonNames[9][0][0] = "Times";
-      symbolButtonNames[9][0][0] = "Division";
-      symbolButtonNames[9][0][0] = "Fraction";
+      symbolButtonNames[9][0][1] = "Multiplication";
+      symbolButtonNames[9][0][2] = "Times";
+      symbolButtonNames[9][0][3] = "Division";
+      symbolButtonNames[9][0][4] = "Fraction";
       symbolButtonNames[10][0][0] = "Pi"; //constants
       symbolButtonNames[10][0][1] = "Euler's Constant";
       symbolButtonNames[10][0][2] = "Golden Ratio";
@@ -548,7 +555,10 @@ public class MathPanel {
       }
       
       inputPanel.add(description);
-      inputPanel.add(input.getPanel());
+      inputLayer.add(input.getPanel());
+      inputLayer.add(submit);
+      inputLayer.add(giveUp);
+      inputPanel.add(inputLayer);
       inputPanel.add(buttonPanel);
       
       return inputPanel;

@@ -8,6 +8,8 @@ public class LaTeXInputRepresentation {
    private int selectionIndex;
    private int cursorLocationIndex;
    private int possibleCursorLocations[];
+   private int selectionSkipForward[];
+   private int selectionSkipBackward[];
    private String LaTeX;
    
    public LaTeXInputRepresentation() {
@@ -17,6 +19,10 @@ public class LaTeXInputRepresentation {
       cursorLocationIndex = 0;
       possibleCursorLocations = new int[1];
       possibleCursorLocations[0] = 0;
+      selectionSkipForward = new int[1];
+      selectionSkipForward[0] = 0;
+      selectionSkipBackward = new int[1];
+      selectionSkipBackward[0] = Integer.MAX_VALUE;
       LaTeX = "";
       
    }
@@ -28,6 +34,10 @@ public class LaTeXInputRepresentation {
       cursorLocationIndex = 0;
       possibleCursorLocations = new int[1];
       possibleCursorLocations[0] = 0;
+      selectionSkipForward = new int[1];
+      selectionSkipForward[0] = 0;
+      selectionSkipBackward = new int[1];
+      selectionSkipBackward[0] = Integer.MAX_VALUE;
       LaTeX = "";
       
    }
@@ -40,31 +50,28 @@ public class LaTeXInputRepresentation {
       case "Lowercase Eta":
          newLaTeX.append("\\eta ");
          newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
-         possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1);
-         for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
-            possibleCursorLocations[i] = possibleCursorLocations[i - 1];
-            possibleCursorLocations[i] += 5;
-         }
-         cursorLocationIndex++;
-         possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + 5;
+         addToTrackerArrays(5, 0);
          break;
       case "^{}":
-         System.out.println(LaTeX);
          newLaTeX.append(f);
          newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
-         possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 2);
-         if(cursorLocationIndex != 0) {
-            for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
-               possibleCursorLocations[i] = possibleCursorLocations[i - 2];
-               possibleCursorLocations[i] += f.length();
-            }
-         }
-         cursorLocationIndex++;
-         possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + f.length() - 1;
-         possibleCursorLocations[cursorLocationIndex + 1] = possibleCursorLocations[cursorLocationIndex] + 1;
-         System.out.println(LaTeX);
+         addToTrackerArrays(1, 1);
+         break;
+      case "Fraction":
+         newLaTeX.append("\\frac{}{}");
+         newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+         addToTrackerArrays(5, 2);
+         break;
+      case "\\frac{}{}":
+         newLaTeX.append(f);
+         newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+         addToTrackerArrays(5, 2);
          break;
       case "\\~{}":
+         newLaTeX.append(f);
+         newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+         addToTrackerArrays(2, 1);
+         break;
       case "\\@ ":
       case "\\$ ":
       case "\\% ":
@@ -75,16 +82,11 @@ public class LaTeXInputRepresentation {
       case "\\| ":
          newLaTeX.append(f);
          newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
-         possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1);
-         for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
-            possibleCursorLocations[i] = possibleCursorLocations[i - 1];
-            possibleCursorLocations[i] += f.length();
-         }
-         cursorLocationIndex++;
-         possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + f.length();
+         addToTrackerArrays(3, 0);
          break;
       default:
          System.out.println(f);
+         newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
       }
       LaTeX = newLaTeX.toString();
       
@@ -97,13 +99,7 @@ public class LaTeXInputRepresentation {
       newLaTeX.append(String.valueOf(c));
       newLaTeX.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
       LaTeX = newLaTeX.toString();
-      possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1);
-      for(int i = possibleCursorLocations.length - 1; i > cursorLocationIndex; i--) {
-         possibleCursorLocations[i] = possibleCursorLocations[i - 1];
-         possibleCursorLocations[i]++;
-      }
-      cursorLocationIndex++;
-      possibleCursorLocations[cursorLocationIndex] = possibleCursorLocations[cursorLocationIndex - 1] + 1;
+      addToTrackerArrays(1,0);
       
    }
    
@@ -111,9 +107,9 @@ public class LaTeXInputRepresentation {
       
       StringBuilder deletedString = new StringBuilder();
       
-      System.out.println(Arrays.toString(possibleCursorLocations));
-      System.out.println(LaTeX);
-      System.out.println(cursorLocationIndex);
+      /*System.out.println(Arrays.toString(selectionSkipForward));
+      System.out.println(Arrays.toString(selectionSkipBackward));
+      System.out.println(cursorLocationIndex);*/
       
       if(!activeSelection) {
          
@@ -121,16 +117,22 @@ public class LaTeXInputRepresentation {
             
             if(cursorLocationIndex < possibleCursorLocations.length - 1) {
                
-               System.out.println("in delete");
-               
-               int diffLength = possibleCursorLocations[cursorLocationIndex + 1] - possibleCursorLocations[cursorLocationIndex];               
-               deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
-               deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex + 1]));
-               LaTeX = deletedString.toString();
-               for(int i = cursorLocationIndex; i < possibleCursorLocations.length - 1; i++) {
-                  possibleCursorLocations[i] = possibleCursorLocations[i + 1] - diffLength;
+               if(selectionSkipForward[cursorLocationIndex] == 0) {
+                  int diffLength = possibleCursorLocations[cursorLocationIndex + 1] - possibleCursorLocations[cursorLocationIndex];               
+                  deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex]));
+                  deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex + 1]));
+                  LaTeX = deletedString.toString();
+                  for(int i = cursorLocationIndex; i < possibleCursorLocations.length - 1; i++) {
+                     possibleCursorLocations[i] = possibleCursorLocations[i + 1] - diffLength;
+                  }
+                  possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - 1);
+                  selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - 1);
+                  selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length - 1);
                }
-               possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - 1);
+               else {
+                  activeSelection = true;
+                  selectionIndex = selectionSkipForward[cursorLocationIndex];
+               }
                
             }
             
@@ -139,17 +141,23 @@ public class LaTeXInputRepresentation {
             
             if(cursorLocationIndex > 0) {
                
-               System.out.println("in backspace");
-               
-               int diffLength = possibleCursorLocations[cursorLocationIndex] - possibleCursorLocations[cursorLocationIndex - 1];
-               deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex - 1]));
-               deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
-               LaTeX = deletedString.toString();
-               for(int i = cursorLocationIndex - 1; i < possibleCursorLocations.length - 1; i++) {
-                  possibleCursorLocations[i] = possibleCursorLocations[i + 1] - diffLength;
+               if(selectionSkipBackward[cursorLocationIndex] == Integer.MAX_VALUE) {
+                  int diffLength = possibleCursorLocations[cursorLocationIndex] - possibleCursorLocations[cursorLocationIndex - 1];
+                  deletedString.append(LaTeX.substring(0, possibleCursorLocations[cursorLocationIndex - 1]));
+                  deletedString.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
+                  LaTeX = deletedString.toString();
+                  for(int i = cursorLocationIndex - 1; i < possibleCursorLocations.length - 1; i++) {
+                     possibleCursorLocations[i] = possibleCursorLocations[i + 1] - diffLength;
+                  }
+                  cursorLocationIndex--;
+                  possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - 1);
+                  selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - 1);
+                  selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length - 1);
                }
-               cursorLocationIndex--;
-               possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - 1);
+               else {
+                  activeSelection = true;
+                  selectionIndex = selectionSkipBackward[cursorLocationIndex];
+               }
                
             }
             
@@ -170,6 +178,8 @@ public class LaTeXInputRepresentation {
                possibleCursorLocations[i] = possibleCursorLocations[i + indexDiff] - diffLength;
             }
             possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - indexDiff - 1);
+            selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - indexDiff - 1);
+            selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length - indexDiff - 1);
             cursorLocationIndex = selectionIndex;
             activeSelection = false;
             
@@ -186,15 +196,56 @@ public class LaTeXInputRepresentation {
                possibleCursorLocations[i] = possibleCursorLocations[i + indexDiff] - diffLength;
             }
             possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length - indexDiff - 1);
+            selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length - indexDiff - 1);
+            selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length - indexDiff - 1);
             activeSelection = false;
             
          }
          
       }
       
-      System.out.println(Arrays.toString(possibleCursorLocations));
-      System.out.println(LaTeX);
-      System.out.println(cursorLocationIndex);
+      /*System.out.println(Arrays.toString(selectionSkipForward));
+      System.out.println(Arrays.toString(selectionSkipBackward));
+      System.out.println(cursorLocationIndex);*/
+      
+   }
+   
+   public void addToTrackerArrays(int strLen, int args) {
+      
+      int oldPossibleCursorLocations[] = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length);
+      int oldSelectionSkipForward[] = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length);
+      int oldSelectionSkipBackward[] = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length);
+      possibleCursorLocations = Arrays.copyOf(possibleCursorLocations, possibleCursorLocations.length + 1 + args);
+      selectionSkipForward = Arrays.copyOf(selectionSkipForward, selectionSkipForward.length + 1 + args);
+      selectionSkipBackward = Arrays.copyOf(selectionSkipBackward, selectionSkipBackward.length + 1 + args);
+      for(int i = cursorLocationIndex; i < oldPossibleCursorLocations.length; i++) {
+         possibleCursorLocations[i + 1 + args] = oldPossibleCursorLocations[i];
+         possibleCursorLocations[i + 1 + args] += strLen + args * 2;
+         selectionSkipForward[i + 1 + args] = oldSelectionSkipForward[i];
+         selectionSkipBackward[i + 1 + args] = oldSelectionSkipBackward[i];
+      }
+      for(int i = 0; i < possibleCursorLocations.length; i++) {
+         if(selectionSkipForward[i] > cursorLocationIndex) {
+            selectionSkipForward[i] += args + 1;
+         }
+         if(selectionSkipBackward[i] >= cursorLocationIndex && selectionSkipBackward[i] != Integer.MAX_VALUE) {
+            selectionSkipBackward[i] += args + 1;
+         }
+      }
+      if(args != 0) {
+         selectionSkipForward[cursorLocationIndex] = cursorLocationIndex + args + 1;
+         selectionSkipBackward[cursorLocationIndex + args + 1] = cursorLocationIndex;
+      }
+      else {
+         selectionSkipForward[cursorLocationIndex] = 0;
+         selectionSkipBackward[cursorLocationIndex + args + 1] = Integer.MAX_VALUE;
+      }
+      for(int i = 0; i < args; i++) {
+         selectionSkipForward[cursorLocationIndex + i + 1] = selectionSkipForward[cursorLocationIndex];
+         selectionSkipBackward[cursorLocationIndex + i + 1] = selectionSkipBackward[cursorLocationIndex + args + 1];
+         possibleCursorLocations[cursorLocationIndex + i + 1] = oldPossibleCursorLocations[cursorLocationIndex] + strLen + i * 2 + 1;
+      }
+      cursorLocationIndex++;
       
    }
    
@@ -238,7 +289,6 @@ public class LaTeXInputRepresentation {
          returnable = returnable.append(LaTeX.substring(possibleCursorLocations[cursorLocationIndex]));
          
       }
-      System.out.println(returnable);
       return returnable.toString();
       
    }
@@ -252,8 +302,29 @@ public class LaTeXInputRepresentation {
       if(!shift) {
          activeSelection = false;
       }
-      if(cursorLocationIndex != possibleCursorLocations.length - 1) {
+      if(cursorLocationIndex != possibleCursorLocations.length - 1 && !shift) {
          cursorLocationIndex++;
+      }
+      if(shift) {
+         if(cursorLocationIndex >= selectionIndex) {
+            if(selectionSkipForward[cursorLocationIndex] != 0) {
+               cursorLocationIndex = selectionSkipForward[cursorLocationIndex];
+               if(selectionSkipBackward[cursorLocationIndex] < selectionIndex) {
+                  selectionIndex = selectionSkipBackward[cursorLocationIndex];
+               }
+            }
+            else if(cursorLocationIndex < possibleCursorLocations.length - 1){
+               cursorLocationIndex++;
+            }
+         }
+         else {
+            if(selectionSkipForward[cursorLocationIndex] != 0) {
+               cursorLocationIndex = selectionSkipForward[cursorLocationIndex];
+            }
+            else if(cursorLocationIndex < possibleCursorLocations.length - 1) {
+               cursorLocationIndex++;
+            }
+         }
       }
       
    }
@@ -267,8 +338,29 @@ public class LaTeXInputRepresentation {
       if(!shift) {
          activeSelection = false;
       }
-      if(cursorLocationIndex != 0) {
+      if(cursorLocationIndex != 0 && !shift) {
             cursorLocationIndex--;
+      }
+      if(shift) {
+         if(cursorLocationIndex <= selectionIndex) {
+            if(selectionSkipBackward[cursorLocationIndex] != Integer.MAX_VALUE) {
+               cursorLocationIndex = selectionSkipBackward[cursorLocationIndex];
+               if(selectionSkipForward[cursorLocationIndex] > selectionIndex) {
+                  selectionIndex = selectionSkipForward[cursorLocationIndex];
+               }
+            }
+            else if(cursorLocationIndex > 0) {
+               cursorLocationIndex--;
+            }
+         }
+         else {
+            if(selectionSkipBackward[cursorLocationIndex] != Integer.MAX_VALUE) {
+               cursorLocationIndex = selectionSkipBackward[cursorLocationIndex];
+            }
+            else if(cursorLocationIndex > 0) {
+               cursorLocationIndex--;
+            }
+         }
       }
       
    }
@@ -283,6 +375,13 @@ public class LaTeXInputRepresentation {
          activeSelection = false;
       }
       cursorLocationIndex = 0;
+      if(shift) {
+         for(int i = 0; i < selectionIndex; i++) {
+            if(selectionSkipForward[i] > selectionIndex) {
+               selectionIndex = selectionSkipForward[i];
+            }
+         }
+      }
       
    }
    
@@ -296,6 +395,12 @@ public class LaTeXInputRepresentation {
          activeSelection = false;
       }
       cursorLocationIndex = possibleCursorLocations.length - 1;
-      
+      if(shift) {
+         for(int i = possibleCursorLocations.length - 1; i > selectionIndex; i--) {
+            if(selectionSkipBackward[i] < selectionIndex) {
+               selectionIndex = selectionSkipBackward[i];
+            }
+         }
+      }
    }
 }
