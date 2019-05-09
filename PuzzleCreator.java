@@ -63,6 +63,7 @@ public class PuzzleCreator extends JFrame {
    private static SokobanRuntimeStorage testPuzzle;
    private static int nh;
    private static int nw;
+   private static JPanel newPanel;
 
    public static void display() {
 
@@ -230,27 +231,43 @@ public class PuzzleCreator extends JFrame {
             }
 
             // Converts the input string into an integer
-            nh = Integer.parseInt(columnEntry.getText());
-            nw = Integer.parseInt(rowEntry.getText());
-
-            if ((nh <= min && nw < min) || (nh < min && nw <= min) || (nh > max) || (nw > max) || (nh > max && nw < 3)
-                  || (nh < 3 && nw > 50)) {
-               windowPrompt.setText("Opps! Values not valid");
+            try {
+               nh = Integer.parseInt(columnEntry.getText());
+               nw = Integer.parseInt(rowEntry.getText());
+            }
+            catch (NumberFormatException e) {
+               windowPrompt.setText("Please input integer numbers for the row and column.");
+               return;
+            }
+            
+            if(nh < min || nw < min) {
+               windowPrompt.setText("Size values must be greater than " + min + ".");
+            }
+            else if(nh > max || nw > max) {
+               windowPrompt.setText("Size values must be less than " + max + ".");
             }
 
             else {
 
                windowPrompt.setText("Creating your puzzle!");
-
                // Adding scrolling
-               JPanel newPanel = new JPanel();
-               JScrollPane newScroll = new JScrollPane(newPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                     JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+               if(newPanel != null) {
+                  newPanel.removeAll();
+                  newPanel.setLayout(new GridLayout(nw, nh));
+                  for(int i = 0; i < nw; i++) {
+                     for(int j = 0; j < nh; j++) {
+                        newPanel.add(arrayPuzzle[i][j]);
+                     }
+                  }
+                  newPanel.validate();
+               }
+               newPanel = new JPanel();
+               JScrollPane newScroll = new JScrollPane(newPanel);
 
                frame.add(newScroll, c);
                holder.setVisible(false);
 
-               windowPrompt.setText("Click to cycle through");
+               windowPrompt.setText("Click to cycle through.");
 
                // initialize storage array
                arrayPuzzle = new JPanel[max][max];
@@ -263,6 +280,7 @@ public class PuzzleCreator extends JFrame {
                   for (int j = 0; j < max; j++) {
                      arrayPuzzle[i][j] = new JPanel();
                      arrayPuzzle[i][j].setBorder(new MatteBorder(1, 1, 1, 1, Color.lightGray));
+                     arrayPuzzle[i][j].setPreferredSize(new Dimension(50, 50));
                      CardLayout buttons = new CardLayout();
 
                      EditorButtons ext = new EditorButtons(exteriorImage);
@@ -373,35 +391,37 @@ public class PuzzleCreator extends JFrame {
 
          @Override
          public void actionPerformed(ActionEvent arg0) {
-            testPuzzle = new SokobanRuntimeStorage("Test Puzzle", nw, nh);
+            
+            windowPrompt.setText("Validating...");
+            testPuzzle = new SokobanRuntimeStorage("Test Puzzle", nh, nw);
             for(int i = 0; i < nw; i++) {
                for(int j = 0; j < nh; j++) {
-                  switch(arrayPuzzle[j][i].getName()) {
+                  switch(arrayPuzzle[i][j].getName()) {
                   case "0":
-                     testPuzzle.setSquare(SokobanInterpreter.EXTERNAL, i, j);
+                     testPuzzle.setSquare(SokobanInterpreter.EXTERNAL, j, i);
                      break;
                   case "1":
-                     testPuzzle.setSquare(SokobanInterpreter.WALL, i, j);
+                     testPuzzle.setSquare(SokobanInterpreter.WALL, j, i);
                      break;
                   case "2":
-                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL, i, j);
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL, j, i);
                      break;
                   case "3":
-                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_PLAYER, i, j);
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_PLAYER, j, i);
                      testPuzzle.setPlayerX(j);
                      testPuzzle.setPlayerY(i);
                      break;
                   case "4":
-                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_BOX, i, j);
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_BOX, j, i);
                      break;
                   case "5":
-                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_TARGET, i, j);
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_TARGET, j, i);
                      break;
                   case "6":
-                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_BOX_TARGET, i, j);
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_BOX_TARGET, j, i);
                      break;
                   case "7":
-                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_PLAYER_TARGET, i, j);
+                     testPuzzle.setSquare(SokobanInterpreter.INTERNAL_PLAYER_TARGET, j, i);
                      testPuzzle.setPlayerX(j);
                      testPuzzle.setPlayerY(i);
                      break;
@@ -409,11 +429,11 @@ public class PuzzleCreator extends JFrame {
                }
             }
             if(Validation.validate(testPuzzle)) {
-               System.out.println("Valid puzzle");
+               windowPrompt.setText("Your puzzle has a valid structure.");
                bTest.setEnabled(true);
             }
             else {
-               System.out.println("Invalid Puzzle");
+               windowPrompt.setText("Your puzzle has an invalid structure.");
             }
          }
          
