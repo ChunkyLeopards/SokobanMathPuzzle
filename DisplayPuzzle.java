@@ -3,7 +3,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -37,6 +41,22 @@ public class DisplayPuzzle extends JPanel{
    private static MathPanel mathP;
    private static JPanel math;
    private static JPanel input;
+   private static BufferedImage exteriorImage;
+   private static BufferedImage wallImage;
+   private static BufferedImage interiorImage;
+   private static BufferedImage playerImage;
+   private static BufferedImage targetImage;
+   private static BufferedImage boxImage;
+   private static BufferedImage boxTargetImage;
+   private static BufferedImage playerTargetImage;
+   private static File exterior;
+   private static File wall;
+   private static File interior;
+   private static File player;
+   private static File target;
+   private static File box;
+   private static File boxTarget;
+   private static File playerTarget;
    
    /**
     * Creates a display object from a Sokoban puzzle.
@@ -56,6 +76,27 @@ public class DisplayPuzzle extends JPanel{
    
    public static JFrame displayWindow(SokobanRuntimeStorage p, boolean test) {
       
+      exterior = new File("data/emptyOS.png");
+      wall = new File("data/wall.png");
+      interior = new File("data/emptyIS.png");
+      player = new File("data/player.png");
+      target = new File("data/target.png");
+      box = new File("data/box.png");
+      boxTarget = new File("data/boxTarget.png");
+      playerTarget = new File("data/playerTarget.png");
+
+      try {
+         exteriorImage = ImageIO.read(exterior);
+         wallImage = ImageIO.read(wall);
+         interiorImage = ImageIO.read(interior);
+         playerImage = ImageIO.read(player);
+         targetImage = ImageIO.read(target);
+         boxImage = ImageIO.read(box);
+         boxTargetImage = ImageIO.read(boxTarget);
+         playerTargetImage = ImageIO.read(playerTarget);
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
       window = new JFrame(p.getName());
       window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
       window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.PAGE_AXIS));
@@ -196,71 +237,42 @@ public class DisplayPuzzle extends JPanel{
             switch ((byte)square) {
             
             case SokobanInterpreter.EXTERNAL:
+               g.drawImage(exteriorImage, squareX, squareY, squareDim, squareDim, null);
                break;            
             
             case SokobanInterpreter.WALL:
                
-               g.setColor(new Color(0, 0, 0));
-               g.drawRect(squareX, squareY, squareDim, squareDim);
-               g.drawLine(squareX, squareY + squareDim / 2, squareX + squareDim, squareY + squareDim / 2);
-               g.drawLine(squareX + squareDim / 2, squareY, squareX + squareDim / 2, squareY + squareDim);
+               g.drawImage(wallImage, squareX, squareY, squareDim, squareDim, null);
                break;
                
             case SokobanInterpreter.INTERNAL:
-               
-               g.setColor(new Color(0, 200, 0));
-               g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
+
+               g.drawImage(interiorImage, squareX, squareY, squareDim, squareDim, null);
                break;
                
             case SokobanInterpreter.INTERNAL_PLAYER:
-               
-               g.setColor(new Color(0, 200, 0));
-               g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
-               g.setColor(new Color(0, 0, 200));
-               g.drawOval(squareX, squareY, squareDim, squareDim);
+
+               g.drawImage(playerImage, squareX, squareY, squareDim, squareDim, null);
                break;
                
             case SokobanInterpreter.INTERNAL_BOX:
-               
-               g.setColor(new Color(0, 200, 0));
-               g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
-               g.setColor(new Color(200, 150, 0));
-               g.drawRect(squareX + 2, squareY + 2, squareDim - 4, squareDim - 4);
-               g.setColor(new Color(0, 0, 0));
-               g.drawString(((Integer)(square / SokobanInterpreter.BOX_TRACK_OFFSET)).toString(), squareX + 4, squareY + squareDim - 4);
+
+               g.drawImage(boxImage, squareX, squareY, squareDim, squareDim, null);
                break;
                
             case SokobanInterpreter.INTERNAL_TARGET:
-               
-               g.setColor(new Color(0, 200, 0));
-               g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
-               g.setColor(new Color(255, 0, 0));
-               g.drawLine(squareX, squareY, squareX + squareDim, squareY + squareDim);
-               g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
+
+               g.drawImage(targetImage, squareX, squareY, squareDim, squareDim, null);
                break;
                
             case SokobanInterpreter.INTERNAL_PLAYER_TARGET:
-               
-               g.setColor(new Color(0, 200, 0));
-               g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
-               g.setColor(new Color(255, 0, 0));
-               g.drawLine(squareX, squareY, squareX + squareDim, squareY + squareDim);
-               g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
-               g.setColor(new Color(0, 0, 200));
-               g.drawOval(squareX, squareY, squareDim, squareDim);
+
+               g.drawImage(playerTargetImage, squareX, squareY, squareDim, squareDim, null);
                break;
                
             case SokobanInterpreter.INTERNAL_BOX_TARGET:
-               
-               g.setColor(new Color(0, 200, 0));
-               g.drawOval(squareX + squareDim / 2 - 3, squareY + squareDim / 2 - 3, 7, 7);
-               g.setColor(new Color(255, 0, 0));
-               g.drawLine(squareX, squareY, squareX + squareDim, squareY + squareDim);
-               g.drawLine(squareX, squareY + squareDim, squareX + squareDim, squareY);
-               g.setColor(new Color(200, 150, 0));
-               g.drawRect(squareX + 2, squareY + 2, squareDim - 4, squareDim - 4);
-               g.setColor(new Color(0, 0, 0));
-               g.drawString(((Integer)(square / SokobanInterpreter.BOX_TRACK_OFFSET)).toString(), squareX + 4, squareY + squareDim - 4);
+
+               g.drawImage(boxTargetImage, squareX, squareY, squareDim, squareDim, null);
                break;
                
             default:
