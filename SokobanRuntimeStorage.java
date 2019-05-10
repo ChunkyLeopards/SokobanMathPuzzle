@@ -17,6 +17,7 @@ public class SokobanRuntimeStorage {
    private int playerX;
    private int playerY;
    private UndoStack undo = null;
+   private boolean solvable;
    
    /**
     * Constructs a 2D array of the appropriate width and height, and saves
@@ -31,6 +32,7 @@ public class SokobanRuntimeStorage {
       
       name = n;
       puzzle = new short[w][h];
+      solvable = false;
       
       for(int i = 0; i < w; i++) {
          
@@ -66,6 +68,18 @@ public class SokobanRuntimeStorage {
        */
       
       puzzle[x][y] = s;
+      
+   }
+   
+   public void setSolvable() {
+      
+      solvable = true;
+      
+   }
+   
+   public boolean getSolvable() {
+      
+      return solvable;
       
    }
    

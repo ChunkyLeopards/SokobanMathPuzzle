@@ -32,12 +32,6 @@ public class SokobanInterpreter {
    public SokobanInterpreter(File p) {
       
       puzzle = p;
-      try {
-         System.out.println(HashPuzzle.genHash(p));
-      } catch (IOException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
       
    }
    
@@ -48,6 +42,11 @@ public class SokobanInterpreter {
     */
    
    public SokobanRuntimeStorage readPuzzleFile() throws IOException {
+      
+      if(HashPuzzle.genHash(puzzle) != HashPuzzle.retrieveHashFromFile(puzzle)) {
+         System.err.println("This puzzle file appears corrupted or modified. Please update it.");
+         return null;
+      }
       
       BufferedReader b = new BufferedReader(new FileReader(puzzle));
       String interp;
@@ -115,6 +114,10 @@ public class SokobanInterpreter {
             
          }
          
+         else if (interp.startsWith("Hash:") && !comment) {
+            
+         }
+         
          else if (interp.startsWith("Puzzle:") && !comment) {
             
             System.err.println("Improper .spsf file structure. Please refer to the example puzzle file for proper structure.");
@@ -141,7 +144,6 @@ public class SokobanInterpreter {
          
          else {
             
-            System.out.println(interp);
             System.err.println("Improper .spsf file structure. Please check your file for errors.");
             b.close();
             return null;

@@ -178,7 +178,6 @@ public class MainMenu extends JPanel {
                   @Override
                   public void mouseClicked(MouseEvent arg0) {
                      
-                     puzzleSelection.setVisible(false);
                      SokobanInterpreter s = new SokobanInterpreter(puzzle);
                      SokobanRuntimeStorage puzzle = null;
 
@@ -191,8 +190,11 @@ public class MainMenu extends JPanel {
                         e.printStackTrace();
 
                      }
-
-                     DisplayPuzzle.displayWindow(puzzle, false);
+                     
+                     if(puzzle != null) {
+                        puzzleSelection.setVisible(false);
+                        DisplayPuzzle.displayWindow(puzzle, false);
+                     }
                      
                   }
 

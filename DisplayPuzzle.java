@@ -33,6 +33,7 @@ public class DisplayPuzzle extends JPanel{
    private static JMenuItem options;
    private static JMenuItem exit;
    private static JMenuItem overview;
+   private static JMenuItem toCreator;
    private static MathPanel mathP;
    private static JPanel math;
    private static JPanel input;
@@ -53,7 +54,7 @@ public class DisplayPuzzle extends JPanel{
     * @param p The runtime storage of a puzzle.
     */
    
-   public static void displayWindow(SokobanRuntimeStorage p, boolean test) {
+   public static JFrame displayWindow(SokobanRuntimeStorage p, boolean test) {
       
       window = new JFrame(p.getName());
       window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -71,6 +72,19 @@ public class DisplayPuzzle extends JPanel{
                
             window.dispose();
             MainMenu.reopenMainMenu();
+            
+         }
+         
+      });
+
+      toCreator = new JMenuItem("Return to Creator");
+      
+      toCreator.addActionListener(new ActionListener() {
+
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            
+            window.dispose();
             
          }
          
@@ -97,11 +111,11 @@ public class DisplayPuzzle extends JPanel{
       time = new JLabel("Time Elapsed: XX:XX");
       window.add(menuBar);
       menu.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
-      menu.add(goMain);
-      menu.add(options);
-      menu.add(overview);
-      menu.add(exit);
       if(!test) {
+         menu.add(goMain);
+         menu.add(options);
+         menu.add(overview);
+         menu.add(exit);
          menuBar.add(moves);
          menuBar.add(Box.createRigidArea(new Dimension(10, 0)));
          menuBar.add(time);
@@ -112,12 +126,23 @@ public class DisplayPuzzle extends JPanel{
          input.setVisible(false);
          window.add(input);
       }
+      else { 
+         menu.add(toCreator);
+         menu.add(exit);
+      }
       menuBar.add(Box.createHorizontalGlue());
       menuBar.add(menu);
       window.add(new DisplayPuzzle(p));
       window.pack();
       window.setVisible(true);
-      new Movement(window, p, input, mathP);
+      if(test) {
+         new Movement(window, p);
+      }
+      else {
+         new Movement(window, p, input, mathP);
+      }
+      
+      return window;
       
    }
    
