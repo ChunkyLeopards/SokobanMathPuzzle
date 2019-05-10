@@ -1,13 +1,14 @@
 import java.util.Arrays;
 
 /**
- * This class serves as storage for a Sokoban puzzle. It also includes
- * methods to move the player.
+ * This class serves as storage for a Sokoban puzzle. It also includes methods
+ * to move the player.
+ * 
  * @author Daniel Moore
  */
 
 public class SokobanRuntimeStorage {
-   
+
    public static final int LEFT = 0;
    public static final int UP = 1;
    public static final int RIGHT = 2;
@@ -18,284 +19,306 @@ public class SokobanRuntimeStorage {
    private int playerY;
    private UndoStack undo = null;
    private boolean solvable;
-   
+
    /**
-    * Constructs a 2D array of the appropriate width and height, and saves
-    * the name of the puzzle. The square value.
+    * Constructs a 2D array of the appropriate width and height, and saves the name
+    * of the puzzle. The square value.
+    * 
     * @param w
-    * @param n The name of the puzzle.
-    * @param w Width of the puzzle.
-    * @param h Height of the puzzle.
+    * @param n
+    *           The name of the puzzle.
+    * @param w
+    *           Width of the puzzle.
+    * @param h
+    *           Height of the puzzle.
     */
-   
+
    public SokobanRuntimeStorage(String n, int w, int h) {
-      
+
       name = n;
       puzzle = new short[w][h];
       solvable = false;
-      
-      for(int i = 0; i < w; i++) {
-         
+
+      for (int i = 0; i < w; i++) {
+
          Arrays.fill(puzzle[i], (short) 0);
-         
+
       }
-      
+
    }
-   
+
    /**
     * Sets a square in a Sokoban puzzle.
-    * @param s The square value.
-    * @param x The column to insert the value.
-    * @param y The row to insert the value. 
+    * 
+    * @param s
+    *           The square value.
+    * @param x
+    *           The column to insert the value.
+    * @param y
+    *           The row to insert the value.
     */
-   
+
    public void setSquare(short s, int x, int y) {
-      
+
       /*
-       * The bytes stored are decimal conversions of binary numbers.
-       * The binary numbers are 5 digits long.
-       * From smallest to largest, the bits are:
-       * Wall
-       * Internal space
-       * Player
-       * Box
-       * Targetpuzzle[playerXNew][playerYNew]
+       * The bytes stored are decimal conversions of binary numbers. The binary
+       * numbers are 5 digits long. From smallest to largest, the bits are: Wall
+       * Internal space Player Box Targetpuzzle[playerXNew][playerYNew]
        * 
-       * A 0 represents no element, while a 1 represents an element of the appropriate type.
-       * Not all combinations are allowed. Input interpreter should catch invalid square contents.
+       * A 0 represents no element, while a 1 represents an element of the appropriate
+       * type. Not all combinations are allowed. Input interpreter should catch
+       * invalid square contents.
        * 
        * A byte value of 0 represents external space.
        */
-      
+
       puzzle[x][y] = s;
-      
+
    }
-   
+
    public void setSolvable() {
-      
+
       solvable = true;
-      
+
    }
-   
+
    public boolean getSolvable() {
-      
+
       return solvable;
-      
+
    }
-   
+
    /**
     * Removes a Sokoban puzzle storage object.
     */
-   
+
    public void empty() {
-      
+
       name = null;
       puzzle = null;
-      
+
    }
-   
+
    /**
     * Method to retrieve the name of a SokobanRuntimeStorage object.
+    * 
     * @return The name of a Sokoban puzzle.
     */
-   
+
    public String getName() {
-      
+
       return name;
-      
+
    }
-   
+
    /**
     * Method to retrieve the height of a SokobanRuntimeStorage object.
+    * 
     * @return The height of a Sokoban puzzle.
     */
-   
+
    public int getHeight() {
-      
+
       return puzzle[0].length;
-      
+
    }
-   
+
    /**
     * Method to retrieve the width of a SokobanRuntimeStorage object.
+    * 
     * @return The width of a Sokoban puzzle.}
     */
-   
+
    public int getWidth() {
-      
+
       return puzzle.length;
-      
+
    }
-   
+
    /**
-    * Method to retrieve the value of a square at a particular location
-    * in a SokobanRuntimeStorage object.
-    * @param x The column to retrieve from. 
-    * @param y The row to retrieve from.
+    * Method to retrieve the value of a square at a particular location in a
+    * SokobanRuntimeStorage object.
+    * 
+    * @param x
+    *           The column to retrieve from.
+    * @param y
+    *           The row to retrieve from.
     * @return The value at location x, y of a Sokoban puzzle.
     */
-   
+
    public short getValue(int x, int y) {
-      
+
       return puzzle[x][y];
-      
+
    }
-   
+
    /**
     * Method to retrieve the player's x location.
+    * 
     * @return The player's x location in a Sokoban puzzle.
     */
-   
+
    public int getPlayerX() {
-      
+
       return playerX;
-      
+
    }
-   
+
    /**
     * Method to set the players's x location.
-    * @param x The player's x coordinate.
+    * 
+    * @param x
+    *           The player's x coordinate.
     */
 
    public void setPlayerX(int x) {
-      
+
       playerX = x;
-      
+
    }
-   
+
    /**
     * Method to retrieve the player's y location.
-    * @return The player's y location in a Sokoban puzzle. 
+    * 
+    * @return The player's y location in a Sokoban puzzle.
     */
-   
+
    public int getPlayerY() {
-      
+
       return playerY;
-      
+
    }
-   
+
    /**
     * Method to set the player's y location.
-    * @param y The player's y coordinate. 
+    * 
+    * @param y
+    *           The player's y coordinate.
     */
-   
+
    public void setPlayerY(int y) {
-      
+
       playerY = y;
-      
+
    }
 
    /**
     * Method to move the player around the SokobanRuntimeStorage object.
-    * @param direction What direction to move in. Use the static
-    * LEFT, RIGHT, UP, DOWN variables.
+    * 
+    * @param direction
+    *           What direction to move in. Use the static LEFT, RIGHT, UP, DOWN
+    *           variables.
     */
-   
+
    public void move(int direction) {
-      
+
       if (undo == null) {
 
          undo = new UndoStack(puzzle, playerX, playerY);
-         
+
       }
-      
+
       int playerXNew = playerX;
       int playerYNew = playerY;
       int boxX = playerX;
       int boxY = playerY;
       undo.push(new UndoState(puzzle, playerX, playerY));
-      
+
       switch (direction) {
-      
+
       case LEFT:
-         
+
          playerXNew = playerX - 1;
          boxX = playerX - 2;
          break;
-         
+
       case UP:
-         
+
          playerYNew = playerY - 1;
          boxY = playerY - 2;
          break;
-         
+
       case RIGHT:
-         
+
          playerXNew = playerX + 1;
          boxX = playerX + 2;
          break;
-         
+
       case DOWN:
-         
+
          playerYNew = playerY + 1;
          boxY = playerY + 2;
          break;
-         
+
       default:
-            
+
       }
-      
+
       if (puzzle[playerXNew][playerYNew] == SokobanInterpreter.WALL) {
-         
+
          undo.pop();
          // add bump sound effect
          return;
-         
+
       }
-      
-      else if ((byte)puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX || (byte)puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
-         
-         if (puzzle[boxX][boxY] == SokobanInterpreter.WALL || (byte)puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX || (byte)puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
-            
+
+      else if ((byte) puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX
+            || (byte) puzzle[playerXNew][playerYNew] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
+
+         if (puzzle[boxX][boxY] == SokobanInterpreter.WALL
+               || (byte) puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX
+               || (byte) puzzle[boxX][boxY] == SokobanInterpreter.INTERNAL_BOX_TARGET) {
+
             undo.pop();
             // add bump sound effect
-            return;   
-            
+            return;
+
          }
-         
-         short tempBoxValue = (short)(puzzle[playerXNew][playerYNew] / SokobanInterpreter.BOX_TRACK_OFFSET);
-         puzzle[playerXNew][playerYNew] -= (SokobanInterpreter.BOX + tempBoxValue * SokobanInterpreter.BOX_TRACK_OFFSET);
+
+         short tempBoxValue = (short) (puzzle[playerXNew][playerYNew] / SokobanInterpreter.BOX_TRACK_OFFSET);
+         puzzle[playerXNew][playerYNew] -= (SokobanInterpreter.BOX
+               + tempBoxValue * SokobanInterpreter.BOX_TRACK_OFFSET);
          puzzle[boxX][boxY] += (SokobanInterpreter.BOX + tempBoxValue * SokobanInterpreter.BOX_TRACK_OFFSET);
-         
+
       }
-      
+
       puzzle[playerX][playerY] -= SokobanInterpreter.PLAYER;
       puzzle[playerXNew][playerYNew] += SokobanInterpreter.PLAYER;
-      
+
       switch (direction) {
-      
+
       case LEFT:
-         
+
          playerX--;
          break;
-         
+
       case UP:
-         
+
          playerY--;
          break;
-         
+
       case RIGHT:
-         
+
          playerX++;
          break;
-         
+
       case DOWN:
-         
+
          playerY++;
          break;
-         
+
       default:
-      
+
       }
-      
+
    }
-   
+
    public void undo() {
-      
+
       UndoState last = undo.pop();
       puzzle = last.getState();
       playerX = last.getX();
       playerY = last.getY();
-      
+
    }
 }

@@ -1,10 +1,13 @@
 1) Fix Hash across multiple computers. Appears to be a result of different strings
-   fetched from the same file on different machines.
-2) Add more puzzles.
-3) Add more math templates.
-4) Create a math solution checker.
+   fetched from the same file on different machines. May only affect different operating systems. Further
+   testing required.
+2) Create a math solution checker.
+3) Add more puzzles.
+4) Add more math templates.
 5) Implement all buttons in math input.
 6) Implement all other buttons in various locations (Credits and Options on the main menu, overview, etc.).
 7) Add validation of other types to prevent creating unwanted puzzles. Specifically, check that the
    external wall is complete, check that all internal space is an internal tile of some type, check
    that all internal space is connected, no more than 1 player, etc.
+8) Implement showing solution on give up.
+9) Implement submitting answer on pushing return key.

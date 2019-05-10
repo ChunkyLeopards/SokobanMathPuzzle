@@ -7,15 +7,15 @@ import java.io.*;
  *
  */
 public class HashPuzzle {
-	
-	/**
-	 * generate a string of the contents of a file
-	 * 
-	 * @param f
-	 * @return
-	 * @throws IOException
-	 */
-	public static String genString(File f) {
+
+   /**
+    * generate a string of the contents of a file
+    * 
+    * @param f
+    * @return
+    * @throws IOException
+    */
+   public static String genString(File f) {
       BufferedReader reader = null;
       try {
          reader = new BufferedReader(new FileReader(f));
@@ -47,50 +47,52 @@ public class HashPuzzle {
          }
       }
       return "";
-	}
-	
-	/**
-	 * Generates a hash code from a file as a string
-	 * 
-	 * 
-	 * @param f
-	 * @return
-	 * @throws IOException
-	 */
-	public static int genHash(File f) {
-		// default no file, hash set to -1
-		int v = -1;
-		boolean bool = false;
-		
-		// turn file contents to string
-		String hashStr = genString(f);
-			
-		v = hashStr.hashCode();
-		
-		bool = f.exists();
-		
-		if (bool) {
-		   
-			return v;
-			
-		}
-		
-		System.err.println("File not found");
-		return v;
-	}
-	
-	public static int genHash(String s) {
-	   return s.hashCode();
-	}
-	
-	/**
-	 * Reads the hash from a line in a puzzle file
-	 * 
-	 * @param f
-	 * @return
-	 * @throws IOException
-	 */
-	public static int retrieveHashFromFile(File f) {
+   }
+
+   /**
+    * Generates a hash code from a file as a string
+    * 
+    * 
+    * @param f
+    * @return
+    * @throws IOException
+    */
+   public static int genHash(File f) {
+      // default no file, hash set to -1
+      int v = -1;
+      boolean bool = false;
+
+      bool = f.exists();
+
+      if (bool) {
+         
+         // turn file contents to string
+         String hashStr = genString(f);
+         v = hashStr.hashCode();
+
+      }
+      else {
+
+         System.err.println("File not found");
+         
+      }
+      
+      return v;
+      
+   }
+
+   public static int genHash(String s) {
+      return s.hashCode();
+   }
+
+   /**
+    * Reads the hash from a line in a puzzle file
+    * 
+    * @param f
+    * @return
+    * @throws IOException
+    */
+   public static int retrieveHashFromFile(File f) {
       BufferedReader reader = null;
       try {
          reader = new BufferedReader(new FileReader(f));
@@ -115,7 +117,7 @@ public class HashPuzzle {
             // TODO Auto-generated catch block
             e.printStackTrace();
          }
-         if(sb.length() > 5) {
+         if (sb.length() > 5) {
             v = sb.toString().substring(5);
 
             return Integer.parseInt(v);
@@ -129,6 +131,6 @@ public class HashPuzzle {
          }
       }
       return -1;
-		
-	}
+
+   }
 }

@@ -126,12 +126,12 @@ public class PuzzleCreator extends JFrame {
       bMenu = new JButton("Main Menu");
       bMenu.setFont(font1);
       menuButtons.add(bMenu);
-      
+
       frame.add(menuButtons);
-      
+
       JPanel sizePanel = new JPanel();
       sizePanel.setLayout(new BoxLayout(sizePanel, BoxLayout.LINE_AXIS));
-      
+
       // Prompt and textbox for Rows
       JLabel rowPrompt = new JLabel("Rows: ");
       rowPrompt.setFont(font1);
@@ -151,13 +151,13 @@ public class PuzzleCreator extends JFrame {
       columnEntry.setMaximumSize(new Dimension(Integer.MAX_VALUE, rowEntry.getPreferredSize().height));
       columnEntry.setFont(font1);
       sizePanel.add(columnEntry);
-      
+
       frame.add(sizePanel);
-      
+
       Component holder = Box.createRigidArea(new Dimension(500, 500));
-      
+
       frame.add(holder);
-      
+
       // Echo messages
       JPanel prompt = new JPanel();
       prompt.setLayout(new BoxLayout(prompt, BoxLayout.LINE_AXIS));
@@ -168,7 +168,7 @@ public class PuzzleCreator extends JFrame {
       frame.add(prompt);
 
       // Place holder panel
-      
+
       frame.pack();
       frame.setVisible(true);
 
@@ -180,7 +180,7 @@ public class PuzzleCreator extends JFrame {
 
          @Override
          public void actionPerformed(ActionEvent arg0) {
-            
+
             exterior = new File("data/emptyOS.png");
             wall = new File("data/wall.png");
             interior = new File("data/emptyIS.png");
@@ -207,40 +207,37 @@ public class PuzzleCreator extends JFrame {
             try {
                nh = Integer.parseInt(columnEntry.getText());
                nw = Integer.parseInt(rowEntry.getText());
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                windowPrompt.setText("Please input integer numbers for the row and column.");
                frame.validate();
                return;
             }
-            
-            if(nh < min || nw < min) {
+
+            if (nh < min || nw < min) {
                windowPrompt.setText("Size values must be greater than " + min + ".");
                frame.validate();
-            }
-            else if(nh > max || nw > max) {
+            } else if (nh > max || nw > max) {
                windowPrompt.setText("Size values must be less than " + max + ".");
                frame.validate();
             }
 
             else {
-               
+
                windowPrompt.setText("Modifying puzzle size!");
                frame.validate();
                // Adding scrolling
                boolean modify = false;
-               if(newPanel != null) {
+               if (newPanel != null) {
                   modify = true;
                   newPanel.removeAll();
                   newPanel.setLayout(new GridLayout(nw, nh));
-                  for(int i = 0; i < nw; i++) {
-                     for(int j = 0; j < nh; j++) {
+                  for (int i = 0; i < nw; i++) {
+                     for (int j = 0; j < nh; j++) {
                         newPanel.add(arrayPuzzle[i][j]);
                      }
                   }
                   newPanel.validate();
-               }
-               else {
+               } else {
                   gridPanel = new JPanel();
                   gridPanel.setLayout(new BoxLayout(gridPanel, BoxLayout.LINE_AXIS));
                   newPanel = new JPanel();
@@ -258,7 +255,7 @@ public class PuzzleCreator extends JFrame {
                frame.validate();
 
                // initialize storage array
-               if(!modify) {
+               if (!modify) {
                   arrayPuzzle = new JPanel[max][max];
                }
 
@@ -295,7 +292,7 @@ public class PuzzleCreator extends JFrame {
                         arrayPuzzle[i][j].add(bt);
                         arrayPuzzle[i][j].add(pt);
                         arrayPuzzle[i][j].setName("0");
-                        
+
                         buttons.first(arrayPuzzle[i][j]);
 
                         arrayPuzzle[i][j].addMouseListener(new MouseListener() {
@@ -382,18 +379,18 @@ public class PuzzleCreator extends JFrame {
 
          }// end ActionPreformed
       });// end bMenu.actionListener
-      
+
       bValidate.addActionListener(new ActionListener() {
 
          @Override
          public void actionPerformed(ActionEvent arg0) {
-            
+
             windowPrompt.setText("Validating...");
             testPuzzle = new SokobanRuntimeStorage("Test Puzzle", nh, nw);
             writePuzzle = new SokobanRuntimeStorage("Test Puzzle", nh, nw);
-            for(int i = 0; i < nw; i++) {
-               for(int j = 0; j < nh; j++) {
-                  switch(arrayPuzzle[i][j].getName()) {
+            for (int i = 0; i < nw; i++) {
+               for (int j = 0; j < nh; j++) {
+                  switch (arrayPuzzle[i][j].getName()) {
                   case "0":
                      testPuzzle.setSquare(SokobanInterpreter.EXTERNAL, j, i);
                      writePuzzle.setSquare(SokobanInterpreter.EXTERNAL, j, i);
@@ -433,83 +430,82 @@ public class PuzzleCreator extends JFrame {
                   }
                }
             }
-            if(Validation.validate(testPuzzle)) {
+            if (Validation.validate(testPuzzle)) {
                windowPrompt.setText("Your puzzle has a valid structure.");
                bTest.setEnabled(true);
-            }
-            else {
+            } else {
                windowPrompt.setText("Your puzzle has an invalid structure.");
             }
          }
-         
+
       });
-      
+
       bTest.addActionListener(new ActionListener() {
 
          @Override
          public void actionPerformed(ActionEvent arg0) {
-            
+
             DisplayPuzzle.displayWindow(testPuzzle, true).addWindowListener(new WindowListener() {
 
                @Override
                public void windowActivated(WindowEvent arg0) {
                   // TODO Auto-generated method stub
-                  
+
                }
 
                @Override
                public void windowClosed(WindowEvent arg0) {
-                  
-                  if(testPuzzle.getSolvable()) {
-                     
+
+                  if (testPuzzle.getSolvable()) {
+
                      bSubmit.setEnabled(true);
                      windowPrompt.setText("You have successfully solved your puzzle. Submit?");
-                     
+
                   }
-                  
+
                }
 
                @Override
                public void windowClosing(WindowEvent arg0) {
                   // TODO Auto-generated method stub
-                  
+
                }
 
                @Override
                public void windowDeactivated(WindowEvent arg0) {
                   // TODO Auto-generated method stub
-                  
+
                }
 
                @Override
                public void windowDeiconified(WindowEvent arg0) {
                   // TODO Auto-generated method stub
-                  
+
                }
 
                @Override
                public void windowIconified(WindowEvent arg0) {
                   // TODO Auto-generated method stub
-                  
+
                }
 
                @Override
                public void windowOpened(WindowEvent arg0) {
                   // TODO Auto-generated method stub
-                  
+
                }
-               
+
             });
-            
+
          }
-         
+
       });
-      
+
       bSubmit.addActionListener(new ActionListener() {
 
          @Override
          public void actionPerformed(ActionEvent arg0) {
-            
+
             JDialog name = new JDialog();
             name.setTitle("Name");
             name.setLayout(new BoxLayout(name.getContentPane(), BoxLayout.PAGE_AXIS));
@@ -523,10 +519,10 @@ public class PuzzleCreator extends JFrame {
 
                @Override
                public void actionPerformed(ActionEvent e) {
-                  
+
                   File newPuzzle = new File("puzzles//" + getName.getText() + ".spsf");
                   try {
-                     if(!newPuzzle.createNewFile()) {
+                     if (!newPuzzle.createNewFile()) {
                         JDialog error = new JDialog();
                         error.setTitle("Error");
                         JLabel message = new JLabel("Your name is not unique. Try another name.");
@@ -535,20 +531,19 @@ public class PuzzleCreator extends JFrame {
 
                            @Override
                            public void actionPerformed(ActionEvent arg0) {
-                              
+
                               error.dispose();
-                              
+
                            }
-                           
+
                         });
                         error.setLayout(new BoxLayout(error.getContentPane(), BoxLayout.PAGE_AXIS));
                         error.add(message);
                         error.add(ok);
                         error.pack();
                         error.setVisible(true);
-                     }
-                     else {
-                        
+                     } else {
+
                         PuzzleWriter p = new PuzzleWriter(newPuzzle, writePuzzle, getName.getText());
                         p.writePuzzle();
                         JDialog puzzleCreated = new JDialog();
@@ -559,24 +554,24 @@ public class PuzzleCreator extends JFrame {
 
                            @Override
                            public void actionPerformed(ActionEvent arg0) {
-                              
+
                               puzzleCreated.dispose();
                               name.dispose();
                               frame.dispose();
                               MainMenu.reopenMainMenu();
-                              
+
                            }
-                           
+
                         });
                         puzzleCreated.setLayout(new BoxLayout(puzzleCreated.getContentPane(), BoxLayout.PAGE_AXIS));
                         puzzleCreated.add(confirmation);
                         puzzleCreated.add(mainMenu);
                         puzzleCreated.pack();
                         puzzleCreated.setVisible(true);
-                        
+
                      }
                   } catch (IOException e1) {
-                     
+
                      JDialog error = new JDialog();
                      error.setTitle("Error");
                      JLabel message = new JLabel("Your name contains invalid characters. Try another name.");
@@ -585,35 +580,35 @@ public class PuzzleCreator extends JFrame {
 
                         @Override
                         public void actionPerformed(ActionEvent arg0) {
-                           
+
                            error.dispose();
-                           
+
                         }
-                        
+
                      });
                      error.setLayout(new BoxLayout(error.getContentPane(), BoxLayout.PAGE_AXIS));
                      error.add(message);
                      error.add(ok);
                      error.pack();
                      error.setVisible(true);
-                     
+
                   }
-                  
+
                }
-               
+
             });
-            
+
             cancel.addActionListener(new ActionListener() {
 
                @Override
                public void actionPerformed(ActionEvent arg0) {
-                  
+
                   name.dispose();
-                  
+
                }
-               
+
             });
-            
+
             name.add(question);
             name.add(getName);
             buttonPanel.add(Box.createHorizontalGlue());
@@ -622,11 +617,11 @@ public class PuzzleCreator extends JFrame {
             name.add(buttonPanel);
             name.pack();
             name.setVisible(true);
-            
+
          }
-         
+
       });
-      
+
    }// end display
 
 }// end clas

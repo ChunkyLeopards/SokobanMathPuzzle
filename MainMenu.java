@@ -44,7 +44,7 @@ public class MainMenu extends JPanel {
    private static File puzzleFile;
 
    public static void main(String[] args) throws IOException {
-      
+
       window = new JFrame("∫oκσbαπ");
       window.setUndecorated(true);
       panel = new JPanel();
@@ -63,7 +63,7 @@ public class MainMenu extends JPanel {
       puzzles.setBorder(new EmptyBorder(5, 5, 5, 5));
       puzzleButton = new JPanel();
       puzzleButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-      puzzleButton.setMaximumSize(new Dimension(puzzles.getWidth()  + 30, puzzles.getHeight()));
+      puzzleButton.setMaximumSize(new Dimension(puzzles.getWidth() + 30, puzzles.getHeight()));
       puzzleButton.setBackground(Color.gray);
       puzzleButton.add(puzzles);
       editor = new JLabel("Puzzle Editor");
@@ -74,7 +74,7 @@ public class MainMenu extends JPanel {
       editor.setBorder(new EmptyBorder(5, 5, 5, 5));
       editorButton = new JPanel();
       editorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-      editorButton.setMaximumSize(new Dimension(editor.getWidth()  + 30, editor.getHeight()));
+      editorButton.setMaximumSize(new Dimension(editor.getWidth() + 30, editor.getHeight()));
       editorButton.setBackground(Color.gray);
       editorButton.add(editor);
       options = new JLabel("Options");
@@ -85,7 +85,7 @@ public class MainMenu extends JPanel {
       options.setBorder(new EmptyBorder(5, 5, 5, 5));
       optionButton = new JPanel();
       optionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-      optionButton.setMaximumSize(new Dimension(options.getWidth()  + 30, options.getHeight()));
+      optionButton.setMaximumSize(new Dimension(options.getWidth() + 30, options.getHeight()));
       optionButton.setBackground(Color.gray);
       optionButton.add(options);
       credits = new JLabel("Credits");
@@ -96,7 +96,7 @@ public class MainMenu extends JPanel {
       credits.setBorder(new EmptyBorder(5, 5, 5, 5));
       creditButton = new JPanel();
       creditButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-      creditButton.setMaximumSize(new Dimension(credits.getWidth()  + 30, credits.getHeight()));
+      creditButton.setMaximumSize(new Dimension(credits.getWidth() + 30, credits.getHeight()));
       creditButton.setBackground(Color.gray);
       creditButton.add(credits);
       exit = new JLabel("Exit");
@@ -111,15 +111,15 @@ public class MainMenu extends JPanel {
       exitButton.setBackground(Color.gray);
       exitButton.add(exit);
       panel.add(title);
-      panel.add(Box.createRigidArea(new Dimension(0,100)));
+      panel.add(Box.createRigidArea(new Dimension(0, 100)));
       panel.add(puzzleButton);
-      panel.add(Box.createRigidArea(new Dimension(0,20)));
+      panel.add(Box.createRigidArea(new Dimension(0, 20)));
       panel.add(editorButton);
-      panel.add(Box.createRigidArea(new Dimension(0,20)));
+      panel.add(Box.createRigidArea(new Dimension(0, 20)));
       panel.add(optionButton);
-      panel.add(Box.createRigidArea(new Dimension(0,20)));
+      panel.add(Box.createRigidArea(new Dimension(0, 20)));
       panel.add(creditButton);
-      panel.add(Box.createRigidArea(new Dimension(0,20)));
+      panel.add(Box.createRigidArea(new Dimension(0, 20)));
       panel.add(exitButton);
       panel.add(Box.createVerticalGlue());
       new MainMenu(panel);
@@ -127,7 +127,7 @@ public class MainMenu extends JPanel {
       window.add(panel);
       window.setSize(panel.getSize());
       window.setVisible(true);
-      
+
    }
 
    public MainMenu(JPanel p) {
@@ -140,44 +140,44 @@ public class MainMenu extends JPanel {
             window.setVisible(false);
             puzzleSelection = new JFrame();
             puzzleSelection.setUndecorated(true);
-            puzzleSelection.setSize(750,750);
+            puzzleSelection.setSize(750, 750);
             puzzlePanel = new JPanel();
             puzzlePanel.setLayout(new BoxLayout(puzzlePanel, BoxLayout.PAGE_AXIS));
             File puzzleDirectory = new File("puzzles");
-            File allPuzzles[] =  puzzleDirectory.listFiles();
+            File allPuzzles[] = puzzleDirectory.listFiles();
             puzzleList = new JPanel[allPuzzles.length];
             puzzleName = new JLabel[allPuzzles.length];
             int maxWidth = 0;
             int maxHeight = 0;
-            
+
             for (int i = 0; i < puzzleList.length; i++) {
-               
+
                puzzleName[i] = new JLabel();
                puzzleName[i].setText(allPuzzles[i].getPath());
                puzzleName[i].setFont(new Font("TimesRoman", Font.BOLD, 20));
                puzzleFile = allPuzzles[i];
-               
+
                if (puzzleName[i].getWidth() > maxWidth) {
-                  
+
                   maxWidth = puzzleName[i].getWidth();
-                  
+
                }
-               
+
                if (puzzleName[i].getHeight() > maxHeight) {
-                  
+
                   maxHeight = puzzleName[i].getHeight();
-                  
+
                }
-               
+
                puzzleList[i] = new JPanel();
                puzzleList[i].setBackground(Color.gray);
                puzzleList[i].addMouseListener(new MouseListener() {
-                  
+
                   File puzzle = new File(puzzleFile.getPath());
-                  
+
                   @Override
                   public void mouseClicked(MouseEvent arg0) {
-                     
+
                      SokobanInterpreter s = new SokobanInterpreter(puzzle);
                      SokobanRuntimeStorage puzzle = null;
 
@@ -190,49 +190,49 @@ public class MainMenu extends JPanel {
                         e.printStackTrace();
 
                      }
-                     
-                     if(puzzle != null) {
+
+                     if (puzzle != null) {
                         puzzleSelection.setVisible(false);
                         DisplayPuzzle.displayWindow(puzzle, false);
                      }
-                     
+
                   }
 
                   @Override
                   public void mouseEntered(MouseEvent arg0) {
-                     
+
                      arg0.getComponent().setBackground(Color.lightGray);
-                     
+
                   }
 
                   @Override
                   public void mouseExited(MouseEvent arg0) {
-                     
+
                      arg0.getComponent().setBackground(Color.gray);
-                     
+
                   }
 
                   @Override
                   public void mousePressed(MouseEvent arg0) {
-                     
+
                      arg0.getComponent().setBackground(Color.white);
-                     
+
                   }
 
                   @Override
                   public void mouseReleased(MouseEvent arg0) {
-                     
+
                      arg0.getComponent().setBackground(Color.lightGray);
-                     
+
                   }
-                  
+
                });
-               
+
                puzzleList[i].add(puzzleName[i]);
                puzzlePanel.add(puzzleList[i]);
-               
+
             }
-            
+
             puzzleListBack = new JLabel("Back");
             puzzleListBack.setFont(new Font("TimesRoman", Font.BOLD, 20));
             puzzleListBackButton = new JPanel();
@@ -242,43 +242,43 @@ public class MainMenu extends JPanel {
 
                @Override
                public void mouseClicked(MouseEvent arg0) {
-                  
+
                   puzzleSelection.setVisible(false);
                   window.setVisible(true);
-                  
+
                }
 
                @Override
                public void mouseEntered(MouseEvent arg0) {
-                  
+
                   puzzleListBackButton.setBackground(Color.lightGray);
-                  
+
                }
 
                @Override
                public void mouseExited(MouseEvent arg0) {
-                  
+
                   puzzleListBackButton.setBackground(Color.gray);
-                  
+
                }
 
                @Override
                public void mousePressed(MouseEvent arg0) {
-                  
+
                   puzzleListBackButton.setBackground(Color.white);
-                  
+
                }
 
                @Override
                public void mouseReleased(MouseEvent arg0) {
-                  
+
                   puzzleListBackButton.setBackground(Color.lightGray);
-                  
+
                }
-               
+
             });
-            
-            puzzlePanel.add(puzzleListBackButton);            
+
+            puzzlePanel.add(puzzleListBackButton);
             puzzlePane = new JScrollPane(puzzlePanel);
             puzzlePane.getVerticalScrollBar().setUnitIncrement(16);
             puzzleSelection.add(puzzlePane);
@@ -320,10 +320,10 @@ public class MainMenu extends JPanel {
 
          @Override
          public void mouseClicked(MouseEvent arg0) {
-            
+
             window.setVisible(false);
             PuzzleCreator.display();
-            
+
          }
 
          @Override
@@ -429,7 +429,7 @@ public class MainMenu extends JPanel {
          }
 
       });
-      
+
       exitButton.addMouseListener(new MouseListener() {
 
          @Override
@@ -475,11 +475,11 @@ public class MainMenu extends JPanel {
    public void paintComponent(Graphics g) {
 
    }
-   
+
    public static void reopenMainMenu() {
-      
+
       window.setVisible(true);
-      
+
    }
 
 }

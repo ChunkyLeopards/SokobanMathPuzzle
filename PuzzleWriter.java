@@ -4,25 +4,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class PuzzleWriter {
-   
+
    private String title;
    private File puzzleFile;
    private SokobanRuntimeStorage puzzle;
    private int width;
    private int height;
-   
+
    public PuzzleWriter(File f, SokobanRuntimeStorage p, String t) {
-      
+
       title = t;
       puzzleFile = f;
       puzzle = p;
       width = puzzle.getWidth();
       height = puzzle.getHeight();
-      
+
    }
-   
+
    public void writePuzzle() {
-      
+
       short value;
       String hasher;
       int hash;
@@ -34,10 +34,10 @@ public class PuzzleWriter {
       sb = new StringBuilder();
       String puzz;
       sb.append("Puzzle:");
-      for(int i = 0; i < width; i++) {
-         for(int j = 0; j < height; j++) {
+      for (int i = 0; i < width; i++) {
+         for (int j = 0; j < height; j++) {
             value = puzzle.getValue(i, j);
-            switch((byte)value) {
+            switch ((byte) value) {
             case SokobanInterpreter.EXTERNAL:
                sb.append(";");
                break;
@@ -88,7 +88,7 @@ public class PuzzleWriter {
       } catch (IOException e) {
          System.err.println("Writing failure.");
       }
-      
+
    }
-   
+
 }

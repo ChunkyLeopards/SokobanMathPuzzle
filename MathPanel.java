@@ -19,9 +19,8 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
-
 public class MathPanel {
-   
+
    private JPanel problemPanel;
    private JPanel inputPanel;
    private JPanel functionPanel;
@@ -50,31 +49,28 @@ public class MathPanel {
    private MathTemplateInterpreter puzzle;
    private JButton submit;
    private JButton giveUp;
-   
+
    public JPanel createMath() {
-      
+
       puzzle = new MathTemplateInterpreter();
       problemPanel = new JPanel();
       problemPanel.setLayout(new BoxLayout(problemPanel, BoxLayout.PAGE_AXIS));
       formulaLaTeX = puzzle.getProblem();
       formula = new TeXFormula(formulaLaTeX);
-      functionImage = formula.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
-                             .setSize(30)
-                             .setFGColor(Color.white)
-                             .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER)
-                             .setIsMaxWidth(true).setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f)
-                             .build();
+      functionImage = formula.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(30)
+            .setFGColor(Color.white).setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER)
+            .setIsMaxWidth(true).setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
       functionPanel = new JPanel();
       functionPanel.setBackground(Color.black);
       function = new JLabel(functionImage);
-      function.setMaximumSize(new Dimension(100,300));
-      function.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+      function.setMaximumSize(new Dimension(100, 300));
+      function.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
       functionPanel.add(function);
       problemPanel.add(functionPanel);
       return problemPanel;
-        
+
    }
-   
+
    public JPanel createInput() {
 
       symbolOptions = new CardLayout();
@@ -99,7 +95,7 @@ public class MathPanel {
       buttonPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
       groupButtonPanel = new JPanel();
       buttonPanel.add(groupButtonPanel);
-      buttonPanel.add(Box.createRigidArea(new Dimension(15,0)));
+      buttonPanel.add(Box.createRigidArea(new Dimension(15, 0)));
       groupButtonPanel.setLayout(new GridLayout(4, 4));
       symbolButtonPanel = new JPanel();
       buttonPanel.add(symbolButtonPanel);
@@ -130,26 +126,26 @@ public class MathPanel {
       groupButtonNames[2][3] = "Statistics";
       groupButtonNames[3][0] = "Combinatorics";
       groupButtonNames[3][1] = "Accents";
-      
-      groupLaTeX[0][0] = "\\alpha"; //lowercase greek letters
-      groupLaTeX[0][1] = "\\Omega"; //uppercase greek letters
-      groupLaTeX[0][2] = "\\int"; //functions
-      groupLaTeX[0][3] = "\\cap"; //sets
-      groupLaTeX[1][0] = "\\neq"; //relation
-      groupLaTeX[1][1] = "\\wedge"; //logic
-      groupLaTeX[1][2] = "\\sin"; //trigonometry
-      groupLaTeX[1][3] = "\\parallel"; //geometry
-      groupLaTeX[2][0] = "\\mathbb{R}"; //number sets
-      groupLaTeX[2][1] = "\\pm"; //operations
-      groupLaTeX[2][2] = "\\pi"; //constants
-      groupLaTeX[2][3] = "\\%"; //statistics
-      groupLaTeX[3][0] = "!"; //combinatorics
-      groupLaTeX[3][1] = "\\hat"; //accents
-      
+
+      groupLaTeX[0][0] = "\\alpha"; // lowercase greek letters
+      groupLaTeX[0][1] = "\\Omega"; // uppercase greek letters
+      groupLaTeX[0][2] = "\\int"; // functions
+      groupLaTeX[0][3] = "\\cap"; // sets
+      groupLaTeX[1][0] = "\\neq"; // relation
+      groupLaTeX[1][1] = "\\wedge"; // logic
+      groupLaTeX[1][2] = "\\sin"; // trigonometry
+      groupLaTeX[1][3] = "\\parallel"; // geometry
+      groupLaTeX[2][0] = "\\mathbb{R}"; // number sets
+      groupLaTeX[2][1] = "\\pm"; // operations
+      groupLaTeX[2][2] = "\\pi"; // constants
+      groupLaTeX[2][3] = "\\%"; // statistics
+      groupLaTeX[3][0] = "!"; // combinatorics
+      groupLaTeX[3][1] = "\\hat"; // accents
+
       for (int i = 0; i < groupLaTeX.length; i++) {
-         
+
          for (int j = 0; j < groupLaTeX[0].length; j++) {
-            
+
             if (groupLaTeX[i][j] != null) {
 
                groupForm[i][j] = new TeXFormula(groupLaTeX[i][j]);
@@ -161,7 +157,7 @@ public class MathPanel {
                groupButtons[i][j].setToolTipText(groupButtonNames[i][j]);
                groupButtons[i][j].setActionCommand(groupButtonNames[i][j]);
                groupButtons[i][j].setFocusPainted(false);
-               
+
                groupButtons[i][j].addActionListener(new ActionListener() {
 
                   @Override
@@ -174,14 +170,14 @@ public class MathPanel {
                });
 
                groupButtonPanel.add(groupButtons[i][j]);
-            
+
             }
-            
+
          }
-            
+
       }
-      
-      symbolButtonNames[0][0][0] = "Lowercase Alpha"; //lowercase greek letters
+
+      symbolButtonNames[0][0][0] = "Lowercase Alpha"; // lowercase greek letters
       symbolButtonNames[0][0][1] = "Lowercase Beta";
       symbolButtonNames[0][0][2] = "Lowercase Gamma";
       symbolButtonNames[0][0][3] = "Lowercase Delta";
@@ -205,7 +201,7 @@ public class MathPanel {
       symbolButtonNames[0][4][1] = "Lowercase Chi";
       symbolButtonNames[0][4][2] = "Lowercase Psi";
       symbolButtonNames[0][4][3] = "Lowercase Omega";
-      symbolButtonNames[1][0][0] = "Uppercase Alpha"; //uppercase greek letters
+      symbolButtonNames[1][0][0] = "Uppercase Alpha"; // uppercase greek letters
       symbolButtonNames[1][0][1] = "Uppercase Beta";
       symbolButtonNames[1][0][2] = "Uppercase Gamma";
       symbolButtonNames[1][0][3] = "Uppercase Delta";
@@ -229,7 +225,7 @@ public class MathPanel {
       symbolButtonNames[1][4][1] = "Uppercase Chi";
       symbolButtonNames[1][4][2] = "Uppercase Psi";
       symbolButtonNames[1][4][3] = "Uppercase Omega";
-      symbolButtonNames[2][0][0] = "Summation"; //functions
+      symbolButtonNames[2][0][0] = "Summation"; // functions
       symbolButtonNames[2][0][1] = "Integral";
       symbolButtonNames[2][0][2] = "Absolute Value";
       symbolButtonNames[2][0][3] = "Floor";
@@ -247,7 +243,7 @@ public class MathPanel {
       symbolButtonNames[2][3][0] = "Partial Derivative";
       symbolButtonNames[2][3][1] = "Logarithm";
       symbolButtonNames[2][3][2] = "Natural Logarithm";
-      symbolButtonNames[3][0][0] = "Empty Set"; //sets
+      symbolButtonNames[3][0][0] = "Empty Set"; // sets
       symbolButtonNames[3][0][1] = "Union";
       symbolButtonNames[3][0][2] = "Intersection";
       symbolButtonNames[3][0][3] = "Difference";
@@ -260,7 +256,7 @@ public class MathPanel {
       symbolButtonNames[3][2][0] = "Not Element";
       symbolButtonNames[3][2][1] = "Cardinality";
       symbolButtonNames[3][2][2] = "Set";
-      symbolButtonNames[4][0][0] = "Not Equals"; //relation
+      symbolButtonNames[4][0][0] = "Not Equals"; // relation
       symbolButtonNames[4][0][1] = "Identity";
       symbolButtonNames[4][0][2] = "Approximately";
       symbolButtonNames[4][0][3] = "Similarity";
@@ -269,7 +265,7 @@ public class MathPanel {
       symbolButtonNames[4][1][1] = "Greater Than Equal To";
       symbolButtonNames[4][1][2] = "Much Less Than";
       symbolButtonNames[4][1][3] = "Much Greater Than";
-      symbolButtonNames[5][0][0] = "Negation"; //logic
+      symbolButtonNames[5][0][0] = "Negation"; // logic
       symbolButtonNames[5][0][1] = "Logical Conjunction";
       symbolButtonNames[5][0][2] = "Logical Disjunction";
       symbolButtonNames[5][0][3] = "Logical Implication";
@@ -283,7 +279,7 @@ public class MathPanel {
       symbolButtonNames[5][2][1] = "Because";
       symbolButtonNames[5][2][2] = "Tautology";
       symbolButtonNames[5][2][3] = "Contradiction";
-      symbolButtonNames[6][0][0] = "Sine"; //trigonometry
+      symbolButtonNames[6][0][0] = "Sine"; // trigonometry
       symbolButtonNames[6][0][1] = "Cosine";
       symbolButtonNames[6][0][2] = "Tangent";
       symbolButtonNames[6][0][3] = "Arcsine";
@@ -298,7 +294,7 @@ public class MathPanel {
       symbolButtonNames[6][2][2] = "Hyperbolic Cotangent";
       symbolButtonNames[6][2][3] = "Hyperbolic Secant";
       symbolButtonNames[6][2][4] = "Hyperbolic Cosecant";
-      symbolButtonNames[7][0][0] = "Parallel"; //geometry
+      symbolButtonNames[7][0][0] = "Parallel"; // geometry
       symbolButtonNames[7][0][1] = "Orthogonal";
       symbolButtonNames[7][0][2] = "Angle";
       symbolButtonNames[7][0][3] = "Vector";
@@ -309,7 +305,7 @@ public class MathPanel {
       symbolButtonNames[7][1][3] = "Dot Product";
       symbolButtonNames[7][1][4] = "Cross Product";
       symbolButtonNames[7][2][0] = "Determinant";
-      symbolButtonNames[8][0][0] = "Real Numbers"; //number sets
+      symbolButtonNames[8][0][0] = "Real Numbers"; // number sets
       symbolButtonNames[8][0][1] = "Natural Numbers";
       symbolButtonNames[8][0][2] = "Integers";
       symbolButtonNames[8][0][3] = "Prime Numbers";
@@ -317,26 +313,26 @@ public class MathPanel {
       symbolButtonNames[8][1][0] = "Complex Numbers";
       symbolButtonNames[8][1][1] = "Quaternions";
       symbolButtonNames[8][1][2] = "Infinite Cardinals";
-      symbolButtonNames[9][0][0] = "Plus or Minus"; //operators
+      symbolButtonNames[9][0][0] = "Plus or Minus"; // operators
       symbolButtonNames[9][0][1] = "Multiplication";
       symbolButtonNames[9][0][2] = "Times";
       symbolButtonNames[9][0][3] = "Division";
       symbolButtonNames[9][0][4] = "Fraction";
-      symbolButtonNames[10][0][0] = "Pi"; //constants
+      symbolButtonNames[10][0][0] = "Pi"; // constants
       symbolButtonNames[10][0][1] = "Euler's Constant";
       symbolButtonNames[10][0][2] = "Golden Ratio";
       symbolButtonNames[10][0][3] = "Imaginary Unit";
-      symbolButtonNames[11][0][0] = "Standard Deviation or Covariance"; //statistics
+      symbolButtonNames[11][0][0] = "Standard Deviation or Covariance"; // statistics
       symbolButtonNames[11][0][1] = "Correlation";
       symbolButtonNames[11][0][2] = "Percent";
       symbolButtonNames[11][0][3] = "Probability";
       symbolButtonNames[11][0][4] = "Variance";
       symbolButtonNames[11][1][0] = "Expected Value";
-      symbolButtonNames[12][0][0] = "Combination"; //combinatorics
+      symbolButtonNames[12][0][0] = "Combination"; // combinatorics
       symbolButtonNames[12][0][1] = "Permutation";
       symbolButtonNames[12][0][2] = "Factorial";
       symbolButtonNames[12][0][3] = "Primorial";
-      symbolButtonNames[13][0][0] = "Hat"; //accents
+      symbolButtonNames[13][0][0] = "Hat"; // accents
       symbolButtonNames[13][0][1] = "Check";
       symbolButtonNames[13][0][2] = "Acuted";
       symbolButtonNames[13][0][3] = "Grave";
@@ -345,8 +341,8 @@ public class MathPanel {
       symbolButtonNames[13][1][1] = "Double Dot";
       symbolButtonNames[13][1][2] = "Breve";
       symbolButtonNames[13][1][3] = "Tilde";
-      
-      symbolLaTeX[0][0][0] = "\\alpha"; //lowercase greek letters
+
+      symbolLaTeX[0][0][0] = "\\alpha"; // lowercase greek letters
       symbolLaTeX[0][0][1] = "\\beta";
       symbolLaTeX[0][0][2] = "\\gamma";
       symbolLaTeX[0][0][3] = "\\delta";
@@ -370,7 +366,7 @@ public class MathPanel {
       symbolLaTeX[0][4][1] = "\\chi";
       symbolLaTeX[0][4][2] = "\\psi";
       symbolLaTeX[0][4][3] = "\\omega";
-      symbolLaTeX[1][0][0] = "\\Alpha"; //uppercase greek letters
+      symbolLaTeX[1][0][0] = "\\Alpha"; // uppercase greek letters
       symbolLaTeX[1][0][1] = "\\Beta";
       symbolLaTeX[1][0][2] = "\\Gamma";
       symbolLaTeX[1][0][3] = "\\Delta";
@@ -394,7 +390,7 @@ public class MathPanel {
       symbolLaTeX[1][4][1] = "\\Chi";
       symbolLaTeX[1][4][2] = "\\Psi";
       symbolLaTeX[1][4][3] = "\\Omega";
-      symbolLaTeX[2][0][0] = "\\Sigma"; //functions
+      symbolLaTeX[2][0][0] = "\\Sigma"; // functions
       symbolLaTeX[2][0][1] = "\\int";
       symbolLaTeX[2][0][2] = "\\vert\\phantom{5}\\vert";
       symbolLaTeX[2][0][3] = "\\lfloor\\phantom{5}\\rfloor";
@@ -412,7 +408,7 @@ public class MathPanel {
       symbolLaTeX[2][3][0] = "\\partial";
       symbolLaTeX[2][3][1] = "\\log";
       symbolLaTeX[2][3][2] = "\\ln";
-      symbolLaTeX[3][0][0] = "\\varnothing"; //sets
+      symbolLaTeX[3][0][0] = "\\varnothing"; // sets
       symbolLaTeX[3][0][1] = "\\cup";
       symbolLaTeX[3][0][2] = "\\cap";
       symbolLaTeX[3][0][3] = "\\setminus";
@@ -425,7 +421,7 @@ public class MathPanel {
       symbolLaTeX[3][2][0] = "\\notin";
       symbolLaTeX[3][2][1] = "\\vert\\phantom{5}\\vert";
       symbolLaTeX[3][2][2] = "\\{\\phantom{5}\\}";
-      symbolLaTeX[4][0][0] = "\\neq"; //relation
+      symbolLaTeX[4][0][0] = "\\neq"; // relation
       symbolLaTeX[4][0][1] = "\\equiv";
       symbolLaTeX[4][0][2] = "\\approx";
       symbolLaTeX[4][0][3] = "\\sim";
@@ -434,7 +430,7 @@ public class MathPanel {
       symbolLaTeX[4][1][1] = "\\geq";
       symbolLaTeX[4][1][2] = "\\ll";
       symbolLaTeX[4][1][3] = "\\gg";
-      symbolLaTeX[5][0][0] = "\\neg"; //logic
+      symbolLaTeX[5][0][0] = "\\neg"; // logic
       symbolLaTeX[5][0][1] = "\\land";
       symbolLaTeX[5][0][2] = "\\lor";
       symbolLaTeX[5][0][3] = "\\rightarrow";
@@ -448,7 +444,7 @@ public class MathPanel {
       symbolLaTeX[5][2][1] = "\\because";
       symbolLaTeX[5][2][2] = "\\top";
       symbolLaTeX[5][2][3] = "\\bot";
-      symbolLaTeX[6][0][0] = "\\sin"; //trigonometry
+      symbolLaTeX[6][0][0] = "\\sin"; // trigonometry
       symbolLaTeX[6][0][1] = "\\cos";
       symbolLaTeX[6][0][2] = "\\tan";
       symbolLaTeX[6][0][3] = "\\arcsin";
@@ -463,7 +459,7 @@ public class MathPanel {
       symbolLaTeX[6][2][2] = "\\coth";
       symbolLaTeX[6][2][3] = "\\sech";
       symbolLaTeX[6][2][4] = "\\csch";
-      symbolLaTeX[7][0][0] = "\\parallel"; //geometry
+      symbolLaTeX[7][0][0] = "\\parallel"; // geometry
       symbolLaTeX[7][0][1] = "\\perp";
       symbolLaTeX[7][0][2] = "\\angle";
       symbolLaTeX[7][0][3] = "\\vec{\\phantom{5}}";
@@ -474,7 +470,7 @@ public class MathPanel {
       symbolLaTeX[7][1][3] = "\\cdot";
       symbolLaTeX[7][1][4] = "\\times";
       symbolLaTeX[7][2][0] = "\\vert\\phantom{5}\\vert";
-      symbolLaTeX[8][0][0] = "\\mathbb{R}"; //number sets
+      symbolLaTeX[8][0][0] = "\\mathbb{R}"; // number sets
       symbolLaTeX[8][0][1] = "\\mathbb{N}";
       symbolLaTeX[8][0][2] = "\\mathbb{Z}";
       symbolLaTeX[8][0][3] = "\\mathbb{P}";
@@ -482,26 +478,26 @@ public class MathPanel {
       symbolLaTeX[8][1][0] = "\\mathbb{C}";
       symbolLaTeX[8][1][1] = "\\mathbb{H}";
       symbolLaTeX[8][1][2] = "\\aleph";
-      symbolLaTeX[9][0][0] = "\\pm"; //operations
+      symbolLaTeX[9][0][0] = "\\pm"; // operations
       symbolLaTeX[9][0][1] = "\\cdot";
       symbolLaTeX[9][0][2] = "\\times";
       symbolLaTeX[9][0][3] = "\\div";
       symbolLaTeX[9][0][4] = "\\frac{a}{b}";
-      symbolLaTeX[10][0][0] = "\\pi"; //constants
+      symbolLaTeX[10][0][0] = "\\pi"; // constants
       symbolLaTeX[10][0][1] = "e";
       symbolLaTeX[10][0][2] = "\\varphi";
       symbolLaTeX[10][0][3] = "i";
-      symbolLaTeX[11][0][0] = "\\sigma"; //statistics
+      symbolLaTeX[11][0][0] = "\\sigma"; // statistics
       symbolLaTeX[11][0][1] = "\\rho";
       symbolLaTeX[11][0][2] = "\\%";
       symbolLaTeX[11][0][3] = "P";
       symbolLaTeX[11][0][4] = "V";
       symbolLaTeX[11][1][0] = "E";
-      symbolLaTeX[12][0][0] = "\\binom{a}{b}"; //combinatorics
+      symbolLaTeX[12][0][0] = "\\binom{a}{b}"; // combinatorics
       symbolLaTeX[12][0][1] = "^nP_r";
       symbolLaTeX[12][0][2] = "!";
       symbolLaTeX[12][0][3] = "\\#";
-      symbolLaTeX[13][0][0] = "\\hat{a}"; //accents
+      symbolLaTeX[13][0][0] = "\\hat{a}"; // accents
       symbolLaTeX[13][0][1] = "\\check{a}";
       symbolLaTeX[13][0][2] = "\\acute{a}";
       symbolLaTeX[13][0][3] = "\\grave{a}";
@@ -510,16 +506,16 @@ public class MathPanel {
       symbolLaTeX[13][1][1] = "\\ddot{a}";
       symbolLaTeX[13][1][2] = "\\breve{a}";
       symbolLaTeX[13][1][3] = "\\tilde{a}";
-      
+
       for (int i = 0; i < symbolLaTeX.length; i++) {
-         
+
          symbolButtonPanelOptions[i] = new JPanel();
          symbolButtonPanelOptions[i].setLayout(new GridLayout(5, 5));
-         
+
          for (int j = 0; j < symbolLaTeX[0].length; j++) {
-            
-            for(int k = 0; k < symbolLaTeX[0][0].length; k++) {
-               
+
+            for (int k = 0; k < symbolLaTeX[0][0].length; k++) {
+
                if (symbolLaTeX[i][j][k] != null) {
                   symbolForm[i][j][k] = new TeXFormula(symbolLaTeX[i][j][k]);
                   symbolImage[i][j][k] = symbolForm[i][j][k].new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY)
@@ -530,12 +526,12 @@ public class MathPanel {
                   symbolButtons[i][j][k].setToolTipText(symbolButtonNames[i][j][k]);
                   symbolButtons[i][j][k].setActionCommand(symbolButtonNames[i][j][k]);
                   symbolButtons[i][j][k].setFocusPainted(false);
-                  
+
                   symbolButtons[i][j][k].addActionListener(new ActionListener() {
 
                      @Override
                      public void actionPerformed(ActionEvent arg0) {
-                        
+
                         input.addButtonFormula(arg0.getActionCommand().toString());
                         input.getPanel().requestFocus();
 
@@ -545,30 +541,30 @@ public class MathPanel {
 
                   symbolButtonPanelOptions[i].add(symbolButtons[i][j][k]);
                }
-            
+
             }
-            
+
          }
-         
+
          symbolButtonPanel.add(symbolButtonPanelOptions[i], groupButtons[i / 4][i % 4].getToolTipText());
-            
+
       }
-      
+
       inputPanel.add(description);
       inputLayer.add(input.getPanel());
       inputLayer.add(submit);
       inputLayer.add(giveUp);
       inputPanel.add(inputLayer);
       inputPanel.add(buttonPanel);
-      
+
       return inputPanel;
-      
+
    }
-   
+
    public void getTextFocus() {
 
       input.getPanel().requestFocus();
-      
+
    }
-   
+
 }

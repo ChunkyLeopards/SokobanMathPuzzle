@@ -21,12 +21,13 @@ import javax.swing.WindowConstants;
 
 /**
  * Displays a Sokoban puzzle.
+ * 
  * @author Daniel Moore
  */
 
 @SuppressWarnings("serial")
-public class DisplayPuzzle extends JPanel{
-   
+public class DisplayPuzzle extends JPanel {
+
    private SokobanRuntimeStorage puzzle;
    private static JFrame window;
    private static JMenuBar menuBar;
@@ -57,25 +58,29 @@ public class DisplayPuzzle extends JPanel{
    private static File box;
    private static File boxTarget;
    private static File playerTarget;
-   
+
    /**
     * Creates a display object from a Sokoban puzzle.
-    * @param p The runtime storage of a puzzle.
+    * 
+    * @param p
+    *           The runtime storage of a puzzle.
     */
-   
+
    public DisplayPuzzle(SokobanRuntimeStorage p) {
-      
+
       puzzle = p;
-      
+
    }
-   
+
    /**
     * Method to manage and display a window.
-    * @param p The runtime storage of a puzzle.
+    * 
+    * @param p
+    *           The runtime storage of a puzzle.
     */
-   
+
    public static JFrame displayWindow(SokobanRuntimeStorage p, boolean test) {
-      
+
       exterior = new File("data/emptyOS.png");
       wall = new File("data/wall.png");
       interior = new File("data/emptyIS.png");
@@ -105,54 +110,54 @@ public class DisplayPuzzle extends JPanel{
       window.setUndecorated(true);
       menu = new JMenu("Menu");
       goMain = new JMenuItem("Return to Main Menu");
-      
+
       goMain.addActionListener(new ActionListener() {
 
          @Override
          public void actionPerformed(ActionEvent arg0) {
-               
+
             window.dispose();
             MainMenu.reopenMainMenu();
-            
+
          }
-         
+
       });
 
       toCreator = new JMenuItem("Return to Creator");
-      
+
       toCreator.addActionListener(new ActionListener() {
 
          @Override
          public void actionPerformed(ActionEvent e) {
-            
+
             window.dispose();
-            
+
          }
-         
+
       });
-      
+
       options = new JMenuItem("Options");
-      
+
       overview = new JMenuItem("View Puzzle");
-      
+
       exit = new JMenuItem("Exit");
-      
+
       exit.addActionListener(new ActionListener() {
 
          @Override
          public void actionPerformed(ActionEvent arg0) {
-            
+
             System.exit(0);
-            
+
          }
-         
+
       });
-      
+
       moves = new JLabel("Moves: XX");
       time = new JLabel("Time Elapsed: XX:XX");
       window.add(menuBar);
       menu.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
-      if(!test) {
+      if (!test) {
          menu.add(goMain);
          menu.add(options);
          menu.add(overview);
@@ -166,8 +171,7 @@ public class DisplayPuzzle extends JPanel{
          input = mathP.createInput();
          input.setVisible(false);
          window.add(input);
-      }
-      else { 
+      } else {
          menu.add(toCreator);
          menu.add(exit);
       }
@@ -176,46 +180,41 @@ public class DisplayPuzzle extends JPanel{
       window.add(new DisplayPuzzle(p));
       window.pack();
       window.setVisible(true);
-      if(test) {
+      if (test) {
          new Movement(window, p);
-      }
-      else {
+      } else {
          new Movement(window, p, input, mathP);
       }
-      
+
       return window;
-      
+
    }
-   
+
    @Override
    public Dimension getPreferredSize() {
-      
+
       return new Dimension(500, 500);
-      
+
    }
-   
+
    @Override
    public void paintComponent(Graphics g) {
-      
+
       super.paintComponent(g);
       g.setColor(new Color(0, 0, 0));
-      
+
       /*
-       * The bytes stored are decimal conversions of binary numbers.
-       * The binary numbers are 5 digits long.
-       * From smallest to largest, the bits are:
-       * Wall
-       * Internal space
-       * Player
-       * Box
-       * Target
+       * The bytes stored are decimal conversions of binary numbers. The binary
+       * numbers are 5 digits long. From smallest to largest, the bits are: Wall
+       * Internal space Player Box Target
        * 
-       * A 0 represents no element, while a 1 represents an element of the appropriate type.
-       * Not all combinations are allowed. Input interpreter should catch invalid square contents.
+       * A 0 represents no element, while a 1 represents an element of the appropriate
+       * type. Not all combinations are allowed. Input interpreter should catch
+       * invalid square contents.
        * 
        * A byte value of 0 represents external space.
        */
-      
+
       int width = puzzle.getWidth();
       int height = puzzle.getHeight();
       short square;
@@ -225,68 +224,68 @@ public class DisplayPuzzle extends JPanel{
       int squareX;
       int squareY = offset;
       int squareDim = Math.min((drawableY - (offset * 2)) / height, (drawableX - (offset * 2)) / width);
-      
+
       for (int i = 0; i < height; i++) {
-         
+
          squareX = offset;
-         
+
          for (int j = 0; j < width; j++) {
-            
+
             square = puzzle.getValue(j, i);
-            
-            switch ((byte)square) {
-            
+
+            switch ((byte) square) {
+
             case SokobanInterpreter.EXTERNAL:
                g.drawImage(exteriorImage, squareX, squareY, squareDim, squareDim, null);
-               break;            
-            
+               break;
+
             case SokobanInterpreter.WALL:
-               
+
                g.drawImage(wallImage, squareX, squareY, squareDim, squareDim, null);
                break;
-               
+
             case SokobanInterpreter.INTERNAL:
 
                g.drawImage(interiorImage, squareX, squareY, squareDim, squareDim, null);
                break;
-               
+
             case SokobanInterpreter.INTERNAL_PLAYER:
 
                g.drawImage(playerImage, squareX, squareY, squareDim, squareDim, null);
                break;
-               
+
             case SokobanInterpreter.INTERNAL_BOX:
 
                g.drawImage(boxImage, squareX, squareY, squareDim, squareDim, null);
                break;
-               
+
             case SokobanInterpreter.INTERNAL_TARGET:
 
                g.drawImage(targetImage, squareX, squareY, squareDim, squareDim, null);
                break;
-               
+
             case SokobanInterpreter.INTERNAL_PLAYER_TARGET:
 
                g.drawImage(playerTargetImage, squareX, squareY, squareDim, squareDim, null);
                break;
-               
+
             case SokobanInterpreter.INTERNAL_BOX_TARGET:
 
                g.drawImage(boxTargetImage, squareX, squareY, squareDim, squareDim, null);
                break;
-               
+
             default:
-            
+
             }
-            
+
             squareX += squareDim;
-            
+
          }
-         
+
          squareY += squareDim;
-         
+
       }
-      
+
    }
 
 }
