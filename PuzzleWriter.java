@@ -34,9 +34,9 @@ public class PuzzleWriter {
       sb = new StringBuilder();
       String puzz;
       sb.append("Puzzle:");
-      for (int i = 0; i < width; i++) {
-         for (int j = 0; j < height; j++) {
-            value = puzzle.getValue(i, j);
+      for (int i = 0; i < height; i++) {
+         for (int j = 0; j < width; j++) {
+            value = puzzle.getValue(j, i);
             switch ((byte) value) {
             case SokobanInterpreter.EXTERNAL:
                sb.append(";");

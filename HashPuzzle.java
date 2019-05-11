@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * Methods for generating, storing and checking hashcodes for a puzzle
@@ -132,5 +133,27 @@ public class HashPuzzle {
       }
       return -1;
 
+   }
+   
+   public static void main(String args[]) {
+      
+      String test1 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=!@#$%^&*()_+;:,.?";
+      int  test1hash = genHash(test1);
+      File f = new File("puzzles/TestHash");
+      File f2 = new File("puzzles/TestHash2");
+      System.out.println("Test 1: Java string input");
+      System.out.println("\tString is: " + test1);
+      System.out.println("\tHash code is: " + test1hash);
+      System.out.println("\tByte values are: " + Arrays.toString(test1.getBytes()) + "\n");
+      System.out.println("Test 2: Shared file");
+      System.out.println("\tString retrieved from file is: " + genString(f));
+      System.out.println("\tHash code is: " + genHash(f));
+      System.out.println("\tByte values are: " + Arrays.toString(genString(f).getBytes()) + "\n");
+      System.out.println("Test 2: Remade file");
+      System.out.println("\tString retrieved from file is: " + genString(f2));
+      System.out.println("\tHash code is: " + genHash(f2));
+      System.out.println("\tByte values are: " + Arrays.toString(genString(f2).getBytes()));
+      
+      
    }
 }
