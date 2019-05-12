@@ -68,7 +68,7 @@ public class PuzzleWriter {
       }
       puzz = sb.toString();
       sb = new StringBuilder();
-      sb.append(puzzleFile.getPath());
+      sb.append(puzzleFile.getName());
       sb.append(title);
       sb.append(puzz);
       hasher = sb.toString();

@@ -363,4 +363,16 @@ public class MathTemplateInterpreter {
 
    }
 
+   public boolean checkAnswer(String input) {
+      
+      return true;
+      
+   }
+
+   public void showSolution() {
+      
+      
+      
+   }
+
 }

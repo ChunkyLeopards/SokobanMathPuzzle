@@ -286,7 +286,11 @@ public class LaTeXInputRepresentation {
 
    }
 
-   public String buildLaTeX() {
+   public String buildLaTeX(boolean forAnswer) {
+      
+      if(forAnswer) {
+         return LaTeX;
+      }
 
       StringBuilder returnable = new StringBuilder();
       if (activeSelection) {

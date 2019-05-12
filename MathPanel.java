@@ -87,7 +87,27 @@ public class MathPanel {
       description.setHighlighter(null);
       input = new Input();
       submit = new JButton("Submit");
+      submit.addActionListener(new ActionListener() {
+
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            
+            puzzle.showSolution();
+            
+         }
+         
+      });
       giveUp = new JButton("Give Up?");
+      giveUp.addActionListener(new ActionListener() {
+
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            
+            puzzle.checkAnswer(input.getInput());
+            
+         }
+         
+      });
       inputLayer = new JPanel();
       inputLayer.setLayout(new BoxLayout(inputLayer, BoxLayout.LINE_AXIS));
       buttonPanel = new JPanel();

@@ -110,6 +110,7 @@ public class PuzzleCreator extends JFrame {
       // Validate
       bValidate = new JButton("Validate");
       bValidate.setFont(font1);
+      bValidate.setEnabled(false);
       menuButtons.add(bValidate);
 
       // Size
@@ -222,7 +223,8 @@ public class PuzzleCreator extends JFrame {
             }
 
             else {
-
+               
+               bValidate.setEnabled(true);
                windowPrompt.setText("Modifying puzzle size!");
                frame.validate();
                // Adding scrolling
@@ -269,8 +271,6 @@ public class PuzzleCreator extends JFrame {
                         arrayPuzzle[i][j] = new JPanel();
                         arrayPuzzle[i][j].setBorder(new MatteBorder(1, 1, 1, 1, Color.lightGray));
                         arrayPuzzle[i][j].setPreferredSize(new Dimension(50, 50));
-                        arrayPuzzle[i][j].setMaximumSize(new Dimension(50, 50));
-                        arrayPuzzle[i][j].setMinimumSize(new Dimension(50, 50));
                         CardLayout buttons = new CardLayout();
 
                         EditorButtons ext = new EditorButtons(exteriorImage);

@@ -27,7 +27,7 @@ public class HashPuzzle {
       String line = null;
       StringBuilder sb = new StringBuilder();
 
-      sb.append(f.getPath());
+      sb.append(f.getName());
 
       try {
          while ((line = reader.readLine()) != null) {
@@ -139,7 +139,7 @@ public class HashPuzzle {
       
       String test1 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=!@#$%^&*()_+;:,.?";
       int  test1hash = genHash(test1);
-      File f = new File("puzzles/TestHash");
+      File f = new File("puzzles/TestingHashAgain.spsf");
       File f2 = new File("puzzles/TestHash2");
       System.out.println("Test 1: Java string input");
       System.out.println("\tString is: " + test1);
@@ -153,7 +153,6 @@ public class HashPuzzle {
       System.out.println("\tString retrieved from file is: " + genString(f2));
       System.out.println("\tHash code is: " + genHash(f2));
       System.out.println("\tByte values are: " + Arrays.toString(genString(f2).getBytes()));
-      
       
    }
 }

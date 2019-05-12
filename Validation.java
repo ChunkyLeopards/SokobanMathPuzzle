@@ -4,6 +4,11 @@ public class Validation {
    public static boolean validate(SokobanRuntimeStorage p) {
       // run all tests for validity
 
+      if(playerCount(p) != 1) {
+         System.err.println("Failed case 0 - invalid player number.");
+         return false;
+      }
+      
       // check boxes to targets 1 to 1, nest for
       int count = 0; // increment when box found, decrement when target found, box on target do
       // nothing
@@ -11,18 +16,18 @@ public class Validation {
          for (int j = 0; j < p.getHeight(); j++) {
             if (p.getValue(i, j) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_BOX)
                count++;
-            else if (p.getValue(i, j) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_TARGET)
+            else if (p.getValue(i, j) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_TARGET || p.getValue(i, j) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_PLAYER_TARGET)
                count--;
          }
       }
 
       if (count != 0) {
-         System.err.println("Failed case 1 - box and target count do not match");
+         System.err.println("Failed case 1 - box and target count do not match.");
          return false; // # of boxes and targets do not match
       }
 
       if (checkSolved(p)) {
-         System.err.println("Failed case 2 - puzzle already solved");
+         System.err.println("Failed case 2 - puzzle already solved.");
          return false;
       }
 
@@ -36,29 +41,153 @@ public class Validation {
       }
 
       // Case 4 External wall closes, includes corners for aesthetics
-      for (int i = 0; i < p.getWidth(); i++) {
-         for (int j = 0; j < p.getHeight(); j++) {
-
-         }
+      
+      if(!checkBorder(p)) {
+         
+         System.err.println("Failed case 4 - wall does not surround the puzzle.");
+         return false;
+         
       }
+      
       // System.out.println("passed test 4");
 
       // Check all internal spaces connected, create list of internal spaces (x,y) and
       // a tree
+      int cases = checkInternalConnectivity(p);
+      if(cases == -1) {
+         
+         System.err.println("Failed case 5a - no internal space.");
+         return false;
+         
+      }
+      else if(cases == 1) {
+         
+         System.err.println("Failed case 5b - internal area contains invalid square types, like external areas.");
+         return false;
+         
+      }
+      else if(cases == 2) {
+         
+         System.err.println("Failed case 5c - internal area is not completely connected.");
+         return false;
+         
+      }
+      
       // System.out.println("passed test 5");
 
       // Boxes on wall with no target along wall requires indentation
       if (!checkIndentVert(p)) {
-         System.err.println("Failed case 6a, improper indentation vertical");
+         System.err.println("Failed case 6a, improper indentation vertical.");
          return false;
       }
       if (!checkIndentHor(p)) {
-         System.err.println("Failed case 6b, improper indentation horizontal");
+         System.err.println("Failed case 6b, improper indentation horizontal.");
          return false;
       }
 
       return true;
 
+   }
+
+   private static int checkInternalConnectivity(SokobanRuntimeStorage p) {
+      
+      boolean tracker[][] = new boolean[p.getWidth()][p.getHeight()];
+      int x = -1;
+      int y = -1;
+      for(int i = 0; i < p.getWidth(); i++) {
+         for(int j = 0; j < p.getHeight(); j++) {
+            if(((byte)p.getValue(i, j) & SokobanInterpreter.INTERNAL) != 0) {
+               if(x == -1) {
+                  x = i;
+                  y = j;
+               }
+               tracker[i][j] = true;
+            }
+            else {
+               tracker[i][j] = false;
+            }
+         }
+      }
+      
+      if(x == -1) {
+         return -1;
+      }
+
+      for(int i = 0; i < p.getWidth(); i++) {
+         for(int j = 0; j < p.getHeight(); j++) {
+            if(i > 0 && tracker[i][j] == true) {
+               if(((byte)p.getValue(i - 1, j) & SokobanInterpreter.INTERNAL) == 0 && ((byte)p.getValue(i - 1, j) & SokobanInterpreter.WALL) == 0 ) {
+                  return 1;
+               }
+            }
+            if(i < p.getWidth() - 1 && tracker[i][j] == true) {
+               if(((byte)p.getValue(i + 1, j) & SokobanInterpreter.INTERNAL) == 0 && ((byte)p.getValue(i + 1, j) & SokobanInterpreter.WALL) == 0 ) {
+                  return 1;
+               }
+            }
+            if(j > 0 && tracker[i][j] == true) {
+               if(((byte)p.getValue(i, j - 1) & SokobanInterpreter.INTERNAL) == 0 && ((byte)p.getValue(i, j - 1) & SokobanInterpreter.WALL) == 0 ) {
+                  return 1;
+               }
+            }
+            if(j < p.getHeight() - 1 && tracker[i][j] == true) {
+               if(((byte)p.getValue(i, j + 1) & SokobanInterpreter.INTERNAL) == 0 && ((byte)p.getValue(i, j + 1) & SokobanInterpreter.WALL) == 0 ) {
+                  return 1;
+               }
+            }
+         }
+      }
+      
+      recursiveInternalCheck(tracker, x, y);
+      
+      for(int i = 0; i < p.getWidth(); i++) {
+         for(int j = 0; j < p.getHeight(); j++) {            
+            if(tracker[i][j] == true) {
+               return 2;
+            }
+         }
+      }
+      
+      return 0; /*checkInternalConnectivityRecursion(p, tracker, x, y);*/
+      
+   }
+
+   private static void recursiveInternalCheck(boolean[][] tracker, int x, int y) {
+      
+      tracker[x][y] = false;
+      if(x > 0) {
+         if(tracker[x - 1][y]) {
+            recursiveInternalCheck(tracker, x - 1, y);
+         }
+      }
+      if(x < tracker.length - 1) {
+         if(tracker[x + 1][y]) {
+            recursiveInternalCheck(tracker, x + 1, y);
+         }
+      }
+      if(y > 0) {
+         if(tracker[x][y - 1]) {
+            recursiveInternalCheck(tracker, x, y - 1);
+         }
+      }
+      if(y < tracker[0].length) {
+         if(tracker[x][y + 1]) {
+            recursiveInternalCheck(tracker, x, y + 1);
+         }
+      }
+      
+   }
+
+   private static int playerCount(SokobanRuntimeStorage p) {
+      int count = 0;
+      for(int i = 0; i < p.getWidth(); i++) {
+         for(int j = 0; j < p.getHeight(); j++) {
+            if((byte)p.getValue(i, j) == SokobanInterpreter.INTERNAL_PLAYER || (byte)p.getValue(i, j) == SokobanInterpreter.INTERNAL_PLAYER_TARGET) {
+               count++;
+            }
+         }
+      }
+      return count;
    }
 
    public static boolean checkSolved(SokobanRuntimeStorage p) {
@@ -78,10 +207,60 @@ public class Validation {
 
    public static boolean checkBorder(SokobanRuntimeStorage p) {
       // make sure puzzle closes border and corners filled
+      
+      for(int i = 0; i < p.getWidth(); i++) {
+         
+         for(int j = 0; j < p.getHeight(); j++) {
+            
+            if(((byte)p.getValue(i, j) & SokobanInterpreter.WALL) != 0) {
+               break;
+            }
+            else if(((byte)p.getValue(i, j) & SokobanInterpreter.INTERNAL) != 0) {
+               return false;
+            }
+            
+         }
+         for(int j = p.getHeight() - 1; j >= 0; j--) {
+            
+            if(((byte)p.getValue(i, j) & SokobanInterpreter.WALL) != 0) {
+               break;
+            }
+            else if(((byte)p.getValue(i, j) & SokobanInterpreter.INTERNAL) != 0) {
+               return false;
+            }
+            
+         }
+         
+      }
+      for(int i = 0; i < p.getHeight(); i++) {
+         
+         for(int j = 0; j < p.getWidth(); j++) {
+            
+            if(((byte)p.getValue(j, i) & SokobanInterpreter.WALL) != 0) {
+               break;
+            }
+            else if(((byte)p.getValue(j, i) & SokobanInterpreter.INTERNAL) != 0) {
+               return false;
+            }
+            
+         }
+         for(int j = p.getWidth() - 1; j >= 0; j--) {
+            
+            if(((byte)p.getValue(j, i) & SokobanInterpreter.WALL) != 0) {
+               break;
+            }
+            else if(((byte)p.getValue(j, i) & SokobanInterpreter.INTERNAL) != 0) {
+               return false;
+            }
+            
+         }
+         
+      }
+      
       return true;
-
+      
    }
-
+   
    public static boolean checkIndentVert(SokobanRuntimeStorage p) {
 
       for (int i = 0; i < p.getWidth(); i++) {
@@ -103,7 +282,7 @@ public class Validation {
                storeI++;
 
                while (p.getValue(storeI, j) != SokobanInterpreter.WALL) {
-                  if (p.getValue(storeI, j) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_TARGET)
+                  if (p.getValue(storeI, j) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_TARGET || p.getValue(storeI, j) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_PLAYER_TARGET)
                      tarCount++;
                   else if (p.getValue(storeI, j)
                         % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_BOX)
@@ -160,7 +339,8 @@ public class Validation {
 
                while (p.getValue(storeI, j + 1) != SokobanInterpreter.WALL) {
                   if (p.getValue(storeI, j + 1)
-                        % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_TARGET)
+                        % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_TARGET || p.getValue(storeI, j + 1)
+                        % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_PLAYER_TARGET)
                      tarCount++;
                   else if (p.getValue(storeI, j + 1)
                         % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_BOX)
@@ -235,7 +415,7 @@ public class Validation {
                storeJ++;
 
                while (p.getValue(i, storeJ) != SokobanInterpreter.WALL) {
-                  if (p.getValue(i, storeJ) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_TARGET)
+                  if (p.getValue(i, storeJ) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_TARGET || p.getValue(i, storeJ) % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_PLAYER_TARGET)
                      tarCount++;
                   else if (p.getValue(i, storeJ)
                         % SokobanInterpreter.BOX_TRACK_OFFSET == SokobanInterpreter.INTERNAL_BOX)
@@ -281,7 +461,7 @@ public class Validation {
                }
             }
             // WB
-            else if (L == 1 && R == 10) {
+            else if (L == SokobanInterpreter.WALL && R == SokobanInterpreter.INTERNAL_BOX) {
                int storeJ = j;
                while (p.getValue(i + 1, storeJ) != SokobanInterpreter.WALL) {
                   storeJ--;

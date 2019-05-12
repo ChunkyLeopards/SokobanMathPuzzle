@@ -25,7 +25,7 @@ public class Input {
       formula = new LaTeXInputRepresentation();
       display = new JPanel();
       display.setFocusable(true);
-      TeXFormula form = new TeXFormula(formula.buildLaTeX());
+      TeXFormula form = new TeXFormula(formula.buildLaTeX(false));
       TeXIcon icon = form.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(20)
             .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER).setIsMaxWidth(true)
             .setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
@@ -188,7 +188,7 @@ public class Input {
                System.out.println(in);
             }
 
-            TeXFormula form = new TeXFormula(formula.buildLaTeX());
+            TeXFormula form = new TeXFormula(formula.buildLaTeX(false));
             TeXIcon icon = form.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(20)
                   .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER).setIsMaxWidth(true)
                   .setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
@@ -236,7 +236,7 @@ public class Input {
 
       formula.addFormula(s);
 
-      TeXFormula form = new TeXFormula(formula.buildLaTeX());
+      TeXFormula form = new TeXFormula(formula.buildLaTeX(false));
       TeXIcon icon = form.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(20)
             .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER).setIsMaxWidth(true)
             .setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
@@ -247,6 +247,12 @@ public class Input {
       display.validate();
       display.update(display.getGraphics());
 
+   }
+   
+   public String getInput() {
+      
+      return formula.buildLaTeX(true);
+      
    }
 
 }
