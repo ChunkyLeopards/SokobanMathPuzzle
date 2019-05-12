@@ -34,8 +34,8 @@ public class Movement {
 
                   }
 
-                  else if (!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
-                        || !Validation.checkStructure(p)) {
+                  else if (/*!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
+                        ||*/ !Validation.checkStructure(p)) {
 
                      SokobanEvents.stuck();
 
@@ -54,8 +54,8 @@ public class Movement {
 
                   }
 
-                  else if (!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
-                        || !Validation.checkStructure(p)) {
+                  else if (/*!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
+                        ||*/ !Validation.checkStructure(p)) {
 
                      SokobanEvents.stuck();
 
@@ -74,8 +74,8 @@ public class Movement {
 
                   }
 
-                  else if (!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
-                        || !Validation.checkStructure(p)) {
+                  else if (/*!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
+                        ||*/ !Validation.checkStructure(p)) {
 
                      SokobanEvents.stuck();
 
@@ -94,8 +94,8 @@ public class Movement {
 
                   }
 
-                  else if (!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
-                        || !Validation.checkStructure(p)) {
+                  else if (/*!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
+                        ||*/ !Validation.checkStructure(p)) {
 
                      SokobanEvents.stuck();
 
@@ -165,8 +165,8 @@ public class Movement {
 
                   }
 
-                  else if (!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
-                        || !Validation.checkStructure(p)) {
+                  else if (/*!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
+                        ||*/ !Validation.checkStructure(p)) {
 
                      SokobanEvents.stuck();
 
@@ -185,8 +185,8 @@ public class Movement {
 
                   }
 
-                  else if (!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
-                        || !Validation.checkStructure(p)) {
+                  else if (/*!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
+                        ||*/ !Validation.checkStructure(p)) {
 
                      SokobanEvents.stuck();
 
@@ -205,8 +205,8 @@ public class Movement {
 
                   }
 
-                  else if (!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
-                        || !Validation.checkStructure(p)) {
+                  else if (/*!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
+                        ||*/ !Validation.checkStructure(p)) {
 
                      SokobanEvents.stuck();
 
@@ -225,8 +225,8 @@ public class Movement {
 
                   }
 
-                  else if (!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
-                        || !Validation.checkStructure(p)) {
+                  else if (/*!Validation.checkIndentHor(p) || !Validation.checkIndentVert(p)
+                        ||*/ !Validation.checkStructure(p)) {
 
                      SokobanEvents.stuck();
 

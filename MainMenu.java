@@ -3,6 +3,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -11,12 +13,17 @@ import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
+
+import org.scilab.forge.jlatexmath.TeXConstants;
+import org.scilab.forge.jlatexmath.TeXFormula;
+import org.scilab.forge.jlatexmath.TeXIcon;
 
 @SuppressWarnings("serial")
 public class MainMenu extends JPanel {
@@ -41,6 +48,15 @@ public class MainMenu extends JPanel {
    private static JLabel puzzleName[];
    private static JLabel puzzleListBack;
    private static JPanel puzzleListBackButton;
+   private static JFrame optionsPanel;
+   private static JButton controlsButton;
+   private static JFrame controlsPanel;
+   private static JButton returnButton;
+   private static JButton okButton;
+   private static JLabel controls;
+   private static String controlFormatting;
+   private static TeXFormula controlLaTeX;
+   private static TeXIcon controlImage;
    private static File puzzleFile;
 
    public static void main(String[] args) throws IOException {
@@ -153,7 +169,7 @@ public class MainMenu extends JPanel {
             for (int i = 0; i < puzzleList.length; i++) {
 
                puzzleName[i] = new JLabel();
-               puzzleName[i].setText(allPuzzles[i].getPath());
+               puzzleName[i].setText(allPuzzles[i].getName().substring(0, allPuzzles[i].getName().length() - 5));
                puzzleName[i].setFont(new Font("TimesRoman", Font.BOLD, 20));
                puzzleFile = allPuzzles[i];
 
@@ -360,7 +376,61 @@ public class MainMenu extends JPanel {
 
          @Override
          public void mouseClicked(MouseEvent arg0) {
+            
+            optionsPanel = new JFrame();
+            optionsPanel.setUndecorated(true);
+            optionsPanel.setLayout(new BoxLayout(optionsPanel.getContentPane(), BoxLayout.PAGE_AXIS));
+            controlsButton = new JButton("View Controls");
+            controlsButton.addActionListener(new ActionListener() {
 
+               @Override
+               public void actionPerformed(ActionEvent arg0) {
+                  
+                  controlsPanel = new JFrame();
+                  controlsPanel.setUndecorated(true);
+                  controlsPanel.setLayout(new BoxLayout(controlsPanel.getContentPane(), BoxLayout.PAGE_AXIS));
+                  controls = new JLabel();
+                  controlFormatting = "\\begin{array}{lr}\\text{left arrow}&\\text{Move Left}\\\\\\text{up arrow}&\\text{Move Up}\\\\\\text{right arrow}&\\text{Move Right}\\\\\\text{down arrow}&\\text{Move Down}\\\\\\text{ctrl} + \\text{z}&\\text{Undo}\\end{array}";
+                  controlLaTeX = new TeXFormula(controlFormatting);
+                  controlImage = controlLaTeX.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(20)
+                        .setWidth(TeXConstants.UNIT_PIXEL, 256f, TeXConstants.ALIGN_CENTER)
+                        .setIsMaxWidth(true).setInterLineSpacing(TeXConstants.UNIT_PIXEL, 20f).build();
+                  controls.setIcon(controlImage);
+                  okButton = new JButton("Ok");
+                  okButton.addActionListener(new ActionListener() {
+
+                     @Override
+                     public void actionPerformed(ActionEvent e) {
+                        
+                        controlsPanel.dispose();
+                        
+                     }
+                     
+                  });
+                  controlsPanel.add(controls);
+                  controlsPanel.add(okButton);
+                  controlsPanel.pack();
+                  controlsPanel.setVisible(true);
+                  
+               }
+               
+            });
+            returnButton = new JButton("Return to Main Menu");
+            returnButton.addActionListener(new ActionListener() {
+
+               @Override
+               public void actionPerformed(ActionEvent e) {
+                  
+                  optionsPanel.dispose();
+                  
+               }
+               
+            });
+            optionsPanel.add(controlsButton);
+            optionsPanel.add(returnButton);
+            optionsPanel.pack();
+            optionsPanel.setVisible(true);
+            
          }
 
          @Override

@@ -76,14 +76,16 @@ public class Validation {
       // System.out.println("passed test 5");
 
       // Boxes on wall with no target along wall requires indentation
-      if (!checkIndentVert(p)) {
+      /*if (!checkIndentVert(p)) {
          System.err.println("Failed case 6a, improper indentation vertical.");
          return false;
       }
       if (!checkIndentHor(p)) {
          System.err.println("Failed case 6b, improper indentation horizontal.");
          return false;
-      }
+      }*/
+      
+      //This validation test is not foolproof
 
       return true;
 
